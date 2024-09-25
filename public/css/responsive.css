@@ -1,0 +1,78 @@
+@media only screen and (min-width:200px) and (max-width:767px) {
+  .skin-blue .main-sidebar {
+    padding-top: 45px;
+  }
+  .skin-blue .main-header .navbar .dropdown-menu li a {
+    color: #333;
+  }
+  .skin-blue .main-header .navbar .dropdown-menu li a:hover {
+    background-color: #e1e3e9;
+  }
+  .main-header .navbar-custom-menu {
+    margin: 3px 0 0 0;
+  }
+  .footersection .pull-left, .footersection .pull-right {
+    float: none !important;
+  }
+  .searchsection {
+    border-radius: 0;
+    margin-bottom: 15px;
+  }
+  .searchsection .searchbutton {
+    border-radius: 0;
+  }
+}
+@media only screen and (min-width:200px) and (max-width:767px) and (orientation:portrait) {}
+@media only screen and (min-width:200px) and (max-width:767px) and (orientation:landscape) {
+  .permissionbox .pull-left.cogs2 {
+    padding: 2% 0 0 0;
+    max-width: 100%;
+  }
+  .searchsection {
+    border-radius: 0;
+    margin-bottom: 15px;
+  }
+  .searchsection .searchbutton {
+    border-radius: 0;
+  }
+}
+/*************************/
+@media only screen and (min-width:768px) and (max-width:1024px) {
+  .searchsection {
+    border-radius: 0;
+    margin-bottom: 15px;
+  }
+  .searchsection .searchbutton {
+    border-radius: 0;
+  }
+}
+@media only screen and (min-width:768px) and (max-width:1024px) and (orientation:portrait) {}
+@media only screen and (min-width:768px) and (max-width:1024px) and (orientation:landscape) {}
+/*************************/
+@media only screen and (min-width:810px) and (max-width:1080px) {
+  .permissionbox .pull-left.cogs2 {
+    padding: 2% 0 0 0;
+    max-width: 100%;
+  }
+}
+@media only screen and (min-width:810px) and (max-width:1080px) and (orientation:portrait) {
+  .searchsection {
+    border-radius: 0;
+    margin-bottom: 15px;
+  }
+  .searchsection .searchbutton {
+    border-radius: 0;
+  }
+}
+@media only screen and (min-width:810px) and (max-width:1080px) and (orientation:landscape) {}
+/*************************/
+@media only screen and (min-width:992px) and (max-width:1023px) {}
+/*************************/
+@media only screen and (min-width:1024px) and (max-width:1200px) {
+  .permissionbox .pull-left.cogs2 {
+    padding: 2% 0 0 0;
+    max-width: 100%;
+  }
+}
+/*************************/
+@media only screen and (min-width:1201px) {}

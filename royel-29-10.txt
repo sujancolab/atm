@@ -1,0 +1,5 @@
+
+ 
+Ticket machine for current site only / remove previous selected machine if not available
+Open ticket restriction.
+Tat Filter for report (0-1)

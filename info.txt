@@ -1,0 +1,22 @@
+ftp.consult-trico.com
+u796251125.rmm
+Test123!@#
+
+Database
+db name: u796251125_rmm
+username : u796251125_rmm
+password: Test123!@#
+
+ https://auth-db152.hstgr.io/index.php?db=u796251125_rmm
+ https://auth-db976.hstgr.io/index.php?db=u796251125_rmm
+
+ rmm.consult-trico.com
+
+ Putty
+ 89.116.53.80
+port - 65002
+username - u796251125
+pass - Admin123!@#
+
+cd public_html/rmm
+ 

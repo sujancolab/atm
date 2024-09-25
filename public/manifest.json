@@ -1,0 +1,17 @@
+{
+    "name": "Royal Infra",
+    "short_name": "Royal Infra",
+    "start_url": "/index.php",
+    "background_color": "#fff",
+    "description": "Royal Infra",
+    "display": "standalone",
+    "theme_color": "#fff",
+    "icons": [
+        {
+            "src": "images/icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
