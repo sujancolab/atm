@@ -23,7 +23,7 @@ class UpdateDistrictRequest extends FormRequest
     {
         return [
             //
-            'district_name' => 'required|string|max:191|unique:districts,district_name,' . $this->get('id'),
+            'district_name' => 'required|string|max:191|unique:district,district_name,' . $this->get('id'),
             'state_id' => 'required|integer|max:191',
         ];
     }

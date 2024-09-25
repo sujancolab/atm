@@ -23,7 +23,7 @@ class StoreDistrictRequest extends FormRequest
     {
         return [
             //
-            'district_name' => 'required|string|max:191|unique:districts',
+            'district_name' => 'required|string|max:191|unique:district',
             'state_id' => 'required|integer|max:191',
         ];
     }

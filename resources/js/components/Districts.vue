@@ -11,7 +11,7 @@
 
                             <div class="card-tools">
 
-                                <button type="button" class="btn btn-sm btn-primary" @click="newModal" v-if="$gate.hasPermission('can_add_district')">
+                                <button type="button" class="btn btn-sm btn-primary" @click="newModal">
                                     <i class="fa fa-plus-square"></i>
                                     Add New
                                 </button>
@@ -52,13 +52,13 @@
 
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-primary btn-sm btn-toggle-custom" @click="editModal(district)" :disabled="!$gate.hasPermission('can_edit_district')">Edit</button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-toggle-custom" @click="editModal(district)">Edit</button>
                                                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <div class="dropdown-menu">
                                                     <a href="javascript:void(0);" @click="deleteUser(district.id)"
-                                                        class="dropdown-item" v-if="$gate.hasPermission('can_delete_district')">
+                                                        class="dropdown-item">
                                                         Delete
                                                     </a>
                                                 </div>
@@ -118,7 +118,7 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>State</label>
-                                            <v-select label="name" :reduce="(option) => option.id" :options="states"
+                                            <v-select label="state_name" :reduce="(option) => option.id" :options="states"
                                                 placeholder="Enter State ..." v-model="form.state_id"
                                                 v-validate="'required'"
                                                 :class="{ 'error': verrors.state_id, 'error': verrors.has('state_id'), 'haveValue': form.state_id }"

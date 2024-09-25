@@ -72,7 +72,7 @@ class CityController extends BaseController
 			]);
 			DB::commit();
 
-			return $this->sendResponse($city, 'District Created Successfully');
+			return $this->sendResponse($city, 'City Created Successfully');
 		} catch (Exception $e) {
 			// Rollback the transaction if an error occurs
 			DB::rollback();
@@ -122,7 +122,7 @@ class CityController extends BaseController
 			DB::commit();
 
 			// Return a success response with the created reading data records
-			return $this->sendResponse($city, 'District updated successfully');
+			return $this->sendResponse($city, 'City updated successfully');
 		} catch (Exception $e) {
 			// Rollback the transaction if an error occurs
 			DB::rollback();
@@ -155,5 +155,10 @@ class CityController extends BaseController
 			// Return an error response
 			return $this->sendError($errorMessage, [$e->getMessage()], 500);
 		}
+    }
+    public function getCitiesByDistrict(Request $request){
+        $district = $request->get('district');
+		$cities = City::where('district_id', $district)->get();
+		return $this->sendResponse($cities, '');
     }
 }

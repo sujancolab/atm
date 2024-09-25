@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class State extends Model {
 	// use SoftDeletes;
-
+    protected $table = "state";
 	protected $fillable = [
 		'id', 'state_name', 'status',
 	];
-    protected $table = "state";
+
 	public function getNameAttribute($value) {
 		return ucfirst($value);
 	}
@@ -21,5 +21,8 @@ class State extends Model {
 
 	public function country() {
 		return $this->belongsTo(Country::class);
+	}
+    public function districts() {
+		return $this->hasMany(District::class);
 	}
 }

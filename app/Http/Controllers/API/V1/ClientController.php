@@ -163,4 +163,8 @@ class ClientController extends BaseController
 			return $this->sendError($errorMessage, [$e->getMessage()], 500);
 		}
     }
+    public function getClients(){
+        $clients = Client::get();
+		return $this->sendResponse($clients, '');
+    }
 }

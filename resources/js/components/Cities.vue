@@ -12,7 +12,7 @@
                                     type="button"
                                     class="btn btn-sm btn-primary"
                                     @click="newModal"
-                                    v-if="$gate.hasPermission('can_add_user')"
+
                                 >
                                     <i class="fa fa-plus-square"></i>
                                     Add New
@@ -88,11 +88,7 @@
                                                     type="button"
                                                     class="btn btn-primary btn-sm btn-toggle-custom"
                                                     @click="editModal(city)"
-                                                    :disabled="
-                                                        !$gate.hasPermission(
-                                                            'can_edit_city'
-                                                        )
-                                                    "
+
                                                 >
                                                     Edit
                                                 </button>
@@ -114,11 +110,7 @@
                                                             deleteCity(city.id)
                                                         "
                                                         class="dropdown-item"
-                                                        v-if="
-                                                            $gate.hasPermission(
-                                                                'can_delete_city'
-                                                            )
-                                                        "
+
                                                     >
                                                         Delete
                                                     </a>
@@ -221,7 +213,7 @@
                                         <div class="form-group">
                                             <label>State</label>
                                             <v-select
-                                                label="name"
+                                                label="state_name"
                                                 :reduce="
                                                     (option) => option.id
                                                 "
@@ -518,18 +510,16 @@ export default {
     },
     beforeCreate() {
         const statesApi = axios.get("api/getStates");
-        const roleApi = axios.get("api/role");
+        // const roleApi = axios.get("api/role");
 
         // Call the APIs in parallel
         axios
-            .all([statesApi, roleApi])
+            .all([statesApi])
             .then(
-                axios.spread((statesRes, roleApi) => {
+                axios.spread((statesRes) => {
                     // Handle the responses
                     this.states = statesRes.data.data;
-                    this.role = roleApi.data.data.filter(
-                        (role) => role.name !== "Developer"
-                    );
+
                 })
             )
             .catch((error) => {

@@ -23,7 +23,7 @@ class StoreStateRequest extends FormRequest
     {
         return [
             //
-            'name' => 'required|string|max:191|unique:states',
+            'state_name' => 'required|string|max:191|unique:state',
         ];
     }
 }

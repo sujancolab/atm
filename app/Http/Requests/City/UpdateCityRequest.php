@@ -23,7 +23,7 @@ class UpdateCityRequest extends FormRequest
     {
         return [
             //
-            'city_name' => 'required|string|max:191|unique:cities,city_name,'.$this->get('id'),
+            'city_name' => 'required|string|max:191|unique:city,city_name,'.$this->get('id'),
             'state_id' => 'required|integer|max:191',
             'district_id' => 'required|integer|max:191',
         ];

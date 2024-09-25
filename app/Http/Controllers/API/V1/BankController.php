@@ -167,4 +167,8 @@ class BankController extends BaseController
 			return $this->sendError($errorMessage, [$e->getMessage()], 500);
 		}
     }
+    public function getBanks(){
+        $banks = Bank::get();
+		return $this->sendResponse($banks, '');
+    }
 }

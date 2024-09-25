@@ -197,4 +197,10 @@ class CmsUserController extends BaseController
 			return $this->sendError($errorMessage, [$e->getMessage()], 500);
 		}
     }
+    public function getClientCode(Request $request){
+        $client_id=$request->get('client_id');
+        $clientcodes=Cmsuser::where('client_id',$client_id)->get();
+        return $this->sendResponse($clientcodes, '');
+
+    }
 }

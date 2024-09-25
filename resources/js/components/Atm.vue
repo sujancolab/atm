@@ -12,7 +12,7 @@
                                     type="button"
                                     class="btn btn-sm btn-primary"
                                     @click="newModal"
-                                    v-if="$gate.hasPermission('can_add_user')"
+
                                 >
                                     <i class="fa fa-plus-square"></i>
                                     Add New
@@ -94,11 +94,7 @@
                                                     type="button"
                                                     class="btn btn-primary btn-sm btn-toggle-custom"
                                                     @click="editModal(atm)"
-                                                    :disabled="
-                                                        !$gate.hasPermission(
-                                                            'can_edit_postcode'
-                                                        )
-                                                    "
+
                                                 >
                                                     Edit
                                                 </button>
@@ -120,11 +116,7 @@
                                                             deleteCity(atm.id)
                                                         "
                                                         class="dropdown-item"
-                                                        v-if="
-                                                            $gate.hasPermission(
-                                                                'can_delete_postcode'
-                                                            )
-                                                        "
+
                                                     >
                                                         Delete
                                                     </a>
@@ -224,7 +216,7 @@
                                         <div class="form-group">
                                             <label>State</label>
                                             <v-select
-                                                label="name"
+                                                label="state_name"
                                                 :reduce="
                                                     (option) => option.id
                                                 "

@@ -146,4 +146,9 @@ class AreaCodeController extends BaseController
 			return $this->sendError($errorMessage, [$e->getMessage()], 500);
 		}
     }
+    public function getAreaCodeByPostCode(Request $request){
+        $postcode_id=$request->get('postcode_id');
+        $areacodes=Areacode::where('postcode_id',$postcode_id)->get();
+        return $this->sendResponse($areacodes, '');
+    }
 }

@@ -94,13 +94,15 @@ class StateController extends BaseController
 		try {
 			// Start a database transaction
 			DB::beginTransaction();
-			$state = State::create([
-				'name' => $request->get('name'),
+			$state = new State();
+            $state->state_name = $request->get('state_name');
+            $state->status =1;
 
-			]);
+            // Save the new state record to the database
+            $state->save();
 			DB::commit();
 
-			return $this->sendResponse($state, 'User Created Successfully');
+			return $this->sendResponse($state, 'State Created Successfully');
 		} catch (Exception $e) {
 			// Rollback the transaction if an error occurs
 			DB::rollback();

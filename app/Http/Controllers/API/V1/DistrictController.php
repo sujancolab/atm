@@ -7,6 +7,7 @@ use App\Http\Requests\District\StoreDistrictRequest;
 use App\Http\Requests\District\UpdateDistrictRequest;
 use App\Http\Requests\State\UpdateStateRequest;
 use App\Models\District;
+use App\Models\State;
 use Exception;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Request;
@@ -156,5 +157,11 @@ class DistrictController extends BaseController
 			// Return an error response
 			return $this->sendError($errorMessage, [$e->getMessage()], 500);
 		}
+    }
+    public function getDistricts(Request $request)
+    {
+        $state = $request->get('state');
+		$districts = State::where('id', $state)->first()->districts;
+		return $this->sendResponse($districts, '');
     }
 }

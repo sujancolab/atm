@@ -1,8 +1,15 @@
 <?php
 
+use App\Http\Controllers\API\V1\AreaCodeController;
+use App\Http\Controllers\API\V1\BankController;
+use App\Http\Controllers\API\V1\CityController;
+use App\Http\Controllers\API\V1\ClientController;
+use App\Http\Controllers\API\V1\CmsUserController;
 use App\Http\Controllers\API\V1\ComplaintController;
+use App\Http\Controllers\API\V1\DistrictController;
 use App\Http\Controllers\API\V1\ExportReportController;
 use App\Http\Controllers\API\V1\ModuleController;
+use App\Http\Controllers\API\V1\PostCodeController;
 use App\Http\Controllers\API\V1\SettingsController;
 use App\Http\Controllers\API\V1\UserController;
 use Illuminate\Http\Request;
@@ -96,6 +103,13 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::get('/assign-ticket/{docket?}', [ComplaintController::class,'assignTicket']);
     Route::post('/get_docket_details',[ComplaintController::class,'getDocketDetails']);
     Route::post('/assign_custodian',[ComplaintController::class,'assignCustodian']);
+    Route::get('getDistricts', [DistrictController::class,'getDistricts']);
+    Route::get('/getCitiesByDistrict',[CityController::class,'getCitiesByDistrict']);
+    Route::get('/getPostCodeByCity',[PostCodeController::class,'getPostCodeByCity']);
+    Route::get('getClients', [ClientController::class,'getClients']);
+    Route::get('/getBanks',[BankController::class,'getBanks']);
+    Route::get('/getAreaCodeByPostCode',[AreaCodeController::class,'getAreaCodeByPostCode']);
+    Route::get('/getClientCode',[CmsUserController::class,'getClientCode']);
     Route::apiResources([
         'company' => 'MachineCompanyController',
         'model' => 'MachineModelController',

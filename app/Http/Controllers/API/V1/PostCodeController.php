@@ -152,4 +152,9 @@ class PostCodeController extends BaseController
 			return $this->sendError($errorMessage, [$e->getMessage()], 500);
 		}
     }
+    public function getPostCodeByCity(Request $request){
+        $city_id = $request->get('city_id');
+		$postcodes = Postcode::where('city_id', $city_id)->get();
+		return $this->sendResponse($postcodes, '');
+    }
 }
