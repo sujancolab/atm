@@ -31,7 +31,7 @@ class CallCenterController extends BaseController
         $s = $request->get('search');
         $export = $request->get('export');
         $list = $request->get('list');
-        $qry = Cmsuser::with('bank')->with('client');
+        $qry = Cmsuser::with('bank')->with('client')->where('id_cms_privileges','4');
         if ($s) {
             $qry->where('user_code', 'LIKE', '%' . $s . '%');
         }
@@ -71,6 +71,8 @@ class CallCenterController extends BaseController
             'bank_id' => $request->get('bank_id'),
             'comment' => $request->get('comment'),
             'is_bna' => $request->get('is_bna'),
+            'id_cms_privileges'=>4,
+            'blocked'=>0
 
         ]);
         DB::commit();

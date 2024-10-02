@@ -66,7 +66,7 @@
                                         </td>
 
                                         <td class="text-capitalize">{{ state.state_name }}</td>
-                                        <td>{{ state.status }}</td>
+                                        <td>{{ state.status==1 ? "Actve" : "In-active" }}</td>
                                     </tr>
                                 </tbody>
                             </table>

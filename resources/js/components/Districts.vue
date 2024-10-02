@@ -45,6 +45,7 @@
                                         <th class="stickey">Action</th>
                                         <th>Name</th>
                                         <th>State</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -67,6 +68,7 @@
 
                                         <td class="text-capitalize">{{ district.district_name }}</td>
                                         <td>{{ district.state.state_name }}</td>
+                                        <td>{{ district.status =="1" ? "Active" : "In-active" }}</td>
 
                                     </tr>
                                 </tbody>

@@ -13,7 +13,7 @@
             </li> -->
             <li class="nav-item" key="dashboard">
                 <router-link to="/dashboard" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-tachometer-alt blue"></i>
                     <p>
                        Dashbord
                     </p>
@@ -22,7 +22,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==3">
                 <router-link to="/complaint" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-arrow-left"></i>
                     <p>
                        Lodge a new Fault
                     </p>
@@ -31,7 +31,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==3">
                 <router-link to="/complaint-list/1" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-eye"></i>
                     <p>
                        Ticket Details
                     </p>
@@ -40,7 +40,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==4">
                 <router-link to="/complaint-list/1" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-eye"></i>
                     <p>
                        FLM
                     </p>
@@ -49,7 +49,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==4">
                 <router-link to="/complaint-list/2" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-eye"></i>
                     <p>
                         Dispenser joined down call (AXIS BNA)
                     </p>
@@ -58,7 +58,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==4">
                 <router-link to="/sls-list" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-eye"></i>
                     <p>
                        SLM
                     </p>
@@ -67,7 +67,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/states" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-globe"></i>
                     <p>
                        States
                     </p>
@@ -76,7 +76,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/districts" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-globe"></i>
                     <p>
                        Districts
                     </p>
@@ -85,7 +85,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/cities" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-globe"></i>
                     <p>
                        Cities
                     </p>
@@ -94,7 +94,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/postcodes" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-globe"></i>
                     <p>
                        Postcode
                     </p>
@@ -103,7 +103,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/areacodes" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-globe"></i>
                     <p>
                        Areacode
                     </p>
@@ -112,7 +112,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/complaint-types" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-file"></i>
                     <p>
                        Complaint Types
                     </p>
@@ -121,7 +121,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/banks" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-landmark"></i>
                     <p>
                        Bank
                     </p>
@@ -130,7 +130,8 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/clients" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-user"></i>
+
                     <p>
                        Client
                     </p>
@@ -140,6 +141,7 @@
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/cms_users" class="nav-link">
                     <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-user-plus"></i>
                     <p>
                        Manage Client Code
                     </p>
@@ -149,6 +151,7 @@
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/call_center_users" class="nav-link">
                     <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-users"></i>
                     <p>
                        Manage Call Center User
                     </p>
@@ -157,7 +160,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/custodians" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-user-plus"></i>
                     <p>
                        Manage Custodian
                     </p>
@@ -166,7 +169,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/atms" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-cog"></i>
                     <p>
                        Atm
                     </p>
@@ -175,7 +178,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/admin-complaints" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-cogs"></i>
                     <p>
                        Manage Complaint
                     </p>
@@ -184,7 +187,7 @@
             </li>
             <li class="nav-item" v-if="authUser.id_cms_privileges==2">
                 <router-link to="/reports" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-file-excel"></i>
                     <p>
                         Report
                     </p>
@@ -193,7 +196,7 @@
             </li>
             <li class="nav-item">
                 <router-link to="/account" class="nav-link">
-                    <!-- <i :class="'nav-icon '+ data.icon"></i> -->
+                    <i class="nav-icon fas fa-cog"></i>
                     <p>
                        Account details
                     </p>

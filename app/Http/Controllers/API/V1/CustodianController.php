@@ -72,8 +72,9 @@ class CustodianController extends BaseController
             'is_bna' => $request->get('is_bna'),
             'id_cms_privileges'=>6,
             'pass_text'=>'TzkgaLW4y#XB&r!e',
-            'password'=>'$2y$10$cBw1f3H.WjNlsZkELqPZUeQSBfviDksSJx4uiGa4xIrp4dcA6V9bS'
-
+            'password'=>'$2y$10$cBw1f3H.WjNlsZkELqPZUeQSBfviDksSJx4uiGa4xIrp4dcA6V9bS',
+            'id_cms_privileges'=>6,
+            'bllocked'=>0
         ]);
         DB::commit();
         if ($request->file('photo')) {

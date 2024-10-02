@@ -54,7 +54,11 @@
           <div class="user-panel mt-3 d-flex">
 
               <div class="image">
-                <img src="{{ auth()->user()->photo }}" class="img-circle elevation-2" alt="User Image">
+                @if(auth()->user()->photo)
+                <img src="{{ asset(auth()->user()->photo) }}" class="img-circle elevation-2" alt="User Image">
+                @else
+                <img src="{{ asset('images/avatar.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                @endif
               </div>
               <div class="info" style="width: 147px; padding-top:0px;">
 

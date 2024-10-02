@@ -31,7 +31,7 @@ class CmsUserController extends BaseController
         $s = $request->get('search');
         $export = $request->get('export');
         $list = $request->get('list');
-        $qry = Cmsuser::with('bank')->with('client');
+        $qry = Cmsuser::with('bank')->with('client')->where('id_cms_privileges','3');
         if ($s) {
             $qry->where('user_code', 'LIKE', '%' . $s . '%');
         }
@@ -93,7 +93,7 @@ class CmsUserController extends BaseController
         //
         DB::beginTransaction();
         $cmsuser = Cmsuser::create([
-            'name' => $request->get('name'),
+            'name' => $request->get('user_code'),//$request->get('name'),
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),
             'pass_text'=>$request->get('password'),
@@ -103,6 +103,8 @@ class CmsUserController extends BaseController
             'bank_id' => $request->get('bank_id'),
             'comment'=>$request->get('comment'),
             'is_bna'=>$request->get('is_bna'),
+            "id_cms_privileges"=>3,
+            "blocked"=>0,
 
         ]);
         DB::commit();
