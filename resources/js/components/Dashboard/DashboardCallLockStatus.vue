@@ -15,7 +15,11 @@
             <div class="card-body" style="background: linear-gradient(to bottom, #ff7e67, #ffb3a7); border-radius: 50px;">
               <h2 class="ticket-count">{{ totalTickets }}</h2>
               <p>Total Tickets</p>
-              <a href="#" class="btn btn-outline-light btn-sm">View Details</a>
+              <router-link to="/complaint-list/all" class="btn btn-outline-light btn-sm">
+                View Details
+                </router-link>
+
+
             </div>
           </div>
         </div>
@@ -27,7 +31,9 @@
               <h2 class="ticket-count">{{ pendingTickets }}</h2>
               <p>Pending Tickets</p>
               <p>FLM: {{ flmPending }} | SLM: {{ slmPending }} | JOINED: {{ joinedPending }}</p>
-              <a href="#" class="btn btn-outline-light btn-sm">View Details</a>
+              <router-link to="/complaint-list/all/Pending" class="btn btn-outline-light btn-sm">
+                View Details
+              </router-link>
             </div>
           </div>
         </div>
@@ -39,7 +45,9 @@
               <h2 class="ticket-count">{{ processingTickets }}</h2>
               <p>Processing Tickets</p>
               <p>FLM: {{ flmProcessing }} | SLM: {{ slmProcessing }} | JOINED: {{ joinedProcessing }}</p>
-              <a href="#" class="btn btn-outline-light btn-sm">View Details</a>
+              <router-link to="/complaint-list/all/Processing" class="btn btn-outline-light btn-sm">
+                View Details
+              </router-link>
             </div>
           </div>
         </div>

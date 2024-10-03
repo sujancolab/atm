@@ -361,13 +361,13 @@ export default {
             }
         },
         getStatusClass(workStatus) {
-            switch(workStatus) {
+            switch (workStatus) {
                 case 'Pending':
-                    return 'pending';
+                    return 'badge badge-danger';
                 case 'Processing':
-                    return 'processing';
+                    return 'badge badge-warning';
                 case 'Completed':
-                    return 'completed';
+                    return 'badge badge-success';
                 default:
                     return ''; // Default or empty class
             }

@@ -314,7 +314,7 @@ const routes = [
         },
     },
     {
-        path: '/complaint-list/:id',
+        path: '/complaint-list/:id/:status?',
         name: 'ComplaintList',
         component: () => import('./components/ComplaintList.vue'),
         meta: {

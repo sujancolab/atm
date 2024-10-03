@@ -583,11 +583,11 @@ export default {
         getStatusClass(workStatus) {
             switch (workStatus) {
                 case 'Pending':
-                    return 'pending';
+                    return 'badge badge-danger';
                 case 'Processing':
-                    return 'processing';
+                    return 'badge badge-warning';
                 case 'Completed':
-                    return 'completed';
+                    return 'badge badge-success';
                 default:
                     return ''; // Default or empty class
             }
@@ -655,7 +655,11 @@ export default {
         getResults(page = 1) {
             let cloaderd = this.$loading.show();
             this.search.page = page
-            axios.get('/api/complaint/list/' + this.$route.params.id, {
+            let url="/api/complaint/list/" + this.$route.params.id;
+            if(this.$route.params.status){
+                url+="/"+this.$route.params.status;
+            }
+            axios.get(url, {
                 params: this.search
             }).then((data) => {
                 console.log("data====", data.data.data);
@@ -671,7 +675,11 @@ export default {
         loadTickets() {
             let cloaderd = this.$loading.show();
             this.search = {};
-            axios.get("/api/complaint/list/" + this.$route.params.id, {
+            let url="/api/complaint/list/" + this.$route.params.id;
+            if(this.$route.params.status){
+                url+="/"+this.$route.params.status;
+            }
+            axios.get(url, {
                 params: this.search
             }).then((data) => {
                 console.log("data====>", data);
@@ -786,8 +794,11 @@ export default {
     },
     beforeCreate() {
         console.log("before create");
-
-        axios.get("/api/complaint/list/" + this.$route.params.id).then(response => {
+        let url="/api/complaint/list/" + this.$route.params.id;
+            if(this.$route.params.status){
+                url+="/"+this.$route.params.status;
+            }
+        axios.get(url).then(response => {
             console.log("data====>", response);
 
             this.Complaints = response.data.data.complaints;
