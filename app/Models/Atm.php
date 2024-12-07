@@ -30,4 +30,7 @@ class Atm extends Model
     public function client() {
 		return $this->belongsTo(Client::class);
 	}
+    public function user() {
+        return $this->belongsTo(CmsUser::class, 'user_id', 'id');
+    }
 }

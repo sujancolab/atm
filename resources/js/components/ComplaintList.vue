@@ -264,35 +264,27 @@
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-primary btn-sm btn-toggle-custom"
-                                                    @click="editMaintainanceModal(complaint)">Maintenance</button>
+                                                    @click="editMaintainanceModal(complaint)">  <i class="nav-icon fas fa-cogs"></i></button>
                                                 <button type="button"
                                                     class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split"
                                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a href="javascript:void(0);" @click="deleteUser(user.id)"
-                                                        class="dropdown-item">
-                                                        Delete
+                                                    <a href="javascript:void(0);" @click="deleteUser(user.id)" v-if="authUser.id_cms_privileges==2"
+                                                        class="dropdown-item nav-link">
+                                                        <i class="nav-icon fas fa-trash"></i> Delete
                                                     </a>
                                                     <router-link :to="'/complaint-details/' + complaint.id"
                                                         class="nav-link">
-
-                                                        <p>
-                                                            Details
-                                                        </p>
+                                                            <i class="nav-icon fas fa-eye"></i> View
                                                     </router-link>
                                                     <router-link :to="'/complaint/assigned-custodians/' + complaint.id"
-                                                        class="nav-link">
-
-                                                        <p>
-                                                            Assigned Custodian
-                                                        </p>
+                                                        class="nav-link" v-if="authUser.id_cms_privileges==2 ||  complaint.custname">
+                                                            <i class="nav-icon fas fa-file"></i> Assigned Custodians
                                                     </router-link>
                                                     <router-link :to="'/complaint/assign-ticket/'+complaint.docket_no" class="nav-link">
-                                                        <p>
-                                                            Assign Custodian
-                                                        </p>
+                                                            <i class="nav-icon fas fa-user-plus"></i>Assign Custodian
                                                     </router-link>
 
 
@@ -444,6 +436,7 @@ export default {
             ],
             sl: 0,
             editmode: false,
+            authUser: localStorage.getItem("auth") ? JSON.parse(localStorage.getItem("auth")) : null,
         }
     },
     methods: {
@@ -789,7 +782,10 @@ export default {
     mounted() {
         // Initial API call when the component is mounted
         console.log("mounted");
-
+        this.authUser=localStorage.getItem("auth");
+        if (this.authUser) {
+            this.authUser = JSON.parse(this.authUser);
+        }
         // this.loadTickets();
     },
     beforeCreate() {

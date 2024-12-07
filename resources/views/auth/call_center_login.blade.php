@@ -23,7 +23,7 @@
                 <input type="hidden" name="cms_privileges_name" value="Call Center User Login">
                 <div class="form-group row justify-content-md-center">
                     <div class="col-md-6">
-                        <label for="user_code">User Code</label>
+                        <label for="user_code">User Id</label>
                         <input id="user_code" type="text" class="form-control @error('user_code') is-invalid @enderror" name="user_code" value="{{ old('user_code') }}" required autocomplete="user_code" autofocus>
 
                         @error('user_code')

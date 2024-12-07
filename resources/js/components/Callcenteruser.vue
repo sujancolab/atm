@@ -71,7 +71,8 @@
                                         <td class="text-capitalize">{{ callcenter.name }}</td>
                                         <td class="text-capitalize">{{ callcenter.email }}</td>
                                         <td class="text-capitalize">{{ callcenter.mobile }}</td>
-                                        <td class="text-capitalize">{{ callcenter.status }}</td>
+                                        <td class="text-capitalize" v-if="callcenter.status==1">Active</td>
+                                        <td class="text-capitalize" v-else>Inactive</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -162,6 +163,31 @@
                     }}</div>
                                         </div>
                                     </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <v-select
+                                            v-model="form.status"
+                                            :options="statuses"
+                                            label="value"
+                                            :reduce="option => option.id"
+                                            placeholder="Enter Status ..."
+                                            v-validate="'required'"
+                                            :class="{
+                                                error: verrors.has('status'),
+                                                haveValue: form.status,
+                                            }"
+                                            data-vv-name="status"
+                                            />
+                                            <div
+                                                v-if="verrors.has('status')"
+                                                class="help-block invalid-feedback"
+                                            >
+                                                {{ verrors.first("status") }}
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -186,6 +212,16 @@ export default {
             users: {},
             callcenters: {},
             clients: [],
+            statuses:[
+                {
+                    id:"0",
+                    value:"Inactive",
+                },
+                {
+                    id:"1",
+                    value:"Active",
+                }
+            ],
             banks: [],
             cities: [],
             bnaoptions:['Yes','No'],
@@ -196,6 +232,7 @@ export default {
                 email: '',
                 mobile: '',
                 user_code: '',
+                status:"1",
             }),
             json_fields: {
                 'name': 'name',

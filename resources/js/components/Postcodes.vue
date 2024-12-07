@@ -292,6 +292,30 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <v-select
+                                            v-model="form.status"
+                                            :options="statuses"
+                                            label="value"
+                                            :reduce="option => option.id"
+                                            placeholder="Enter Status ..."
+                                            v-validate="'required'"
+                                            :class="{
+                                                error: verrors.has('status'),
+                                                haveValue: form.status,
+                                            }"
+                                            data-vv-name="status"
+                                            />
+                                            <div
+                                                v-if="verrors.has('status')"
+                                                class="help-block invalid-feedback"
+                                            >
+                                                {{ verrors.first("status") }}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -334,6 +358,16 @@ export default {
             postcodes:{},
             cities: [],
             states: [],
+            statuses:[
+                {
+                    id:0,
+                    value:"Inactive",
+                },
+                {
+                    id:1,
+                    value:"Active",
+                }
+            ],
             role: [],
             districts: [],
             form: new Form({
@@ -342,6 +376,7 @@ export default {
                 district_id: "",
                 state_id: "",
                 city_id: "",
+                status:"1",
             }),
             json_fields: {
                 name: "name",

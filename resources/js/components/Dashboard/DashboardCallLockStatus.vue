@@ -30,7 +30,7 @@
             <div class="card-body" style="background: linear-gradient(to bottom, #918af4, #b3a6f6); border-radius: 50px;">
               <h2 class="ticket-count">{{ pendingTickets }}</h2>
               <p>Pending Tickets</p>
-              <p>FLM: {{ flmPending }} | SLM: {{ slmPending }} | JOINED: {{ joinedPending }}</p>
+              <p v-if="authUser.id_cms_privileges==4">FLM: {{ flmPending }} | SLM: {{ slmPending }} | JOINED: {{ joinedPending }}</p>
               <router-link to="/complaint-list/all/Pending" class="btn btn-outline-light btn-sm">
                 View Details
               </router-link>
@@ -44,7 +44,7 @@
             <div class="card-body" style="background: linear-gradient(to bottom, #d381f2, #d9a4f4); border-radius: 50px;">
               <h2 class="ticket-count">{{ processingTickets }}</h2>
               <p>Processing Tickets</p>
-              <p>FLM: {{ flmProcessing }} | SLM: {{ slmProcessing }} | JOINED: {{ joinedProcessing }}</p>
+              <p v-if="authUser.id_cms_privileges==4">FLM: {{ flmProcessing }} | SLM: {{ slmProcessing }} | JOINED: {{ joinedProcessing }}</p>
               <router-link to="/complaint-list/all/Processing" class="btn btn-outline-light btn-sm">
                 View Details
               </router-link>

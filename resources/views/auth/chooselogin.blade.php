@@ -68,7 +68,7 @@
                 <div class="form-group row mb-1">
                     <div class="col-md-6 offset-md-3">
                         <a type="submit" href="{{url('/client')}}" class="btn btn-primary btn-block" style="background: white;color: black;font-weight: bold;border: 3px solid #004488;">
-                            Login as Employee
+                            Login as Client
                         </a>
                     </div>
                 </div>

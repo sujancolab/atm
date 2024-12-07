@@ -108,93 +108,284 @@ class ComplaintController extends BaseController
             return $this->sendResponse([], 'Complaint has been lodged successfully.');
         }
     }
+    // public function listComplaint($system = 'all', $status = NULL)
+    // {
+    //     $atm_id = request()->query('atm_id');
+    //     $docket_no = request()->query('docket_no');
+    //     $complaint_status = request()->query('complaint_status');
+    //     $from_date = request()->query('from_date');
+    //     $to_date = request()->query('to_date');
+    //     if(!empty($from_date))
+    //     {
+    //         $from_date = date("Y-m-d H:i:s",strtotime($from_date." 00:00:00"));
+
+    //     }
+    //     if(!empty($to_date))
+    //     {
+    //         $to_date = date("Y-m-d H:i:s",strtotime($to_date." 23:59:59"));
+
+    //     }
+    //     $title = 'Complaint List';
+    //     if (Auth::user()->id_cms_privileges == 3)
+    //         $atms = DB::table('atm')->where('user_id', Auth::user()->id)->get();
+    //     else
+    //         $atms = DB::table('atm')->where('status', 1)->get();
+    //     //$ids = [];
+    //     //	$testCount = 0;
+
+    //     // 	foreach($atms as $atm){
+    //     // 	    //if($testCount < 999)
+    //     // 	    $ids[] = $atm->id;
+
+    //     // 	//	$testCount++;
+    //     // 	}
+
+    //     $status_list = array('' => 'Select', 'Pending' => 'Pending', 'Processing' => 'Processing', 'Completed' => 'Completed');
+
+    //     if ($system != 'all') {
+    //         if (Auth::user()->id_cms_privileges == 4) {
+
+
+
+    //             $complaints = DB::table('complaint')
+    //                 ->join('atm', 'complaint.atm_id', '=', 'atm.id')
+    //                 ->join('complaint_type', 'complaint.complaint_type_id', '=', 'complaint_type.id')
+    //                 ->join('cms_users', 'atm.user_id', '=', 'cms_users.id')
+    //                 ->join('bank', 'bank.id', '=', 'cms_users.bank_id')
+    //                 ->leftJoin('custodians', 'custodians.complaint_id', '=', 'complaint.id')
+    //                 ->select('complaint.*','atm.atm_id as atm_atm_id', 'atm.tag_time', 'complaint_type.title', 'cms_users.user_code', 'bank.bank_name', 'custodians.name as custname', DB::raw('count(custodians.id) as cust_count'), DB::raw('IF(complaint.work_status<>"Completed",IF(complaint.lag_time IS NULL, IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIMESTAMP, complaint.created_at))>TIME_TO_SEC(atm.tag_time), TIME_TO_SEC(TIMEDIFF(CURRENT_TIMESTAMP, complaint.created_at))-TIME_TO_SEC(atm.tag_time), 2),TIME_TO_SEC(complaint.lag_time)),IF(complaint.lag_time IS NOT NULL,1,0)) as sorttest2'))
+    //                 ->whereIn('atm.id', function ($query) {
+    //                     $query->select('id')
+    //                         ->from('atm')
+    //                         ->where('status', 1);
+    //                 })
+    //                 ->where([
+    //                     ['complaint_system_type_id', '=', $system],
+    //                     ['is_slm', '=', 0],
+    //                 ]);
+    //                 if($atm_id) $complaints = $complaints->where('atm.atm_id', $atm_id);
+    //                 if($docket_no) $complaints = $complaints->where('complaint.docket_no', $docket_no);
+    //                 if($complaint_status) $complaints = $complaints->where('complaint.work_status', $complaint_status);
+    //                 if($from_date) $complaints = $complaints->where('complaint.created_at','>=',$from_date);
+    //                 if($to_date) $complaints = $complaints->where('complaint.created_at','<=',$to_date);
+    //             if ($status) $complaints = $complaints->where('work_status', $status);
+    //             $complaints = $complaints->groupBy('complaint.id')->orderBy('sorttest2', 'desc')->paginate(10);
+    //             //dd($complaints);die;
+
+    //         } elseif (Auth::user()->id_cms_privileges == 3) {
+    //             $complaints = DB::table('complaint')
+    //                 ->join('atm', 'complaint.atm_id', '=', 'atm.id')
+    //                 ->join('complaint_type', 'complaint.complaint_type_id', '=', 'complaint_type.id')
+    //                 ->join('cms_users', 'atm.user_id', '=', 'cms_users.id')
+    //                 ->join('bank', 'bank.id', '=', 'cms_users.bank_id')
+    //                 ->leftJoin('custodians', 'custodians.complaint_id', '=', 'complaint.id')
+    //                 ->select('complaint.*','atm.atm_id as atm_atm_id', 'atm.tag_time', 'complaint_type.title', 'cms_users.user_code', 'bank.bank_name', DB::raw('count(custodians.id) as cust_count'), 'custodians.name as custname')
+    //                 ->whereIn('atm.id', function ($query) {
+    //                     $query->select('id')
+    //                         ->from('atm')
+    //                         ->where('user_id', Auth::user()->id);
+    //                 })
+    //                 ->where([
+    //                     ['complaint_system_type_id', '=', $system],
+    //                 ]);
+    //                 if($atm_id) $complaints = $complaints->where('atm.atm_id', $atm_id);
+    //                 if($docket_no) $complaints = $complaints->where('complaint.docket_no', $docket_no);
+    //                 if($complaint_status) $complaints = $complaints->where('complaint.work_status', $complaint_status);
+    //                 if($from_date) $complaints = $complaints->where('complaint.created_at','>=',$from_date);
+    //                 if($to_date) $complaints = $complaints->where('complaint.created_at','<=',$to_date);
+    //             if ($status) $complaints = $complaints->where('work_status', $status);
+    //             $complaints = $complaints->groupBy('complaint.id')->orderBy('complaint.created_at', 'desc')->paginate(10);
+    //         } else {
+    //             $complaints = DB::table('complaint')
+    //                 ->join('atm', 'complaint.atm_id', '=', 'atm.id')
+    //                 ->join('complaint_type', 'complaint.complaint_type_id', '=', 'complaint_type.id')
+    //                 ->join('cms_users', 'atm.user_id', '=', 'cms_users.id')
+    //                 ->join('bank', 'bank.id', '=', 'cms_users.bank_id')
+    //                 ->leftJoin('custodians', 'custodians.complaint_id', '=', 'complaint.id')
+    //                 ->select('complaint.*','atm.atm_id as atm_atm_id', 'atm.tag_time', 'complaint_type.title', 'cms_users.user_code', 'bank.bank_name', DB::raw('count(custodians.id) as cust_count'), 'custodians.name as custname')
+    //                 ->whereIn('atm.id', function ($query) {
+    //                     $query->select('id')
+    //                         ->from('atm');
+    //                 })
+    //                 ->where([
+    //                     ['complaint_system_type_id', '=', $system],
+    //                 ]);
+    //                 if($atm_id) $complaints = $complaints->where('atm.atm_id', $atm_id);
+    //                 if($docket_no) $complaints = $complaints->where('complaint.docket_no', $docket_no);
+    //                 if($complaint_status) $complaints = $complaints->where('complaint.work_status', $complaint_status);
+    //                 if($from_date) $complaints = $complaints->where('complaint.created_at','>=',$from_date);
+    //                 if($to_date) $complaints = $complaints->where('complaint.created_at','<=',$to_date);
+    //             if ($status) $complaints = $complaints->where('work_status', $status);
+    //             $complaints = $complaints->groupBy('complaint.id')->orderBy('complaint.created_at', 'desc')->paginate(10);
+    //         }
+    //     } else {
+    //         $complaints = DB::table('complaint')
+    //             ->join('atm', 'complaint.atm_id', '=', 'atm.id')
+    //             ->join('complaint_type', 'complaint.complaint_type_id', '=', 'complaint_type.id')
+    //             ->join('cms_users', 'atm.user_id', '=', 'cms_users.id')
+    //             ->join('bank', 'bank.id', '=', 'cms_users.bank_id')
+    //             ->leftJoin('custodians', 'custodians.complaint_id', '=', 'complaint.id')
+    //             ->select('complaint.*','atm.atm_id as atm_atm_id', 'atm.tag_time', 'complaint_type.title', 'cms_users.user_code', 'bank.bank_name', DB::raw('count(custodians.id) as cust_count'), 'custodians.name as custname')
+    //             ->whereIn('atm.id', function ($query) {
+    //                 $query->select('id')
+    //                     ->from('atm')
+    //                     ->where('status', 1);
+    //             });
+    //             if($atm_id) $complaints = $complaints->where('atm.atm_id', $atm_id);
+    //             if($docket_no) $complaints = $complaints->where('complaint.docket_no', $docket_no);
+    //             if($complaint_status) $complaints = $complaints->where('complaint.work_status', $complaint_status);
+    //             if($from_date) $complaints = $complaints->where('complaint.created_at','>=',$from_date);
+    //             if($to_date) $complaints = $complaints->where('complaint.created_at','<=',$to_date);
+    //         if ($status) $complaints = $complaints->where('work_status', $status);
+    //         $complaints = $complaints->groupBy('complaint.id')->orderBy('complaint.created_at', 'desc')->paginate(10);
+    //     }
+    //     // dd($complaints);
+    //     foreach ($complaints as $com) {
+    //         if ($com->work_status == 'Completed' && $com->lag_time == '') {
+
+    //             $com->lag_time = '';
+    //         } else if ($com->work_status == 'Completed' && $com->lag_time != '') {
+    //             $lag_time = $com->lag_time;
+    //             $com->lag_time = $lag_time;
+    //         } else {
+    //             $current_date = date('Y-m-d H:i:s');
+
+    //             $to = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $com->created_at);
+    //             $from = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $current_date);
+    //             $diff_in_seconds = $to->diffInSeconds($from);
+
+    //             $total_time = $diff_in_seconds;
+
+    //             list($h, $m, $s) = explode(':', $com->tag_time);
+    //             $tag_time = ($h * 3600) + ($m * 60) + $s;
+
+    //             if ($total_time > $tag_time) {
+
+    //                 $diff = $total_time - $tag_time;
+    //                 $init = $diff;
+    //                 $hours = floor($init / 3600);
+    //                 $minutes = floor(($init / 60) % 60);
+    //                 $seconds = $init % 60;
+
+    //                 $x = "$hours:$minutes:$seconds";
+    //                 $lag_time = $x;
+    //             } else {
+    //                 $lag_time = NULL;
+    //             }
+    //             $com->lag_time = $lag_time;
+    //         }
+    //     }
+    //     //dd($complaints);
+    //     foreach ($complaints as $cmp) {
+    //         $custodian_list = '';
+    //         $complaint_id = $cmp->id;
+    //         $custodians =  DB::table('complaint')
+    //             ->Join('custodians', 'custodians.complaint_id', '=', 'complaint.id')
+    //             ->select('custodians.*', 'complaint.id')
+    //             ->where([
+    //                 ['complaint.id', '=', $complaint_id],
+    //                 ['custodians.status', '=', 1],
+    //                 ['custodians.custodian_id', '!=', 0]
+    //             ])
+    //             ->first();
+    //         //dd("echo");
+    //         //dd($complaints);
+
+    //         /*foreach($custodians as $cst)
+    //         {
+    //             if($cst->status==1 || $cst->is_claim==1)
+    //             {
+
+    //                 if($custodian_list=='')
+    //                 {
+    //                     $custodian_list = $cst->name;
+
+    //                 }
+    //                 else
+    //                 {
+    //                     $custodian_list = $custodian_list.' , '.$cst->name;
+    //                 }
+    //             }
+
+    //         }*/
+    //         //$cmp->custname = $custodian_list;
+    //         $cmp->custname = isset($custodians) ? $custodians->name : null;
+    //     }
+    //     //dd($complaints);
+    //     /*if($status)$complaints = $complaints->where('work_status',$status);
+    // 	$complaints = $complaints->groupBy('complaint.id')->orderBy('sortOrder', 'asc')->paginate(10);*/
+    //     //dd($complaints);
+    //     //return $complaints;
+    //     $custodians =  DB::table('custodians')
+    //         ->Join('cms_users', 'cms_users.id', '=', 'custodians.custodian_id')
+    //         ->select(DB::raw('DISTINCT(custodians.custodian_id)'), 'custodians.name', 'custodians.status', 'custodians.is_claim')
+    //         ->where('custodians.custodian_id', '!=', 0)
+    //         ->where('cms_users.blocked', 0)
+    //         ->groupBy('custodians.custodian_id')
+    //         ->get();
+    //     //dd($complaints);die;
+    //     $data = [
+    //         "complaints" => $complaints,
+    //         "status_list" => $status_list,
+    //         "system" => $system,
+    //         "custodians" => $custodians
+    //     ];
+    //     return $this->sendResponse($data, 'List of Complaints.');
+    // }
     public function listComplaint($system = 'all', $status = NULL)
     {
-        $atm_id = request()->query('atm_id');
-        $docket_no = request()->query('docket_no');
-        $complaint_status = request()->query('complaint_status');
-        $from_date = request()->query('from_date');
-        $to_date = request()->query('to_date');
-        if(!empty($from_date))
-        {
-            $from_date = date("Y-m-d H:i:s",strtotime($from_date." 00:00:00"));
-
-        }
-        if(!empty($to_date))
-        {
-            $to_date = date("Y-m-d H:i:s",strtotime($to_date." 23:59:59"));
-
-        }
         $title = 'Complaint List';
         if (Auth::user()->id_cms_privileges == 3)
             $atms = DB::table('atm')->where('user_id', Auth::user()->id)->get();
         else
-            $atms = DB::table('atm')->where('status', 1)->get();
-        //$ids = [];
-        //	$testCount = 0;
+            $atms = DB::table('atm')->get();
+        $ids = [];
+        foreach ($atms as $atm) {
+            $ids[] = $atm->id;
+        }
 
-        // 	foreach($atms as $atm){
-        // 	    //if($testCount < 999)
-        // 	    $ids[] = $atm->id;
-
-        // 	//	$testCount++;
-        // 	}
 
         $status_list = array('' => 'Select', 'Pending' => 'Pending', 'Processing' => 'Processing', 'Completed' => 'Completed');
-
+        //return $ids;
         if ($system != 'all') {
             if (Auth::user()->id_cms_privileges == 4) {
+                // $complaints = DB::table('complaint')
+                //     ->join('atm', 'complaint.atm_id', '=', 'atm.id')
+                //     ->join('complaint_type', 'complaint.complaint_type_id', '=', 'complaint_type.id')
+                //     ->join('cms_users', 'atm.user_id', '=', 'cms_users.id')
+                //     ->join('bank', 'bank.id', '=', 'cms_users.bank_id')
+                //     ->leftJoin('custodians', 'custodians.complaint_id', '=', 'complaint.id')
+                //     ->select('complaint.*', 'atm.atm_id as atm_atm_id', 'atm.tag_time', 'complaint_type.title', 'cms_users.user_code', 'bank.bank_name', 'custodians.name as custname', DB::raw('count(custodians.id) as cust_count'), DB::raw('IF(complaint.work_status<>"Completed",IF(complaint.lag_time IS NULL, IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIMESTAMP, complaint.created_at))>TIME_TO_SEC(atm.tag_time), TIME_TO_SEC(TIMEDIFF(CURRENT_TIMESTAMP, complaint.created_at))-TIME_TO_SEC(atm.tag_time), 2),TIME_TO_SEC(complaint.lag_time)),IF(complaint.lag_time IS NOT NULL,1,0)) as sorttest2'))
+                //     ->whereIn('atm.id', $ids)
+                //     ->where([
+                //         ['complaint_system_type_id', '=', $system],
+                //         ['is_slm', '=', 0],
+                //     ]);
+                // $complaints= DB::table('complaints_view')
+                // ->whereIn('atm_id', $ids)
+                //     ->where([
+                //             ['complaint_system_type_id', '=', $system],
+                //             ['is_slm', '=', 0],
+                //         ]);
 
 
+                // if ($status) $complaints = $complaints->where('work_status', $status);
 
-                $complaints = DB::table('complaint')
-                    ->join('atm', 'complaint.atm_id', '=', 'atm.id')
-                    ->join('complaint_type', 'complaint.complaint_type_id', '=', 'complaint_type.id')
-                    ->join('cms_users', 'atm.user_id', '=', 'cms_users.id')
-                    ->join('bank', 'bank.id', '=', 'cms_users.bank_id')
-                    ->leftJoin('custodians', 'custodians.complaint_id', '=', 'complaint.id')
-                    ->select('complaint.*','atm.atm_id as atm_atm_id', 'atm.tag_time', 'complaint_type.title', 'cms_users.user_code', 'bank.bank_name', 'custodians.name as custname', DB::raw('count(custodians.id) as cust_count'), DB::raw('IF(complaint.work_status<>"Completed",IF(complaint.lag_time IS NULL, IF(TIME_TO_SEC(TIMEDIFF(CURRENT_TIMESTAMP, complaint.created_at))>TIME_TO_SEC(atm.tag_time), TIME_TO_SEC(TIMEDIFF(CURRENT_TIMESTAMP, complaint.created_at))-TIME_TO_SEC(atm.tag_time), 2),TIME_TO_SEC(complaint.lag_time)),IF(complaint.lag_time IS NOT NULL,1,0)) as sorttest2'))
-                    ->whereIn('atm.id', function ($query) {
-                        $query->select('id')
-                            ->from('atm')
-                            ->where('status', 1);
-                    })
-                    ->where([
-                        ['complaint_system_type_id', '=', $system],
-                        ['is_slm', '=', 0],
-                    ]);
-                    if($atm_id) $complaints = $complaints->where('atm.atm_id', $atm_id);
-                    if($docket_no) $complaints = $complaints->where('complaint.docket_no', $docket_no);
-                    if($complaint_status) $complaints = $complaints->where('complaint.work_status', $complaint_status);
-                    if($from_date) $complaints = $complaints->where('complaint.created_at','>=',$from_date);
-                    if($to_date) $complaints = $complaints->where('complaint.created_at','<=',$to_date);
-                if ($status) $complaints = $complaints->where('work_status', $status);
-                $complaints = $complaints->groupBy('complaint.id')->orderBy('sorttest2', 'desc')->paginate(10);
-                //dd($complaints);die;
+                $complaints = DB::table('complaints_view')
+    ->select('id', 'atm_id','atm_atm_id','docket_no', 'complaint_system_type_id', 'is_slm', 'work_status', 'sorttest2','created_at','tag_time') // Add only required columns
+    ->whereIn('atm_id', $ids)
+    ->where([
+        ['complaint_system_type_id', '=', $system],
+        ['is_slm', '=', 0],
+    ]);
 
-            } elseif (Auth::user()->id_cms_privileges == 3) {
-                $complaints = DB::table('complaint')
-                    ->join('atm', 'complaint.atm_id', '=', 'atm.id')
-                    ->join('complaint_type', 'complaint.complaint_type_id', '=', 'complaint_type.id')
-                    ->join('cms_users', 'atm.user_id', '=', 'cms_users.id')
-                    ->join('bank', 'bank.id', '=', 'cms_users.bank_id')
-                    ->leftJoin('custodians', 'custodians.complaint_id', '=', 'complaint.id')
-                    ->select('complaint.*','atm.atm_id as atm_atm_id', 'atm.tag_time', 'complaint_type.title', 'cms_users.user_code', 'bank.bank_name', DB::raw('count(custodians.id) as cust_count'), 'custodians.name as custname')
-                    ->whereIn('atm.id', function ($query) {
-                        $query->select('id')
-                            ->from('atm')
-                            ->where('user_id', Auth::user()->id);
-                    })
-                    ->where([
-                        ['complaint_system_type_id', '=', $system],
-                    ]);
-                    if($atm_id) $complaints = $complaints->where('atm.atm_id', $atm_id);
-                    if($docket_no) $complaints = $complaints->where('complaint.docket_no', $docket_no);
-                    if($complaint_status) $complaints = $complaints->where('complaint.work_status', $complaint_status);
-                    if($from_date) $complaints = $complaints->where('complaint.created_at','>=',$from_date);
-                    if($to_date) $complaints = $complaints->where('complaint.created_at','<=',$to_date);
-                if ($status) $complaints = $complaints->where('work_status', $status);
-                $complaints = $complaints->groupBy('complaint.id')->orderBy('complaint.created_at', 'desc')->paginate(10);
+                // dd(vsprintf(str_replace('?', '%s', $complaints->toSql()), $complaints->getBindings()));
+                $complaints = $complaints->groupBy('id')->orderBy('sorttest2', 'desc')->paginate(10);
+
+
+                //echo '<pre>';
+                //print_r($complaints);exit;
+
             } else {
                 $complaints = DB::table('complaint')
                     ->join('atm', 'complaint.atm_id', '=', 'atm.id')
@@ -202,19 +393,12 @@ class ComplaintController extends BaseController
                     ->join('cms_users', 'atm.user_id', '=', 'cms_users.id')
                     ->join('bank', 'bank.id', '=', 'cms_users.bank_id')
                     ->leftJoin('custodians', 'custodians.complaint_id', '=', 'complaint.id')
-                    ->select('complaint.*','atm.atm_id as atm_atm_id', 'atm.tag_time', 'complaint_type.title', 'cms_users.user_code', 'bank.bank_name', DB::raw('count(custodians.id) as cust_count'), 'custodians.name as custname')
-                    ->whereIn('atm.id', function ($query) {
-                        $query->select('id')
-                            ->from('atm');
-                    })
+                    ->select('complaint.*', 'atm.atm_id as atm_atm_id', 'atm.tag_time', 'complaint_type.title', 'cms_users.user_code', 'bank.bank_name', DB::raw('count(custodians.id) as cust_count'), 'custodians.name as custname')
+                    ->whereIn('atm.id', $ids)
                     ->where([
                         ['complaint_system_type_id', '=', $system],
                     ]);
-                    if($atm_id) $complaints = $complaints->where('atm.atm_id', $atm_id);
-                    if($docket_no) $complaints = $complaints->where('complaint.docket_no', $docket_no);
-                    if($complaint_status) $complaints = $complaints->where('complaint.work_status', $complaint_status);
-                    if($from_date) $complaints = $complaints->where('complaint.created_at','>=',$from_date);
-                    if($to_date) $complaints = $complaints->where('complaint.created_at','<=',$to_date);
+
                 if ($status) $complaints = $complaints->where('work_status', $status);
                 $complaints = $complaints->groupBy('complaint.id')->orderBy('complaint.created_at', 'desc')->paginate(10);
             }
@@ -225,21 +409,13 @@ class ComplaintController extends BaseController
                 ->join('cms_users', 'atm.user_id', '=', 'cms_users.id')
                 ->join('bank', 'bank.id', '=', 'cms_users.bank_id')
                 ->leftJoin('custodians', 'custodians.complaint_id', '=', 'complaint.id')
-                ->select('complaint.*','atm.atm_id as atm_atm_id', 'atm.tag_time', 'complaint_type.title', 'cms_users.user_code', 'bank.bank_name', DB::raw('count(custodians.id) as cust_count'), 'custodians.name as custname')
-                ->whereIn('atm.id', function ($query) {
-                    $query->select('id')
-                        ->from('atm')
-                        ->where('status', 1);
-                });
-                if($atm_id) $complaints = $complaints->where('atm.atm_id', $atm_id);
-                if($docket_no) $complaints = $complaints->where('complaint.docket_no', $docket_no);
-                if($complaint_status) $complaints = $complaints->where('complaint.work_status', $complaint_status);
-                if($from_date) $complaints = $complaints->where('complaint.created_at','>=',$from_date);
-                if($to_date) $complaints = $complaints->where('complaint.created_at','<=',$to_date);
+                ->select('complaint.*', 'atm.atm_id as atm_atm_id', 'atm.tag_time', 'complaint_type.title', 'cms_users.user_code', 'bank.bank_name', DB::raw('count(custodians.id) as cust_count'), 'custodians.name as custname')
+                ->whereIn('atm.id', $ids);
+
             if ($status) $complaints = $complaints->where('work_status', $status);
             $complaints = $complaints->groupBy('complaint.id')->orderBy('complaint.created_at', 'desc')->paginate(10);
         }
-        // dd($complaints);
+
         foreach ($complaints as $com) {
             if ($com->work_status == 'Completed' && $com->lag_time == '') {
 
@@ -274,56 +450,49 @@ class ComplaintController extends BaseController
                 }
                 $com->lag_time = $lag_time;
             }
+            $complaint_id = $com->id;
+            // $custodians =  DB::table('complaint')
+            //     ->Join('custodians', 'custodians.complaint_id', '=', 'complaint.id')
+            //     ->select('custodians.*', 'complaint.id')
+            //     ->where([
+            //         ['complaint.id', '=', $complaint_id],
+            //         ['custodians.status', '=', 1],
+            //         ['custodians.custodian_id', '!=', 0]
+            //     ])
+            //     ->first();
+            $custodians=DB::table('custodians')->where([
+                ['complaint_id','=',$complaint_id],
+                ['status', '=', 1],
+                ['custodian_id', '!=', 0]
+            ])->first();
+
+            if (isset($custodians)) {
+                $com->custname = $custodians->name;
+            }
         }
-        //dd($complaints);
-        foreach ($complaints as $cmp) {
-            $custodian_list = '';
-            $complaint_id = $cmp->id;
-            $custodians =  DB::table('complaint')
-                ->Join('custodians', 'custodians.complaint_id', '=', 'complaint.id')
-                ->select('custodians.*', 'complaint.id')
-                ->where([
-                    ['complaint.id', '=', $complaint_id],
-                    ['custodians.status', '=', 1],
-                    ['custodians.custodian_id', '!=', 0]
-                ])
-                ->first();
-            //dd("echo");
-            //dd($complaints);
+        // foreach ($complaints as $cmp) {
+        //     $custodian_list = '';
+        //     $complaint_id = $cmp->id;
+        //     $custodians =  DB::table('complaint')
+        //         ->Join('custodians', 'custodians.complaint_id', '=', 'complaint.id')
+        //         ->select('custodians.*', 'complaint.id')
+        //         ->where([
+        //             ['complaint.id', '=', $complaint_id],
+        //             ['custodians.status', '=', 1],
+        //             ['custodians.custodian_id', '!=', 0]
+        //         ])
+        //         ->first();
 
-            /*foreach($custodians as $cst)
-            {
-                if($cst->status==1 || $cst->is_claim==1)
-                {
+        //     if (isset($custodians)) {
+        //         $cmp->custname = $custodians->name;
+        //     }
+        // }
 
-                    if($custodian_list=='')
-                    {
-                        $custodian_list = $cst->name;
-
-                    }
-                    else
-                    {
-                        $custodian_list = $custodian_list.' , '.$cst->name;
-                    }
-                }
-
-            }*/
-            //$cmp->custname = $custodian_list;
-            $cmp->custname = isset($custodians) ? $custodians->name : null;
-        }
-        //dd($complaints);
-        /*if($status)$complaints = $complaints->where('work_status',$status);
-    	$complaints = $complaints->groupBy('complaint.id')->orderBy('sortOrder', 'asc')->paginate(10);*/
-        //dd($complaints);
-        //return $complaints;
         $custodians =  DB::table('custodians')
-            ->Join('cms_users', 'cms_users.id', '=', 'custodians.custodian_id')
-            ->select(DB::raw('DISTINCT(custodians.custodian_id)'), 'custodians.name', 'custodians.status', 'custodians.is_claim')
-            ->where('custodians.custodian_id', '!=', 0)
-            ->where('cms_users.blocked', 0)
-            ->groupBy('custodians.custodian_id')
-            ->get();
-        //dd($complaints);die;
+        ->select(DB::raw('DISTINCT(custodians.custodian_id)'), 'custodians.name', 'custodians.status', 'custodians.is_claim')
+        ->where('custodians.custodian_id', '!=', 0)
+        ->groupBy('custodians.custodian_id')
+        ->get();
         $data = [
             "complaints" => $complaints,
             "status_list" => $status_list,
@@ -332,6 +501,7 @@ class ComplaintController extends BaseController
         ];
         return $this->sendResponse($data, 'List of Complaints.');
     }
+
     public function viewComplaint($id)
     {
         $title = 'View Complaint';
@@ -725,7 +895,9 @@ $custodians = DB::table('cms_users')
         }
         $to_user = "call center";
         $complaint = Complaint::findOrFail($id);
+
         if($request->action){
+            // echo  "here";die();
             if($request->action == "Completed"){
 
                 $manual_close= $request->manual_close;
@@ -797,7 +969,7 @@ $custodians = DB::table('cms_users')
             if($request->action){
 
 
-                $complaint->update([
+                Complaint::where('id', $id)->update([
                     'work_status'   => $request->action,
                     'total_time' => $total_time,
                     'lag_time' => $lag_time,
@@ -811,7 +983,7 @@ $custodians = DB::table('cms_users')
             $post_for_engineer = 0;
         }else{
             $post_for_engineer = $request->post_for_engineer;
-            $complaint->update([
+            Complaint::where('id', $id)->update([
                 'is_slm' => 1
             ]);
         }
@@ -829,7 +1001,8 @@ $custodians = DB::table('cms_users')
                 $template_slug = 'ticket-conversation';
             }
             $this->send_whole_conversation($id , $template_slug, $is_admin);
-            return ;//redirect()->route('dashboard.viewComplaint', $id)->with('message','Your comment have successfully has been sent to '.$to_user.' successfully.');
+            //return ;//redirect()->route('dashboard.viewComplaint', $id)->with('message','Your comment have successfully has been sent to '.$to_user.' successfully.');
+            return $this->sendResponse([], 'Status changed successfully.');
         }
     }
     protected function send_whole_conversation($id , $template_slug=null, $is_admin){
@@ -869,6 +1042,7 @@ $custodians = DB::table('cms_users')
             'mail_key_code'     => ['conversation'=>view('email_template.viewConversation',compact('complaint','complaint_details')),'logo'=>url('/').'/'.'test.png','name'=>$complaint_details[0]->client_name,'docket_no'=>$complaint->docket_no],
             'subject'       => "S&IB ticket conversation history"
         ];
+        return true;
         //dd($config);
         // return $this->initiateMail($config);
     }

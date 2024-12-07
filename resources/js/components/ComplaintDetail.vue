@@ -13,8 +13,8 @@
                 <button class="btn btn-info">{{ atm_details.bank_name }}</button>
             </div>
             <div class="col-md-4">
-                <p><strong>SLM Docket No :</strong></p>
-                <button class="btn btn-info">{{ sls_details ? sls_details.sls_docket_no : "" }}</button>
+                <p v-if="sls_details"><strong>SLM Docket No :</strong></p>
+                <button class="btn btn-info" v-if="sls_details">{{ sls_details ? sls_details.sls_docket_no : "" }}</button>
                 <p><strong>Docket No :</strong></p>
                 <button class="btn btn-info">{{ complaint.docket_no }}</button>
             </div>
@@ -28,7 +28,7 @@
             </div>
             <div class="col-md-4">
                 <div v-if="complaint.is_slm === 1 && custodian_details" class="viewtab viewtabber action-th">
-                    <div v-if="myPrivilegeId === 4">
+                    <div v-if="authUser.id_cms_privileges === 4">
                         <label class="control-label">Assigned Custodian :</label>
                         <!-- You can enable the button below if needed for assignment functionality -->
                         <!-- <a class="action-btn" style="padding: 2px 6px; border: 1px solid #d9d9d9; color: #191919; font-size: 1.0em; text-align: center; display: inline-block; border-radius: 3px; margin: 1px;"
@@ -58,7 +58,7 @@
         <div class="card-body chat-body">
           <div class="chat-messages">
             <div v-for="(row, index) in complaint_details" :key="index">
-              <div v-if="myPrivilegeId == 3" class="mb-3">
+              <div v-if="authUser.id_cms_privileges == 3" class="mb-3">
                 <div v-if="row.is_admin">
                   <div v-if="row.post_for_engineer" class="message admin engineer-message">
                     <div class="d-flex justify-content-between">
@@ -83,7 +83,7 @@
                   <p>{{ row.comment }}</p>
                 </div>
               </div>
-              <div v-else-if="myPrivilegeId == 4" class="mb-3">
+              <div v-else-if="authUser.id_cms_privileges == 4" class="mb-3">
                 <div v-if="row.is_admin">
                   <div v-if="row.post_for_engineer" class="message admin engineer-message">
                     <div class="d-flex justify-content-between">
@@ -115,10 +115,10 @@
         <div class="card-footer">
           <form @submit.prevent="submitComplaintForm">
             <div class="form-group">
-              <textarea v-model="comment" :disabled="isCommentDisabled" class="form-control" placeholder="Add Comment" rows="3" required></textarea>
+              <textarea v-model="comment" :disabled="complaint.work_status === 'Completed' && authUser.id_cms_privileges === 3" class="form-control" placeholder="Add Comment" rows="3" required></textarea>
             </div>
 
-            <div v-if="myPrivilegeId == 4">
+            <div v-if="authUser.id_cms_privileges == 4">
               <div class="form-group">
                 <select v-model="selectedStatus" class="form-control">
                   <option value="Pending">Pending</option>
@@ -135,7 +135,7 @@
             </div>
 
             <div class="form-group">
-              <button :disabled="isCommentDisabled" type="submit" class="btn btn-primary btn-block">Send</button>
+              <button :disabled="complaint.work_status === 'Completed' && authUser.id_cms_privileges === 3" type="submit" class="btn btn-primary btn-block">Send</button>
             </div>
           </form>
         </div>
@@ -216,6 +216,7 @@ export default {
             newComment: "",
             selectedStatus: null,
             myPrivilegeId:3,
+            authUser: localStorage.getItem("auth") ? JSON.parse(localStorage.getItem("auth")) : null,
             comment: '',
       selectedStatus:  this.complaint ? this.complaint.work_status : 'Pending',
       manualClose: '',
@@ -237,7 +238,11 @@ export default {
             }
         },
         isCommentDisabled() {
-            return this.complaint.work_status === 'Completed' && this.myPrivilegeId === 3;
+            console.log("cakki");
+
+            console.log("======>",this.complaint.work_status,this.authUser.id_cms_privileges);
+
+            return this.complaint.work_status === 'Completed' && this.authUser.id_cms_privileges === 3;
         },
         showManualClose() {
             return this.selectedStatus === 'Completed';
@@ -248,13 +253,14 @@ export default {
         submitComplaintForm() {
             // Submit form logic using `comment`, `selectedStatus`, `manualClose`, and `lagReason` values.
             const formData = {
+                action:"update",
                 comment: this.comment,
                 status: this.selectedStatus,
                 manual_close: this.manualClose,
                 lag_reason: this.lagReason,
             };
             // Example POST request (replace URL as necessary)
-            this.$http.post(`/dashboard/updateComplaintDetails/${this.complaint.id}`, formData)
+            this.$http.post(`api/complaint/comment/${this.complaint.id}`, formData)
                 .then(response => {
                     // handle success
                 })
@@ -282,6 +288,15 @@ export default {
 
             });
 
+    },
+    mounted() {
+        // Initial API call when the component is mounted
+        console.log("mounted");
+        this.authUser=localStorage.getItem("auth");
+        if (this.authUser) {
+            this.authUser = JSON.parse(this.authUser);
+        }
+        // this.loadTickets();
     },
 };
 </script>

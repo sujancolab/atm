@@ -15,7 +15,7 @@
 }
 
 .nav.nav-treeview{
-  background: #1a5794 !important; 
+  background: #1a5794 !important;
   border-radius: 4px !important;
 }
 
@@ -173,9 +173,9 @@ table th:first-child {
 /* Make the first column sticky */
 .table thead th:first-child,
 .table tbody td:first-child {
-  position: sticky;
+  position: static;
   left: 0;
-  z-index: 3; /* Ensure it's above other table cells */
+  z-index: 3; /*Ensure it's above other table cells*/
   background: #eeeeee; /* Adjust as necessary to match your table's background */
 }
 

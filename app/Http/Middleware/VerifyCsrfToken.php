@@ -11,6 +11,6 @@ class VerifyCsrfToken extends Middleware {
 	 * @var array
 	 */
 	protected $except = [
-		'/sociallogin/google', '/sociallogin/facebook', '/sociallogin/github', '/sociallogin/twitter', '/sociallogin/vkontakte', 'payments/*',
+		'/sociallogin/google', '/sociallogin/facebook', '/sociallogin/github', '/sociallogin/twitter', '/sociallogin/vkontakte', 'payments/*','api/postlogin-api*',
 	];
 }

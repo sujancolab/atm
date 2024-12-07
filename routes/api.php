@@ -39,6 +39,9 @@ Route::middleware('auth:api')->get('/permissions', [ModuleController::class, 'in
 Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
 
     Route::post('login', 'LoginController@login')->name('apilogin');
+    Route::post('postlogin-api', 'AppAuthController@postlogin')->name('postlogin');
+    Route::post('/save-complaint-status','AppAuthController@saveComplaintStatus');
+    Route::post('complaints/custodian-app','AppAuthController@ComplaintsCustodian');
     Route::get('profile', 'ProfileController@profile');
     Route::put('profile', 'ProfileController@updateProfile');
     Route::post('change-password', 'ProfileController@changePassword');
@@ -103,6 +106,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::get('/assign-ticket/{docket?}', [ComplaintController::class,'assignTicket']);
     Route::post('/get_docket_details',[ComplaintController::class,'getDocketDetails']);
     Route::post('/assign_custodian',[ComplaintController::class,'assignCustodian']);
+    Route::post('/complaint/comment/{id}',[ComplaintController::class,'updateComplaintDetails']);
     Route::get('getDistricts', [DistrictController::class,'getDistricts']);
     Route::get('/getCitiesByDistrict',[CityController::class,'getCitiesByDistrict']);
     Route::get('/getPostCodeByCity',[PostCodeController::class,'getPostCodeByCity']);
