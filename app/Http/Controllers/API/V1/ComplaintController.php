@@ -57,8 +57,9 @@ class ComplaintController extends BaseController
             DB::table('complaint')
             ->where('docket_no', $docket_no)
             ->count() > 0
-        )
+        ){
             return $this->sendError('This complaint already has been lodged for the day.');
+        }
 
 
         if (
@@ -70,8 +71,10 @@ class ComplaintController extends BaseController
             })
             ->select('id')
             ->count() > 0
-        )
-            return $this->sendError('Already a docket is under process under this ATM!');
+        ){
+            return $this->sendError('Already a docket is under process under this ATM!',[],403);
+            // return $this->sendResponse([], 'Complaint has been lodged successfully.');
+        }
 
 
 
@@ -895,7 +898,8 @@ $custodians = DB::table('cms_users')
         }
         $to_user = "call center";
         $complaint = Complaint::findOrFail($id);
-
+        $total_time=0;
+        $lag_time='';
         if($request->action){
             // echo  "here";die();
             if($request->action == "Completed"){

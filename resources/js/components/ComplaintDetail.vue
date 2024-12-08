@@ -7,9 +7,11 @@
                 <p><strong>ATM :</strong></p>
                 <button class="btn btn-primary">Code - {{ complaint && complaint.atm ? complaint.atm.atm_id :
                     ""}}</button>
-                <p>Address - {{ atm_details.city_name + ', ' + atm_details.district_name + ', ' + atm_details.state_name }}</p>
-                <p>Area Code -{{ atm_details.area_code }}</p>
-                <p>Postcode - {{ atm_details.postcode }}</p>
+                <p>
+                  Address - {{ atm_details.city_name + ', ' + atm_details.district_name + ', ' + atm_details.state_name }}
+                  <br>Area Code -{{ atm_details.area_code }}
+                  <br>Postcode - {{ atm_details.postcode }}
+                </p>
                 <button class="btn btn-info">{{ atm_details.bank_name }}</button>
             </div>
             <div class="col-md-4">
@@ -225,6 +227,20 @@ export default {
     },
     methods: {
         // Function to add a new comment
+        getResult(){
+            axios.get("api/complaint/view/" + this.$route.params.id)
+            .then((res) => {
+                console.log("res====>", res.data.data);
+                this.complaint = res.data.data.complaint;
+                this.atm_details = res.data.data.atm_details;
+                this.complaint_details = res.data.data.complaint_details;
+                this.custodian_details = res.data.data.custodian_details;
+                this.sls_details = res.data.data.sls_details;
+                this.selectedStatus = this.complaint.work_status || 'Pending';
+                // console.log("atm",atm_details);
+
+            });
+        },
         addComment() {
             if (this.newComment.trim()) {
                 const newMessage = {
@@ -263,6 +279,7 @@ export default {
             this.$http.post(`api/complaint/comment/${this.complaint.id}`, formData)
                 .then(response => {
                     // handle success
+                    this.getResult();
                 })
                 .catch(error => {
                     // handle error
@@ -289,6 +306,7 @@ export default {
             });
 
     },
+
     mounted() {
         // Initial API call when the component is mounted
         console.log("mounted");

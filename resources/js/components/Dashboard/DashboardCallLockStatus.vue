@@ -1,82 +1,70 @@
 <template>
     <div class="container-fluid dashboard"  v-if="authUser.id_cms_privileges!='2'">
-      <!-- Header Row -->
-      <div class="row">
-        <div class="col-md-12 text-center py-3" style="background-color: #40E0D0;">
-          <h4>Dashboard</h4>
-        </div>
-      </div>
 
-      <!-- Top Row for Tickets -->
-      <div class="row justify-content-center my-4">
-        <!-- Total Tickets -->
-        <div class="col-md-4">
-          <div class="card text-center shadow" style="border-radius: 50px;">
-            <div class="card-body" style="background: linear-gradient(to bottom, #ff7e67, #ffb3a7); border-radius: 50px;">
-              <h2 class="ticket-count">{{ totalTickets }}</h2>
-              <p>Total Tickets</p>
-              <router-link to="/complaint-list/all" class="btn btn-outline-light btn-sm">
-                View Details
-                </router-link>
-
-
+        <div class="row">
+            <div class="col-md-4 col-sm-6 col-12">
+                <div class="info-box bg-purple">
+                    <span class="info-box-icon"><i class="fa fa-ticket-alt"></i></span> 
+                    <div class="info-box-content"><span class="info-box-text">Total Tickets</span> 
+                        <span class="info-box-number">{{ totalTickets }}</span>
+                    </div>
+                    <router-link to="/complaint-list/all" class="btn btn-outline-light btn-sm custom-btn" style="color: black !important;">
+                        View Details
+                    </router-link>
+                </div>
+            </div> 
+            <div class="col-md-4 col-sm-6 col-12">
+                <div class="info-box bg-danger">
+                    <span class="info-box-icon"><i class="fa fa-ticket-alt"></i></span> 
+                    <div class="info-box-content">
+                        <span class="info-box-text">Pending Tickets</span> 
+                        <span class="info-box-number">{{ pendingTickets }}</span>
+                        <p v-if="authUser.id_cms_privileges==4">FLM: {{ flmPending }} | SLM: {{ slmPending }} | JOINED: {{ joinedPending }}</p>
+                    </div>
+                    <router-link to="/complaint-list/all/Pending" class="btn btn-outline-light btn-sm custom-btn" style="color: black !important;">
+                        View Details
+                    </router-link>
+                </div>
+            </div> 
+            <div class="col-md-4 col-sm-6 col-12">
+                <div class="info-box bg-primary">
+                    <span class="info-box-icon"><i aria-hidden="true" class="fa fa-ticket-alt"></i></span> 
+                    <div class="info-box-content">
+                        <span class="info-box-text">Processing Tickets</span> 
+                        <span class="info-box-number">{{ processingTickets }}</span>
+                        <p v-if="authUser.id_cms_privileges==4">FLM: {{ flmProcessing }} | SLM: {{ slmProcessing }} | JOINED: {{ joinedProcessing }}</p>
+                    </div>
+                    <router-link to="/complaint-list/all/Processing" class="btn btn-sm custom-btn" style="color: black !important;">
+                        View Details
+                    </router-link>
+                </div>
             </div>
-          </div>
         </div>
 
-        <!-- Pending Tickets -->
-        <div class="col-md-4">
-          <div class="card text-center shadow" style="border-radius: 50px;">
-            <div class="card-body" style="background: linear-gradient(to bottom, #918af4, #b3a6f6); border-radius: 50px;">
-              <h2 class="ticket-count">{{ pendingTickets }}</h2>
-              <p>Pending Tickets</p>
-              <p v-if="authUser.id_cms_privileges==4">FLM: {{ flmPending }} | SLM: {{ slmPending }} | JOINED: {{ joinedPending }}</p>
-              <router-link to="/complaint-list/all/Pending" class="btn btn-outline-light btn-sm">
-                View Details
-              </router-link>
+        <!-- Top Row for Tickets -->
+        <div class="row">
+            <div class="col-md-4">
+                <table class="table table-bordered ">
+                    <tr>
+                        <td class="pb-2"><i class="fa fa-ticket-alt"></i></td>
+                        <td>New Tickets</td>
+                        <td><b>{{ newTickets }}</b></td>
+                    </tr>
+                    <tr>
+                        <td class="pb-2"><i class="fa fa-ticket-alt"></i></td>
+                        <td>Closed Tickets</td>
+                        <td><b>{{ closedTickets }}</b></td>
+                    </tr>
+                </table>
             </div>
-          </div>
         </div>
+        
 
-        <!-- Processing Tickets -->
-        <div class="col-md-4">
-          <div class="card text-center shadow" style="border-radius: 50px;">
-            <div class="card-body" style="background: linear-gradient(to bottom, #d381f2, #d9a4f4); border-radius: 50px;">
-              <h2 class="ticket-count">{{ processingTickets }}</h2>
-              <p>Processing Tickets</p>
-              <p v-if="authUser.id_cms_privileges==4">FLM: {{ flmProcessing }} | SLM: {{ slmProcessing }} | JOINED: {{ joinedProcessing }}</p>
-              <router-link to="/complaint-list/all/Processing" class="btn btn-outline-light btn-sm">
-                View Details
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Ticket Status Section -->
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <div class="card shadow">
-            <div class="card-body text-center">
-              <h4>New Tickets</h4>
-              <p style="color:gray;">{{ newTickets }}</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card shadow">
-            <div class="card-body text-center">
-              <h4>Closed Tickets</h4>
-              <p style="color:gray;">{{ closedTickets }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- User Role Section -->
       <div class="row justify-content-center mt-4">
         <div class="col-md-12 text-center">
-          <p>You have logged in as <strong class="text-success">{{ userRole }}</strong></p>
+          <p>You have logged in as <strong class="text-success">Client</strong></p>
         </div>
       </div>
     </div>

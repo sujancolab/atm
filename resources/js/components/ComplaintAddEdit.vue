@@ -6,7 +6,7 @@
                 <div class="col-md-12">
                    <div class="card">
                       <div class="card-header">
-                         <h3 class="card-title">{{ form.id ? 'Update' : 'Add' }} Machine</h3>
+                         <h3 class="card-title">{{ form.id ? 'Update' : 'Add' }} Complaint</h3>
                       </div><!-- /.card-header -->
                       <div class="card-body">
 
@@ -32,7 +32,7 @@
                                   <label>Call Type *</label>
                                   <v-select label="title" :reduce="(option) => option.id" :options="complaint_system_types"
                                      placeholder="Choose Call Type ..." v-model="form.complaint_system_type_id" v-validate="'required'"
-                                     :class="{ 'is-invalid': verrors.has('complaint_system_type_id') }" data-vv-name="title"
+                                     :class="{ 'is-invalid': verrors.has('complaint_system_type_id') }" data-vv-name="complaint_system_type_id"
                                      class="required">
                                   </v-select>
                                   <div v-if="verrors.has('complaint_system_type_id')" class="help-block invalid-feedback">
@@ -45,7 +45,7 @@
                                   <label>Fault Type *</label>
                                   <v-select label="title" :reduce="(option) => option.id" :options="complaint_type"
                                      placeholder="Choose Fault Type ..." v-model="form.complaint_type_id" v-validate="'required'"
-                                     :class="{ 'is-invalid': verrors.has('complaint_type_id') }" data-vv-name="title"
+                                     :class="{ 'is-invalid': verrors.has('complaint_type_id') }" data-vv-name="complaint_type_id"
                                      class="required">
                                   </v-select>
                                   <div v-if="verrors.has('complaint_type_id')" class="help-block invalid-feedback">
@@ -200,61 +200,89 @@
                 let cloaderd = this.$loading.show({
                    container: this.$refs.ref_load_user
                 });
-
-                if (this.form.id > 0) {
-                   this.form.put('api/machine/' + this.form.id)
-                      .then((response) => {
-                         this.$validator.reset();
-                         cloaderd.hide()
-                         if (response.data.success == true) {
-
-                            var fd = new FormData();
-                            fd.append(`file`, this.invoice_copy);
-                            fd.append(`cffile`, this.cf_copy);
-                            fd.append(`npfile`, this.national_permit_copy);
-                            fd.append(`rtfile`, this.road_tax_copy);
-                            fd.append(`insurancefile`, this.insurance_copy);
-                            fd.append(`pollutionfile`, this.pollution_copy);
-                            fd.append(`rcfile`, this.rc_copy);
-                            fd.append(`id`, this.form.id);
-                            axios.post('api/machine/files', fd).then((res) => {
-
-                               this.form.reset();
-                               Toast.fire({
-                                  icon: 'success',
-                                  title: response.data.message
-                               });
-                               this.$router.push('/machines').catch(() => { });
-
-                            })
-                         }
-                      })
-                      .catch(err => {
-                         cloaderd.hide();
-                         if (err.response && err.response.data) {
-                            this.$setErrorsFromResponse(err.response.data);
-                         }
-                      })
-                } else {
-                   this.form.post('api/storeComplaint')
+                this.form.post('api/storeComplaint')
                       .then((data) => {
+                        console.log("Data: " ,data.data.data);
+
                          this.$validator.reset();
                          cloaderd.hide()
                          this.form.id = data.data.data.id;
                          this.form.reset();
+                         console.log("data",data.data);
+
                          Toast.fire({
                             icon: 'success',
                             title: data.data.message
                          });
-                         this.$router.push('/complaint').catch(() => { });
+                         this.$router.push('/complaint-list/1').catch(() => { });
                       })
                       .catch(err => {
+                        console.log(err);
+
                          if (err.response && err.response.data) {
+                            console.log(err.response.data);
+
                             this.$setErrorsFromResponse(err.response.data);
                          }
                          cloaderd.hide();
-                      })
-                }
+                      });
+
+                // if (this.form.id > 0) {
+                //    this.form.put('api/machine/' + this.form.id)
+                //       .then((response) => {
+                //          this.$validator.reset();
+                //          cloaderd.hide()
+                //          if (response.data.success == true) {
+
+                //             var fd = new FormData();
+                //             fd.append(`file`, this.invoice_copy);
+                //             fd.append(`cffile`, this.cf_copy);
+                //             fd.append(`npfile`, this.national_permit_copy);
+                //             fd.append(`rtfile`, this.road_tax_copy);
+                //             fd.append(`insurancefile`, this.insurance_copy);
+                //             fd.append(`pollutionfile`, this.pollution_copy);
+                //             fd.append(`rcfile`, this.rc_copy);
+                //             fd.append(`id`, this.form.id);
+                //             axios.post('api/machine/files', fd).then((res) => {
+
+                //                this.form.reset();
+                //                Toast.fire({
+                //                   icon: 'success',
+                //                   title: response.data.message
+                //                });
+                //                this.$router.push('/machines').catch(() => { });
+
+                //             })
+                //          }
+                //       })
+                //       .catch(err => {
+                //          cloaderd.hide();
+                //          if (err.response && err.response.data) {
+                //             this.$setErrorsFromResponse(err.response.data);
+                //          }
+                //       })
+                // } else {
+                //    this.form.post('api/storeComplaint')
+                //       .then((data) => {
+                //          this.$validator.reset();
+                //          cloaderd.hide()
+                //          this.form.id = data.data.data.id;
+                //          this.form.reset();
+                //          console.log("data",data.data);
+
+                //          Toast.fire({
+                //             icon: 'success',
+                //             title: data.data.message
+                //          });
+                //          this.$router.push('/complaint-list/1').catch(() => { });
+                //       })
+                //       .catch(err => {
+                //          if (err.response && err.response.data) {
+                //             this.$setErrorsFromResponse(err.response.data);
+                //          }
+                //          cloaderd.hide();
+                //       })
+                // }
              }
           });
        },

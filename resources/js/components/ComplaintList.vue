@@ -7,7 +7,8 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Complaints Report</h3>
+                            <h3 class="card-title" v-if="authUser.id_cms_privileges==3">Ticket Details</h3>
+                            <h3 class="card-title" v-else>Complaints Report</h3>
                             <div class="card-tools">
                                 <download-excel class="btn btn-sm btn-primary" :fetch="export_csv" :fields="json_fields"
                                     :before-generate="startDownload" :before-finish="finishDownload"
@@ -246,6 +247,7 @@
                                         <th>#</th>
                                         <th>ATM ID</th>
                                         <th>Docket No</th>
+                                        <th>Bank Name</th>
                                         <th>Date</th>
                                         <!-- <th class="truncate" title="Equipment Description">Equipment Description</th> -->
                                         <th>Custodian</th>
@@ -283,7 +285,7 @@
                                                         class="nav-link" v-if="authUser.id_cms_privileges==2 ||  complaint.custname">
                                                             <i class="nav-icon fas fa-file"></i> Assigned Custodians
                                                     </router-link>
-                                                    <router-link :to="'/complaint/assign-ticket/'+complaint.docket_no" class="nav-link">
+                                                    <router-link v-if="authUser.id_cms_privileges!=3" :to="'/complaint/assign-ticket/'+complaint.docket_no" class="nav-link">
                                                             <i class="nav-icon fas fa-user-plus"></i>Assign Custodian
                                                     </router-link>
 
@@ -294,6 +296,9 @@
                                         <td style="padding-bottom: 10px !important;">{{ complaint.atm_atm_id }}</td>
                                         <td class="truncate" :title="complaint.docket_no" style="max-width: 150px;">{{
                                             complaint.docket_no }}</td>
+
+                                        <td class="truncate" :title="complaint.bank_name" style="max-width: 150px;">{{
+                                            complaint.bank_name }}</td>
                                         <td class="truncate">{{ formatDate(complaint.created_at) }}</td>
                                         <td>{{ complaint.custname }}</td>
                                         <td>{{ complaint.tag_time }}</td>
