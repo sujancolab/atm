@@ -94,9 +94,10 @@
                     </div>
                     <p>{{ row.comment }}</p>
                   </div>
-                  <div v-else class="message admin callcenter-message">
+                  <!-- <div v-else class="message admin callcenter-message"> -->
+                    <div v-else class="message user-message">
                     <div class="d-flex justify-content-between">
-                      <h5 class="chatheading text-info">Call Center ({{ row.name }})</h5>
+                      <h5 class="chatheading">Call Center ({{ row.name }})</h5>
                       <span class="date text-muted small">{{ formatDate(row.posted_at) }}</span>
                     </div>
                     <p>{{ row.comment }}</p>
@@ -128,12 +129,15 @@
                   <option value="Completed">Completed</option>
                 </select>
               </div>
-              <div class="form-group" v-show="showManualClose">
+              <div class="form-group" v-show="selectedStatus=='Completed'">
+                <input type="datetime-local" v-model="manualClose" class="form-control manual-close" placeholder="Complete Date Time" />
+              </div>
+              <!-- <div class="form-group" v-show="showManualClose">
                 <input type="text" v-model="manualClose" class="form-control manual-close" placeholder="Manual Close" />
               </div>
               <div class="form-group" v-show="showLagReason">
-                <textarea v-model="lagReason" class="form-control" placeholder="Add lag reason *"></textarea>
-              </div>
+                <textarea v-model="lagReason" class="form-control" placeholder="Add lag reason"></textarea>
+              </div> -->
             </div>
 
             <div class="form-group">
@@ -217,6 +221,7 @@ export default {
             // New comment input
             newComment: "",
             selectedStatus: null,
+            complete_date_time:null,
             myPrivilegeId:3,
             authUser: localStorage.getItem("auth") ? JSON.parse(localStorage.getItem("auth")) : null,
             comment: '',
@@ -366,6 +371,8 @@ export default {
 .chat-body {
   padding: 20px;
   background-color: #f8f9fa;
+  overflow-y: auto;
+  height: 100vh;
 }
 
 .card-footer {

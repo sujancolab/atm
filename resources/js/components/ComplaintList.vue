@@ -282,7 +282,7 @@
                                                             <i class="nav-icon fas fa-eye"></i> View
                                                     </router-link>
                                                     <router-link :to="'/complaint/assigned-custodians/' + complaint.id"
-                                                        class="nav-link" v-if="authUser.id_cms_privileges==2 ||  complaint.custname">
+                                                        class="nav-link" v-if="authUser.id_cms_privileges!=3 ||  complaint.custname">
                                                             <i class="nav-icon fas fa-file"></i> Assigned Custodians
                                                     </router-link>
                                                     <router-link v-if="authUser.id_cms_privileges!=3" :to="'/complaint/assign-ticket/'+complaint.docket_no" class="nav-link">
