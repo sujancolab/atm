@@ -215,7 +215,7 @@
                                                                     <textarea id="comment" class="form-control" rows="3"
                                                                         required v-model="comment"></textarea>
                                                                 </div>
-                                                                <button type="submit"
+                                                                <button type="button"
                                                                     class="btn btn-primary" @click="assign_sls_button()">Submit</button>
                                                             </form>
                                                         </div>
@@ -227,12 +227,12 @@
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">
                                                 Close
                                             </button>
-                                            <button v-show="editmode" type="submit" class="btn btn-success">
+                                            <!-- <button v-show="editmode" type="submit" class="btn btn-success">
                                                 Update
                                             </button>
                                             <button v-show="!editmode" type="submit" class="btn btn-primary">
                                                 Create
-                                            </button>
+                                            </button> -->
                                         </div>
                                     </form>
                                 </div>
@@ -250,10 +250,10 @@
                                         <th>Bank Name</th>
                                         <th>Date</th>
                                         <!-- <th class="truncate" title="Equipment Description">Equipment Description</th> -->
-                                        <th>Custodian</th>
-                                        <th>Tag Time</th>
-                                        <th>Lag Time</th>
-                                        <th>Countdown(Days hh:mm:ss)</th>
+                                        <th v-if="authUser.id_cms_privileges!=3">Custodian</th>
+                                        <th v-if="authUser.id_cms_privileges!=3">Tag Time</th>
+                                        <th v-if="authUser.id_cms_privileges!=3">Lag Time</th>
+                                        <th v-if="authUser.id_cms_privileges!=3">Countdown(Days hh:mm:ss)</th>
                                         <!-- <th class="truncate" title="Status During Complain">Status During Complain</th> -->
                                         <th>Status</th>
 
@@ -263,10 +263,9 @@
                                     <tr v-for="(complaint, x) in Complaints.data" :key="complaint.id"
                                         :data-created="complaint.created_at" :data-tag="complaint.tag_time"
                                         :data-stat="complaint.work_status">
-                                        <td>
+                                        <td width="10">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-primary btn-sm btn-toggle-custom"
-                                                    @click="editMaintainanceModal(complaint)">  <i class="nav-icon fas fa-cogs"></i></button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-toggle-custom">  <i class="nav-icon fas fa-cogs"></i></button>
                                                 <button type="button"
                                                     class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split"
                                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -278,38 +277,41 @@
                                                         <i class="nav-icon fas fa-trash"></i> Delete
                                                     </a>
                                                     <router-link :to="'/complaint-details/' + complaint.id"
-                                                        class="nav-link">
+                                                        class="dropdown-item nav-link">
                                                             <i class="nav-icon fas fa-eye"></i> View
                                                     </router-link>
+                                                    <router-link v-if="authUser.id_cms_privileges!=3 && complaint.work_status != 'Completed'" :to="'/complaint/assign-ticket/'+complaint.docket_no" class="dropdown-item nav-link">
+                                                            <i class="nav-icon fas fa-user-plus"></i> Assign Custodian
+                                                    </router-link>
                                                     <router-link :to="'/complaint/assigned-custodians/' + complaint.id"
-                                                        class="nav-link" v-if="authUser.id_cms_privileges!=3 ||  complaint.custname">
+                                                        class="dropdown-item nav-link" v-if="authUser.id_cms_privileges!=3 &&  complaint.custname">
                                                             <i class="nav-icon fas fa-file"></i> Assigned Custodians
                                                     </router-link>
-                                                    <router-link v-if="authUser.id_cms_privileges!=3" :to="'/complaint/assign-ticket/'+complaint.docket_no" class="nav-link">
-                                                            <i class="nav-icon fas fa-user-plus"></i>Assign Custodian
-                                                    </router-link>
-
+                                                    <a href="javascript:void(0);" @click="editMaintainanceModal(complaint)" v-if="authUser.id_cms_privileges!=3 && complaint.work_status != 'Completed' && complaint.custname"
+                                                        class="dropdown-item nav-link">
+                                                        <i class="nav-icon fas fa-cog"></i> Log SLM
+                                                    </a>
 
                                                 </div>
                                             </div>
                                         </td>
                                         <td style="padding-bottom: 10px !important;">{{ complaint.atm_atm_id }}</td>
-                                        <td class="truncate" :title="complaint.docket_no" style="max-width: 150px;">{{
+                                        <td class="truncate" :title="complaint.docket_no" style="max-width: 180px;">{{
                                             complaint.docket_no }}</td>
 
                                         <td class="truncate" :title="complaint.bank_name" style="max-width: 150px;">{{
                                             complaint.bank_name }}</td>
                                         <td class="truncate">{{ formatDate(complaint.created_at) }}</td>
-                                        <td>{{ complaint.custname }}</td>
-                                        <td>{{ complaint.tag_time }}</td>
-                                        <td :style="{ color: complaint.lag_time ? 'Red' : 'Green' }"> {{
+                                        <td v-if="authUser.id_cms_privileges!=3">{{ complaint.custname }}</td>
+                                        <td v-if="authUser.id_cms_privileges!=3">{{ complaint.tag_time }}</td>
+                                        <td v-if="authUser.id_cms_privileges!=3" :style="{ color: complaint.lag_time ? 'Red' : 'Green' }"> {{
                                             formatLagTime(complaint.lag_time) }}</td>
 
                                         <!-- <td @click="view_site_details(ticket.machine)">{{ ticket.far_no }}</td> -->
-                                        <td>
+                                        <td v-if="authUser.id_cms_privileges!=3">
 
-                                            <span v-if="complaint.work_status === 'Completed'">N/A</span>
-                                            <span v-else>{{ complaint.updated_at }}</span>
+                                            <span v-if="complaint.work_status === 'Completed'" class="countdown">N/A</span>
+                                            <span v-else class="countdown">{{ complaint.updated_at }}</span>
                                         </td>
                                         <td>
                                             <span :class="getStatusClass(complaint.work_status)">{{
@@ -446,10 +448,12 @@ export default {
     },
     methods: {
         async assign_sls_button(){
+            console.log("here");
+
             const formData = new FormData();
                 formData.append('docket_no', this.complaint_data.docket_no);
-                formData.append('complaint_id', this.complaint_data.complaint_id);
-                formData.append('complaint_status', custodian_id);
+                formData.append('complaint_id', this.complaint_data.id);
+                formData.append('complaint_status', this.custodian_data.id);
                 formData.append('cust_comment', this.comment);
 
                 try {
@@ -458,17 +462,17 @@ export default {
                         'Content-Type': 'multipart/form-data',
                     },
                     });
-                    // $('#addNew').modal('hide');
+                    $('#addNew').modal('hide');
 
                     Toast.fire({
                         icon: 'success',
-                        title: response.data.message
+                        title: "FLM To SLM Convert Successfully!"
                     });
-
+                    this.$router.push('/sls-list');
                     //this.$Progress.finish();
 
 
-                    alert(response.data.success);
+                    //alert(response.data.success);
                 } catch (error) {
                     console.error(error);
                     alert('Form submission failed.');
@@ -544,7 +548,8 @@ export default {
             }).then((data) => {
                 console.log("data====", data.data.data);
 
-                this.complaint_data = data.data.data.complaint_details;
+                // this.complaint_data = data.data.data.complaint_details;
+
 
                 this.custodian_data = data.data.data.custodian_details;
                 this.custodian_list = data.data.data.custodians;
@@ -664,7 +669,7 @@ export default {
 
                 this.Complaints = data.data.data.complaints;
 
-                this.Custodians = data.data.data.custodians;
+                // this.Custodians = data.data.data.custodians;
                 this.Statuses = data.data.data.status_list;
                 this.initializeTimers();
                 cloaderd.hide();
@@ -684,7 +689,7 @@ export default {
 
                 this.Complaints = data.data.data.complaints;
 
-                this.Custodians = data.data.data.custodians;
+                // this.Custodians = data.data.data.custodians;
                 this.Statuses = data.data.data.status_list;
                 this.initializeTimers();
                 cloaderd.hide();
@@ -795,6 +800,9 @@ export default {
     },
     beforeCreate() {
         console.log("before create");
+        axios.get("/custodian/list").then(response => {
+            this.Custodians = response.data.data;
+        }).catch(()=> console.warn('Oh. Something went wrong'));
         let url="/api/complaint/list/" + this.$route.params.id;
             if(this.$route.params.status){
                 url+="/"+this.$route.params.status;
@@ -804,10 +812,11 @@ export default {
 
             this.Complaints = response.data.data.complaints;
 
-            this.Custodians = response.data.data.custodians;
+            // this.Custodians = response.data.data.custodians;
             this.Statuses = response.data.data.status_list;
             this.initializeTimers();
         }).catch(() => console.warn('Oh. Something went wrong'));
+
     },
     watch: {
         $route(to, from) {

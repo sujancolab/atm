@@ -7,329 +7,312 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Total SLM Complaints</h3>
-                            <div class="card-tools">
-                                <download-excel class="btn btn-sm btn-primary" :fetch="export_csv" :fields="json_fields"
-                                    :before-generate="startDownload" :before-finish="finishDownload"
-                                    worksheet="My Worksheet" type="csv" name="master_report.csv" v-if="$gate.hasPermission('can_download_master_report')">
-                                    Export CSV</span>
-                                </download-excel>
-                                <button class="btn btn-sm btn-blue" @click="openSideModal"><i
-                                    class="fa fa-sliders-h mr-2" aria-hidden="true"></i> Filter</button>
+                            <h3 class="card-title">Sls List</h3>
 
+                            <div class="card-tools">
+
+                                <button type="button" class="btn btn-sm btn-primary" @click="newModal" v-if="$gate.hasPermission('can_add_state')">
+                                    <i class="fa fa-plus-square"></i>
+                                    Add New
+                                </button>
                             </div>
                         </div>
-
-                        <SidebarModal ref="sidebarModal">
-                            <!-- Content of the sidebar modal goes here -->
-                            <h3><i class="fa fa-sliders-h mr-2" aria-hidden="true" style="font-size: 22px;"></i> Filter
-                            </h3>
-                            <hr>
+                        <div class="card-body p-2">
                             <form autocomplete="off" @submit.prevent="getResults()">
-
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-auto col-custom">
-                                        <label for="machine_id">FAR No</label>
+                                <div class="form-row">
+                                    <div class="col col-3 pt-2">
+                                        <input placeholder="Enter ..." v-model="search" class="form-control">
                                     </div>
-                                    <div class="col">
-                                        <v-select label="name" :get-option-label="getLabel"
-                                            :reduce="(option) => option.id" :options="search_machines"
-                                            placeholder="Enter machines ..." v-model="search.machine_id"
-                                            name="machine_id">
-                                        </v-select>
-                                    </div>
-                                </div>
-
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-auto col-custom">
-                                        <label for="machine_id">Search Ticket</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="text" placeholder="Enter ticket ..." v-model="search.ticket"
-                                            name="ticket" class="form-control">
-                                    </div>
-                                </div>
-
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-auto col-custom">
-                                        <label for="machine_id">Select Site</label>
-                                    </div>
-                                    <div class="col">
-                                        <v-select label="site_name" :reduce="(option) => option.id"
-                                            :options="search_sites" placeholder="Select Site..."
-                                            v-model="search.site_id" name="site_id">
-                                        </v-select>
-                                    </div>
-                                </div>
-
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-auto col-custom">
-                                        <label for="machine_id">Select Status</label>
-                                    </div>
-                                    <div class="col">
-                                        <v-select label="site_name" :options="['Open', 'Closed']"
-                                            placeholder="Select Status..." v-model="search.status" name="status">
-                                        </v-select>
-                                    </div>
-                                </div>
-
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-auto col-custom">
-                                        <label for="machine_id">Created by</label>
-                                    </div>
-                                    <div class="col">
-                                        <v-select label="name" :options="created_users" :reduce="(option) => option.id"
-                                            placeholder="Created by..." v-model="search.created_by" name="created_by">
-                                        </v-select>
-                                    </div>
-                                </div>
-
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-auto col-custom">
-                                        <label for="machine_id">Ticket Type</label>
-                                    </div>
-                                    <div class="col">
-                                        <v-select label="name"
-                                            :options="['Periodic Maintenance', 'Breakdown Maintenance']"
-                                            placeholder="Ticket Type..." v-model="search.ticket_type"
-                                            name="ticket_type">
-                                        </v-select>
-                                    </div>
-                                </div>
-
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-auto col-custom">
-                                        <label for="machine_id">From Date</label>
-                                    </div>
-                                    <div class="col">
-                                        <datetime value-zone="Asia/Kolkata" v-model="search.created_from" input-class="form-control" placeholder="Date" />
-                                    </div>
-                                </div>
-
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-auto col-custom">
-                                        <label for="machine_id">To Date</label>
-                                    </div>
-                                    <div class="col">
-                                        <datetime value-zone="Asia/Kolkata" v-model="search.created_to" input-class="form-control" placeholder="Date" />
-                                    </div>
-                                </div>
-
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-auto col-custom">
-                                        <label for="machine_id">TAT From</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="number" placeholder="TAT From ..." v-model="search.tat_from"
-                                            class="form-control">
-                                    </div>
-                                </div>
-
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-auto col-custom">
-                                        <label for="machine_id">TAT To</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="number" placeholder="TAT To ..." v-model="search.tat_to"
-                                            class="form-control">
-                                    </div>
-                                </div>
-
-                                <div class="row align-items-center mb-2">
-                                    <div class="col-auto col-custom">
-                                        <label for="machine_id">Complaint nature</label>
-                                    </div>
-                                    <div class="col">
-                                        <v-select label="site_name" :options="['Major', 'Minor']"
-                                            placeholder="Select Complaint Nature..." v-model="search.complaint_nature" name="complaint_nature">
-                                        </v-select>
-                                    </div>
-                                </div>
-
-
-
-
-
-                                <div class="row">
-                                    <div class="col-6 mb-2 pr-1">
-                                        <button type="submit" class="btn btn-success btn-block">Search</button>
-                                    </div>
-                                    <div class="col-6 mb-2 pl-1">
-                                        <button type="button" class="btn btn-danger btn-block"
-                                            @click="reset_filter()">Reset</button>
+                                    <div class="col col-3 pt-2 btn-group" role="group">
+                                        <button type="submit" class="btn btn-success">Search</button>
+                                        <download-excel class="btn btn-warning ml-2" :fetch="export_csv"
+                                            :fields="json_fields" :before-generate="startDownload"
+                                            :before-finish="finishDownload" worksheet="My Worksheet" type="csv"
+                                            name="state_list.csv">
+                                            <span class="labelText">
+                                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                Export as CSV</span>
+                                        </download-excel>
                                     </div>
                                 </div>
                             </form>
-                        </SidebarModal>
-
+                        </div>
                         <!-- /.card-header -->
                         <div class="card-body ticketLstTbl table-responsive p-0">
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
+                                        <th class="stickey">Action</th>
                                         <th>ATM ID</th>
+                                        <th>SLM No</th>
                                         <th>Docket No</th>
                                         <th>Date</th>
-                                        <!-- <th class="truncate" title="Equipment Description">Equipment Description</th> -->
                                         <th>Custodian</th>
                                         <th>Tag Time</th>
-                                        <th>Lag Time</th>
-                                        <th>Countdown(Days hh:mm:ss)</th>
-                                        <!-- <th class="truncate" title="Status During Complain">Status During Complain</th> -->
                                         <th>Status</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(complaint, x) in Complaints.data" :key="complaint.id">
+                                    <tr v-for="(sls, x) in slss.data" :key="sls.id">
+
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-primary btn-sm btn-toggle-custom" @click="editModal(user)">Edit</button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-toggle-custom" @click="editModal(sls)" :disabled="!$gate.hasPermission('can_edit_complaint_type')">Edit</button>
                                                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a href="javascript:void(0);" @click="deleteUser(user.id)"
-                                                        class="dropdown-item" >
+                                                    <a href="javascript:void(0);" @click="deleteState(sls.id)"
+                                                        class="dropdown-item" v-if="$gate.hasPermission('can_delete_complaint_type')">
                                                         Delete
                                                     </a>
-                                                    <router-link :to="'/complaint-details/'+complaint.id" class="nav-link">
-
-                                                        <p>
-                                                            Details
-                                                        </p>
-                                                    </router-link>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td style="padding-bottom: 10px !important;">{{ complaint.atm_atm_id }}</td>
-                                        <td class="truncate" :title="complaint.docket_no" style="max-width: 150px;">{{ complaint.docket_no }}</td>
-                                        <td class="truncate">{{  formatDate(complaint.created_at)  }}</td>
-                                        <td>{{ complaint.custname }}</td>
-                                        <td>{{ complaint.tag_time }}</td>
-                                        <td :style="{ color: complaint.lag_time ? 'Red' : 'Green' }"> {{ formatLagTime(complaint.lag_time) }}</td>
 
-                                        <!-- <td @click="view_site_details(ticket.machine)">{{ ticket.far_no }}</td> -->
-                                        <td></td>
-                                        <td>
-                                            <span :class="getStatusClass(complaint.work_status)">{{ complaint.work_status }}</span>
-                                        </td>
-
+                                        <td class="text-capitalize">{{ sls.complaint.atm.atm_id }}</td>
+                                        <td class="text-capitalize">{{ sls.sls_docket_no }}</td>
+                                        <td class="text-capitalize">{{ sls.docket_no }}</td>
+                                        <td class="text-capitalize">{{ sls.created_at }}</td>
+                                        <td class="text-capitalize"></td>
+                                        <td class="text-capitalize">{{ sls.work_status }}</td>
+                                        <td class="text-capitalize">{{ sls.complaint.atm.tag_time }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <pagination :data="Complaints" :limit="10" @pagination-change-page="getResults"></pagination>
+                            <pagination :data="slss" :limit="10" @pagination-change-page="getResults"></pagination>
                         </div>
                     </div>
                     <!-- /.card -->
                 </div>
             </div>
 
+<!--
+            <div v-if="!$gate.isAdmin()">
+                <not-found></not-found>
+            </div> -->
 
+            <!-- Modal -->
+            <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="addNew" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content ">
+                        <div class="modal-header">
+                            <h5 class="modal-title" v-show="!editmode">Create New Complaint</h5>
+                            <h5 class="modal-title" v-show="editmode">Update Complaint's Info</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
 
+                        <!-- <form @submit.prevent="createState"> -->
+
+                        <form @submit.prevent="editmode ? updateState() : createState()">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input v-model="form.name" type="text" name="name" class="form-control"
+                                                :class="{ 'is-invalid': verrors.has('name') }" v-validate="'required'"
+                                                data-vv-as="name" :disabled="form.id != ''">
+                                            <div v-if="verrors.has('name')" class="help-block invalid-feedback"> {{
+                        verrors.first('name')
+                    }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label>Client code</label>
+                                            <input v-model="form.user_code" type="text" name="user_code" class="form-control"
+                                                :class="{ 'is-invalid': verrors.has('user_code') }" v-validate="'required'"
+                                                data-vv-as="user_code" :disabled="form.id != ''">
+                                            <div v-if="verrors.has('user_code')" class="help-block invalid-feedback"> {{
+                        verrors.first('user_code')
+                    }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label>Mobile Number</label>
+                                            <input v-model="form.mobile" type="text" name="mobile" class="form-control"
+                                                :class="{ 'is-invalid': verrors.has('mobile') }" v-validate="'required'"
+                                                data-vv-as="mobile" :disabled="form.id != ''">
+                                            <div v-if="verrors.has('mobile')" class="help-block invalid-feedback"> {{
+                        verrors.first('mobile')
+                    }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label>Password</label>
+                                            <input v-model="form.password" type="password" name="password" class="form-control"
+                                                :class="{ 'is-invalid': verrors.has('password') }" v-validate="'required'"
+                                                data-vv-as="password" :disabled="form.id != ''">
+                                            <div v-if="verrors.has('password')" class="help-block invalid-feedback"> {{
+                        verrors.first('password')
+                    }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input v-model="form.email" type="text" name="email" class="form-control"
+                                                :class="{ 'is-invalid': verrors.has('email') }" v-validate="'required'"
+                                                data-vv-as="email" :disabled="form.id != ''">
+                                            <div v-if="verrors.has('email')" class="help-block invalid-feedback"> {{
+                        verrors.first('email')
+                    }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label>Client</label>
+                                            <v-select
+                                                label="client_name"
+                                                :reduce="
+                                                    (option) => option.id
+                                                "
+                                                :options="clients"
+                                                placeholder="Enter Client ..."
+                                                v-model="form.client_id"
+                                                v-validate="'required'"
+                                                :class="{
+                                                    error: verrors.client_id,
+                                                    error: verrors.has('client_id'),
+                                                    haveValue: form.client_id,
+                                                }"
+                                                data-vv-name="client_name"
+                                            />
+                                            <div
+                                                v-if="verrors.has('client_id')"
+                                                class="help-block invalid-feedback"
+                                            >
+                                                {{ verrors.first("client_id") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label>Bank</label>
+                                            <v-select
+                                                v-model="form.bank_id"
+                                                label="bank_name"
+                                                :reduce="
+                                                    (option) => option.id
+                                                "
+                                                :options="banks"
+                                                placeholder="Enter Bank ..."
+                                                v-validate="'required'"
+                                                :class="{
+                                                    error: verrors.bank_id,
+                                                    error: verrors.has('bank_id'),
+                                                    haveValue: form.bank_id,
+                                                }"
+                                                data-vv-name="bank_id"
+                                            />
+                                            <div
+                                                v-if="verrors.has('bank_id')"
+                                                class="help-block invalid-feedback"
+                                            >
+                                                {{ verrors.first("bank_id") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                        <label>comment</label>
+                                        <textarea placeholder="Enter comment..."
+                                            v-model="form.comment" v-validate="''"
+                                            :class="{ 'is-invalid': verrors.has('comment') }"
+                                            name="comment" data-vv-as="comment"
+                                             class="form-control">
+                                            </textarea>
+                                        <div v-if="verrors.has('comment')" class="help-block invalid-feedback">
+                                            {{
+                                                verrors.first('comment')
+                                            }}</div>
+                                    </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label>Photo</label>
+                                            <input type="file" name="photo" class="form-control"
+                                                :class="{ 'is-invalid': verrors.has('photo') }" v-validate="'required'"
+                                                data-vv-as="photo" :disabled="form.id != ''" @change="onFileChange" >
+                                            <div v-if="verrors.has('photo')" class="help-block invalid-feedback"> {{
+                        verrors.first('photo')
+                    }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label>Bna</label>
+                                            <v-select
+                                                v-model="form.is_bna"
+                                                label="bna"
+                                                :options="bnaoptions"
+                                                placeholder="Enter Bna ..."
+                                                v-validate="'required'"
+                                                :class="{
+                                                    error: verrors.is_bna,
+                                                    error: verrors.has('is_bna'),
+                                                    haveValue: form.is_bna,
+                                                }"
+                                                data-vv-name="name"
+                                            />
+                                            <div
+                                                v-if="verrors.has('is_bna')"
+                                                class="help-block invalid-feedback"
+                                            >
+                                                {{ verrors.first("is_bna") }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
+                                <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
-        <!-- <MachinePop id="MachineSiteModal3" :machine="pmModalData" /> -->
     </section>
 </template>
 
 <script>
-//import VueReadMoreSmooth from "vue-read-more-smooth";
-import MultiRangeSlider from "multi-range-slider-vue";
-import SidebarModal from './SideBarModal.vue';
 export default {
-    name: "MasterReport",
-    components: {
-        VueReadMoreSmooth: () => import('vue-read-more-smooth'),
-        MultiRangeSlider,SidebarModal,
-        MachinePop: () => import('./MachineFarPop.vue'),
-    },
     data() {
         return {
-            stageMore: [],
-            additionalMore: [],
-            problemsMore: [],
-            rcaMore: [],
-            pmModalData: '',
-            created_users: [],
-            search_machines: [],
-            search_sites: [],
-            search: {
-                page: 1,
-                machine_id: '',
-                site_id: '',
-                created_by: '',
-                created_from: '',
-                created_to: '',
-                tat_from: '',
-                tat_to: '',
-                complaint_nature: '',
-                ticket_type: '',
-                ticket: ''
-            },
-            categories: [],
-            sub_categories: [],
-            sites: [],
-            selected_machine: '',
-            users: [],
-            machines: [],
-            Custodians: [],
-            Complaints:{},
-            Statuses:[],
-            sl: 1,
+            editmode: false,
+            search: '',
+            users: {},
+            slss: {},
+            clients: [],
+            banks: [],
+            cities: [],
+            bnaoptions:['Yes','No'],
+            form: new Form({
+                id: '',
+                name: '',
+                password: '',
+                email: '',
+                mobile: '',
+                user_code: '',
+                comment:'',
+                photo:'',
+                is_bna: '',
+                client_id:'',
+                bank_id: '',
+            }),
             json_fields: {
-                "Sl No": {
-                    callback: () => {
-                        return this.sl++;
-                    },
-                },
-                'Site name': 'site_name',
-                'Operator name': 'operator_name',
-                'Equipment Description': 'machine_name',
-                'FAR No': 'far_no',
-                'Complaint No': 'ticket_no',
-                'Complaint date': "created_at",
-                'Complaint Raised By': 'created_by_name',
-                'Complaint Nature': 'complaint_nature',
-                'Status During Complaint': 'status_during_complaint',
-                'Problem description': 'problem_description',
-                'Additional Problem': {
-                    field: "problems",
-                    callback: (problem) => {
-                        let ret = ''
-                        if (problem) {
-                            ret = problem.map(value => value.problem).join("\r\n");
-                        }
-                        return ret;
-                    },
-                },
-                "Current Status": {
-                    field: "status",
-                    callback: (status) => {
-                        return status.toLowerCase() == 'created by user' ? 'Open' : status;
-                    },
-                },
-                "Current Stage": {
-                    field: "last_stage",
-                    callback: (value) => {
-                        return value ? value.description : '-';
-                    },
-                },
-                "Status Post Resolution": 'machine_status',
-                'Expected Resolution date': 'likely_date',
-                'Revised Expected date': 'reversion_date',
-                'Reason for date Revision': 'reversion_reason',
-                'Actual Resolve Date': 'actual_date',
-                'TAT': 'tat',
-                'Estimated Cost': 'estimated_cost',
-                'Actual Cost': 'actual_cost',
-                'Production Loss': 'production_loss_amount',
-                'RCA': 'rca'
+                'name': 'name',
             },
             json_meta: [
                 [{
@@ -337,81 +320,58 @@ export default {
                     value: "utf-8",
                 },],
             ],
-            sl: 0,
         }
     },
+
     methods: {
-        formatDate(datetime) {
-            const date = new Date(datetime);
-            return date.toLocaleString('en-GB', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            });
-        },
-        formatLagTime(lagTime) {
-            if (lagTime) {
-                const parts = lagTime.split(":");
-                return `${parts[0]}H:${parts[1]}M`;
-            } else {
-                return 'N/A';
-            }
-        },
-        getStatusClass(workStatus) {
-            switch (workStatus) {
-                case 'Pending':
-                    return 'badge badge-danger';
-                case 'Processing':
-                    return 'badge badge-warning';
-                case 'Completed':
-                    return 'badge badge-success';
-                default:
-                    return ''; // Default or empty class
-            }
-        },
-        openSideModal() {
-            this.$refs.sidebarModal.openSideModal();
-        },
-        closeSideModal() {
-            this.$refs.sidebarModal.closeSideModal();
-        },
-        view_site_details(data) {
-            this.pmModalData = data
-            $('#MachineSiteModal3').modal('show');
-        },
-        reset_filter() {
-            this.search = {
-                page: 1,
-                machine_id: '',
-                site_id: '',
-                created_by: '',
-                created_from: '',
-                created_to: '',
-                tat_from: "",
-                tat_to: "",
-                complaint_nature: '',
-                ticket_type: '',
-                ticket: ''
-            }
-            this.getResults()
-        },
-        UpdateValues(e) {
-            this.search.tat_from = e.minValue;
-            this.search.tat_to = e.maxValue;
-        },
-        // excel
+        onFileChange(e) {
+      this.form.photo = e.target.files[0];
+    },
+    async submitForm() {
+      const formData = new FormData();
+      formData.append('id', this.form.id);
+      formData.append('name', this.form.name);
+      formData.append('password', this.form.password);
+      formData.append('email', this.form.email);
+      formData.append('mobile', this.form.mobile);
+      formData.append('bank_id', this.form.bank_id);
+      formData.append('client_id', this.form.client_id);
+      formData.append('user_code', this.form.user_code);
+      formData.append('comment', this.form.comment);
+      formData.append('photo', this.form.photo);
+      formData.append('is_bna', this.form.is_bna == 'Yes' ? 1 : 0);
+
+      try {
+        const response = await axios.post('api/sls', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        $('#addNew').modal('hide');
+
+        Toast.fire({
+            icon: 'success',
+            title: response.data.message
+        });
+
+        this.$Progress.finish();
+        this.loadStates();
+
+        alert(response.data.success);
+      } catch (error) {
+        console.error(error);
+        alert('Form submission failed.');
+      }
+    },
         async export_csv() {
-            const response = await axios.get('api/ticket/export', {
-                params: this.search
+            const response = await axios.get('api/sls?export=1', {
+                params: {
+                    search: this.search
+                }
             });
-            // const response = await axios.get('api/ticket/export');
             return response.data.data;
         },
         startDownload() {
-            this.sl = 1;
             Swal.fire({
                 title: 'Please Wait !',
                 html: 'Data populating', // add html attribute if you want or remove
@@ -425,131 +385,212 @@ export default {
             Swal.close()
         },
 
-        getLabel(val) {
-            if (typeof val === 'object') {
-                return val.far_no + ' - ' + val.name;
-            } else {
-                return val;
-            }
-        },
         getResults(page = 1) {
             let cloaderd = this.$loading.show();
-            this.search.page = page
-            axios.get('/api/sls/list', {
-                params: this.search
-            }).then((data) => {
-                console.log("data====",data.data.data);
-
-                this.Complaints=data.data.data.complaints;
-
-                this.Custodians = data.data.data.custodians;
-                this.Statuses = data.data.data.status_list;
-                cloaderd.hide();
-            })
-        },
-        loadTickets() {
-            let cloaderd = this.$loading.show();
-            this.search={};
-            axios.get("/api/sls/list", {
-                params: this.search
-            }).then((data) => {
-                console.log("data====>",data);
-
-                this.Complaints=data.data.data.complaints;
-
-                this.Custodians = data.data.data.custodians;
-                this.Statuses = data.data.data.status_list;
-                cloaderd.hide();
-            })
-        },
-        read_more(x, p = '') {
-            if (p) {
-                if (p == 's') {
-                    let a = this.stageMore[x] ? false : true
-                    this.$set(this.stageMore, x, a);
-                } else if (p == 'rc') {
-                    let a = this.rcaMore[x] ? false : true
-                    this.$set(this.rcaMore, x, a);
-                } else {
-                    let a = this.problemsMore[x] ? false : true
-                    this.$set(this.problemsMore, x, a);
+            axios.get('api/sls', {
+                params: {
+                    page: page,
+                    search: this.search
                 }
-            } else {
-                let a = this.additionalMore[x] ? false : true
-                this.$set(this.additionalMore, x, a);
-            }
+            }).then(({ data }) => {
+                console.log("after search results",data.data);
+                this.slss = data.data;
+
+                cloaderd.hide();
+            }).catch(err => {
+                cloaderd.hide();
+                if (err.response && err.response.data) {
+                    this.$setErrorsFromResponse(err.response.data);
+                }
+            });
+        },
+        updateState() {
+            this.$validator.validateAll().then(async (valid) => {
+                if (valid) {
+                    this.verrors.clear();
+                    let cloaderd = this.$loading.show();
+                    // console.log('Editing data');
+                    this.form.put('api/sls/' + this.form.id)
+                        .then((response) => {
+                            // success
+                            $('#addNew').modal('hide');
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.data.message
+                            });
+                            cloaderd.hide();
+                            //  Fire.$emit('AfterCreate');
+
+                            this.loadStates();
+                        })
+                        .catch(err => {
+                            if (err.response && err.response.data) {
+                                this.$setErrorsFromResponse(err.response.data);
+                            }
+                        });
+                }
+            })
+        },
+        editModal(state) {
+            this.editmode = true;
+            this.form.reset();
+            this.verrors.clear();
+            $('#addNew').modal('show');
+            state.is_bna= state.is_bna == 1 ? "Yes" : "No";
+
+            this.form.fill(state);
+        },
+        newModal() {
+            this.editmode = false;
+            this.form.reset();
+            this.verrors.clear();
+            $('#addNew').modal('show');
+        },
+        deleteState(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+
+                // Send request to the server
+                if (result.value) {
+                    this.form.delete('api/sls/' + id).then((response) => {
+
+                        if(response.data.success){
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Data has been deleted'
+                            });
+                        }
+
+                        this.loadStates();
+                    }).catch((data) => {
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.data.message
+                        });
+                    });
+                }
+            })
+        },
+        loadStates() {
+            let cloaderd = this.$loading.show();
+
+            // if (this.$gate.isAdmin()) {
+            //     axios.get("api/user").then(({ data }) => (this.users = data.data));
+            // }
+
+            axios.get('api/sls').then(({ data }) => {
+                console.log("Complaint data: ", data);
+                this.slss = data.data;
+                console.log("statelist",this.slss);
+
+                // this.users.data.forEach((element, index) => {
+                //     if(element.role.length > 0){
+                //         element.role_id = element.role[0].id;
+                //     }
+                // });
+
+                cloaderd.hide();
+            }).catch(err => {
+                cloaderd.hide();
+                if (err.response && err.response.data) {
+                    this.$setErrorsFromResponse(err.response.data);
+                }
+            });
+        },
+
+        createState() {
+            this.$validator.validateAll().then(async (valid) => {
+                if (valid) {
+                    this.verrors.clear();
+                    this.submitForm();
+                    // this.form.post('api/complaint')
+                    //     .then((response) => {
+                    //         $('#addNew').modal('hide');
+
+                    //         Toast.fire({
+                    //             icon: 'success',
+                    //             title: response.data.message
+                    //         });
+
+                    //         this.$Progress.finish();
+                    //         this.loadStates();
+
+                    //     })
+                    //     .catch(err => {
+                    //         if (err.response && err.response.data) {
+                    //             this.$setErrorsFromResponse(err.response.data);
+                    //         }
+                        // });
+                }
+            })
         }
 
     },
-    created() {
-        this.loadTickets();
-    },
     mounted() {
-        // Initial API call when the component is mounted
-        this.loadTickets();
+        console.log('Complaint Component mounted.');
+
+    },
+    created() {
+        this.loadStates();
     },
     beforeCreate() {
-        axios.get("api/sls/list")
-            .then((res) => {
-                console.log("res====>",res.data.data);
-                this.Complaints=res.data.data.complaints;
+        const clientsApi = axios.get("api/getClients");
+        const bankApi = axios.get("api/getBanks");
 
-                this.Custodians = res.data.data.custodians;
-                this.Statuses = res.data.data.status_list;
-            })
-        axios.get("/api/sls/list").then(response => {
-            console.log("data====>",response);
+        // Call the APIs in parallel
+        axios.all([clientsApi, bankApi])
+            .then(axios.spread((clientRes, banksRes) => {
+                // Handle the responses
+                console.log("statesRes",banksRes);
+                this.clients = clientRes.data.data;
+                this.banks = banksRes.data.data;
 
-            this.Complaints=response.data.data.complaints;
+            }))
+            .catch(error => {
+                console.error("There was an error fetching the data:", error);
+                // Handle the error as needed
+            });
+            console.log("after fetch clients:",this.clients);
+        axios.get('api/sls').then(({ data }) => {
+                console.log("data: ", data.data);
+                this.slss = data.data;
 
-                this.Custodians = response.data.data.custodians;
-                this.Statuses = response.data.data.status_list;
-        }).catch(() => console.warn('Oh. Something went wrong'));
+                // this.users.data.forEach((element, index) => {
+                //     if(element.role.length > 0){
+                //         element.role_id = element.role[0].id;
+                //     }
+                // });
+
+                cloaderd.hide();
+            }).catch(err => {
+                cloaderd.hide();
+                if (err.response && err.response.data) {
+                    this.$setErrorsFromResponse(err.response.data);
+                }
+            });
     },
     watch: {
-        $route(to, from) {
-            this.loadTickets();
-        },
-        async 'form.sub_category_id'(n, o) {
-            if (n) {
-                this.get_machine()
-            }
-        },
-        async 'form.site_id'(n, o) {
-            if (n) {
-                this.get_machine()
-            }
-        },
-
-        'form.category_id': {
-            handler: function (n, o) {
-
+        'form.state': {
+            immediate: true,
+            handler(n) {
                 if (n) {
-                    axios.get("api/sls/list" + n)
+                    axios.get("api/getCities", {
+                        params: {
+                            'state': n
+                        }
+                    })
                         .then((res) => {
-                            this.sub_categories = res.data.data;
+                            this.cities = res.data.data
                         })
-                    this.get_machine()
                 }
-            },
-            deep: true,
-            initial: true
+            }
         },
-
     },
 }
 </script>
-<style>
-.rmore {
-    color: blue;
-}
-.pending {
-  color: orange;
-}
-.processing {
-  color: blue;
-}
-.completed {
-  color: green;
-}
-</style>

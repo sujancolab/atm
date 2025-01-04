@@ -114,6 +114,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::get('/getBanks',[BankController::class,'getBanks']);
     Route::get('/getAreaCodeByPostCode',[AreaCodeController::class,'getAreaCodeByPostCode']);
     Route::get('/getClientCode',[CmsUserController::class,'getClientCode']);
+    Route::get('/custodian/list',[ComplaintController::class, 'listOfCustodians']);
     Route::apiResources([
         'company' => 'MachineCompanyController',
         'model' => 'MachineModelController',

@@ -2,8 +2,8 @@
     <div class="container mt-4">
       <div class="row">
         <div class="col">
-          <div class="card">
-            <div class="card-header bg-info text-white">View Assigned Custodians For Docket {{ custodian_details[0].docket_no }}</div>
+          <div class="card" v-if="custodian_details && custodian_details.length >0">
+            <div class="card-header bg-info text-white">View Assigned Custodians For Docket {{ custodian_details && custodian_details.length>0 ? custodian_details[0].docket_no : "" }}</div>
             <div class="card-body"  v-for="(cust, x) in custodian_details" :key="cust.id">
               <div class="badge badge-success p-2 mb-2">Active</div>
               <div>

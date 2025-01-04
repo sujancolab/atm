@@ -64,7 +64,7 @@
       <!-- User Role Section -->
       <div class="row justify-content-center mt-4">
         <div class="col-md-12 text-center">
-          <p>You have logged in as <strong class="text-success">Client</strong></p>
+          <p>You have logged in as <strong class="text-success" v-if="authUser.id_cms_privileges==4">Call Center</strong> <strong class="text-success" v-if="authUser.id_cms_privileges==3">Client</strong></p>
         </div>
       </div>
     </div>
