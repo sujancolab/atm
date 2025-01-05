@@ -1,6 +1,5 @@
 <template>
     <div class="container-fluid dashboard"  v-if="authUser.id_cms_privileges!='2'">
-
         <div class="row">
             <div class="col-md-4 col-sm-6 col-12">
                 <div class="info-box bg-purple">
@@ -362,6 +361,7 @@ export default {
         this.$nextTick(function () {
             // this.asign_graphs();
         })
+        this.getDashboard();
     },
     watch: {
         'search.quarter'(n) {
@@ -443,10 +443,28 @@ export default {
             var year = i + '-' + next.toString();
             this.financial_years.push(year)
         }
+        this.getDashboard();
     },
     beforeCreate() {
+        // this.getAuth();
+        axios.get('/api/account-auth')
+        .then(response => {
 
+
+          console.log("response module");
+          console.log(response.data.data);
+          localStorage.setItem("auth", JSON.stringify(response.data.data));
+          this.authUser=localStorage.getItem("auth");
+        if (this.authUser) {
+            this.authUser = JSON.parse(this.authUser);
+        }
+        })
+        .catch(error => {
+          console.error('Error fetching modules:', error);
+        });
         this.authUser=localStorage.getItem("auth");
+        console.log("auth: " + this.authUser);
+
         if (this.authUser) {
             this.authUser = JSON.parse(this.authUser);
             if(this.authUser.id_cms_privileges==3){
@@ -455,7 +473,6 @@ export default {
                 this.userRole="Call Center User";
             }
         }
-
         axios.get('api/dashboard')
             .then(res => {
                 this.records = res.data.data
@@ -486,6 +503,8 @@ export default {
             })
 
 
+
+
         // axios.get("api/get_pre_machine").then((res) => {
         //     this.categories = res.data.data.Category;
         //     this.sites = res.data.data.sites;
@@ -504,6 +523,8 @@ export default {
 
     },
     mounted() {
+        this.getAuth();
+
         this.authUser=localStorage.getItem("auth");
         if (this.authUser) {
             this.authUser = JSON.parse(this.authUser);
@@ -513,6 +534,7 @@ export default {
                 this.userRole="Call Center User";
             }
         }
+        this.getDashboard();
         // if (this.$gate.isAdmin()) {
         //     // this.$router.push('/users').catch(() => { });
         // } else {
@@ -520,6 +542,53 @@ export default {
         // }
     },
     methods: {
+        getAuth(){
+            axios.get('/api/account-auth')
+        .then(response => {
+
+
+          console.log("response module");
+          console.log(response.data.data);
+          localStorage.setItem("auth", JSON.stringify(response.data.data));
+          this.authUser=localStorage.getItem("auth");
+        if (this.authUser) {
+            this.authUser = JSON.parse(this.authUser);
+        }
+        })
+        .catch(error => {
+          console.error('Error fetching modules:', error);
+        });
+        },
+        getDashboard(){
+            axios.get('api/dashboard')
+            .then(res => {
+                this.records = res.data.data
+                if(this.authUser.id_cms_privileges==2){
+                    console.log("this.records",this.records);
+
+
+                }else{
+                        console.log("this.records",this.records);
+                        this.totalTickets= this.records.total_tickets;
+                        this.pendingTickets= this.records.pending_tickets;
+                        this.flmPending= this.records.flm_pending_tickets;
+                        this.slmPending= this.records.slm_pending_tickets;
+                        this.joinedPending= this.records.joined_pending_tickets;
+                        this.processingTickets= this.records.processing_tickets;
+                        this.flmProcessing= this.records.flm_processing_tickets;
+                        this.slmProcessing= this.records.slm_processing_tickets;
+                        this.joinedProcessing= this.records.joined_processing_tickets;
+                        this.newTickets= this.records.new_tickets;
+                        this.closedTickets= this.records.closed_tickets;
+                        this.userRole= 'Call Center User';
+                }
+
+
+            })
+            .catch(err => {
+                console.error(err);
+            })
+        },
         asign_graphs() {
             this.records = this.records
             this.chartOptions = {
