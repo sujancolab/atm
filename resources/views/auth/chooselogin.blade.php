@@ -61,7 +61,7 @@
                 <div class="form-group row mb-1">
                     <div class="col-md-6 offset-md-3">
                         <a type="submit" href="{{url('/call-center')}}" class="btn btn-primary btn-block" style="background: white;color: black;font-weight: bold;border: 3px solid #004488;">
-                            Login as Call Center
+                            Login as Employee
                         </a>
                     </div>
                 </div>

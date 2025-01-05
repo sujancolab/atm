@@ -14,6 +14,21 @@ class Complaint extends Model
     public function atm() {
         return $this->belongsTo(Atm::class, 'atm_id', 'id');
     }
+
+    public function complaintType()
+    {
+        return $this->belongsTo(Complainttype::class, 'complaint_type_id', 'id');
+    }
+
+
+    public function custodians()
+    {
+        return $this->hasMany(Custodian::class,'complaint_id','id');
+    }
+
+
+
+
     public function scopeInBetween($query, $fromDate, $toDate){
         if($fromDate && $toDate){
             $fromDate = date('Y-m-d', strtotime($fromDate));

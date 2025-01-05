@@ -45,9 +45,9 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::get('profile', 'ProfileController@profile');
     Route::put('profile', 'ProfileController@updateProfile');
     Route::post('change-password', 'ProfileController@changePassword');
-    Route::get('tag/list', 'TagController@list');
+    // Route::get('tag/list', 'TagController@list');
     Route::get('category/list', 'CategoryController@list');
-    Route::post('product/upload', 'ProductController@upload');
+    // Route::post('product/upload', 'ProductController@upload');
 
     Route::get('user/list', 'UserController@list');
     Route::get('get_pre_machine', 'MachinesController@get_pre_machine');
@@ -119,9 +119,9 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
         'company' => 'MachineCompanyController',
         'model' => 'MachineModelController',
         'user' => 'UserController',
-        'product' => 'ProductController',
+        // 'product' => 'ProductController',
         'category' => 'CategoryController',
-        'tag' => 'TagController',
+        // 'tag' => 'TagController',
         'site' => 'SitesController',
         'vendor' => 'VendorsController',
         'operator' => 'OperatorsController',

@@ -800,7 +800,7 @@ export default {
     },
     beforeCreate() {
         console.log("before create");
-        axios.get("/custodian/list").then(response => {
+        axios.get("/api/custodian/list").then(response => {
             this.Custodians = response.data.data;
         }).catch(()=> console.warn('Oh. Something went wrong'));
         let url="/api/complaint/list/" + this.$route.params.id;

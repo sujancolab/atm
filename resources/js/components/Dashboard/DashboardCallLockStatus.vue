@@ -4,20 +4,20 @@
         <div class="row">
             <div class="col-md-4 col-sm-6 col-12">
                 <div class="info-box bg-purple">
-                    <span class="info-box-icon"><i class="fa fa-ticket-alt"></i></span> 
-                    <div class="info-box-content"><span class="info-box-text">Total Tickets</span> 
+                    <span class="info-box-icon"><i class="fa fa-ticket-alt"></i></span>
+                    <div class="info-box-content"><span class="info-box-text">Total Tickets</span>
                         <span class="info-box-number">{{ totalTickets }}</span>
                     </div>
                     <router-link to="/complaint-list/all" class="btn btn-outline-light btn-sm custom-btn" style="color: black !important;">
                         View Details
                     </router-link>
                 </div>
-            </div> 
+            </div>
             <div class="col-md-4 col-sm-6 col-12">
                 <div class="info-box bg-danger">
-                    <span class="info-box-icon"><i class="fa fa-ticket-alt"></i></span> 
+                    <span class="info-box-icon"><i class="fa fa-ticket-alt"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Pending Tickets</span> 
+                        <span class="info-box-text">Pending Tickets</span>
                         <span class="info-box-number">{{ pendingTickets }}</span>
                         <p v-if="authUser.id_cms_privileges==4">FLM: {{ flmPending }} | SLM: {{ slmPending }} | JOINED: {{ joinedPending }}</p>
                     </div>
@@ -25,12 +25,12 @@
                         View Details
                     </router-link>
                 </div>
-            </div> 
+            </div>
             <div class="col-md-4 col-sm-6 col-12">
                 <div class="info-box bg-primary">
-                    <span class="info-box-icon"><i aria-hidden="true" class="fa fa-ticket-alt"></i></span> 
+                    <span class="info-box-icon"><i aria-hidden="true" class="fa fa-ticket-alt"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Processing Tickets</span> 
+                        <span class="info-box-text">Processing Tickets</span>
                         <span class="info-box-number">{{ processingTickets }}</span>
                         <p v-if="authUser.id_cms_privileges==4">FLM: {{ flmProcessing }} | SLM: {{ slmProcessing }} | JOINED: {{ joinedProcessing }}</p>
                     </div>
@@ -58,13 +58,13 @@
                 </table>
             </div>
         </div>
-        
+
 
 
       <!-- User Role Section -->
       <div class="row justify-content-center mt-4">
         <div class="col-md-12 text-center">
-          <p>You have logged in as <strong class="text-success" v-if="authUser.id_cms_privileges==4">Call Center</strong> <strong class="text-success" v-if="authUser.id_cms_privileges==3">Client</strong></p>
+          <p>You have logged in as <strong class="text-success" v-if="authUser.id_cms_privileges==4">Employee</strong> <strong class="text-success" v-if="authUser.id_cms_privileges==3">Client</strong></p>
         </div>
       </div>
     </div>
@@ -342,15 +342,15 @@ export default {
             sub_categories: [],
             sites: [],
             machines: [],
-            totalTickets: 184613,
+            totalTickets: 0,
       pendingTickets: 0,
       flmPending: 0,
       slmPending: 0,
       joinedPending: 0,
-      processingTickets: 49,
-      flmProcessing: 39,
-      slmProcessing: 1,
-      joinedProcessing: 9,
+      processingTickets: 0,
+      flmProcessing: 0,
+      slmProcessing: 0,
+      joinedProcessing: 0,
       newTickets: 0,
       closedTickets: 0,
       authUser: localStorage.getItem("auth") ? JSON.parse(localStorage.getItem("auth")) : null,
