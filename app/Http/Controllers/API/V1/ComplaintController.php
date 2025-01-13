@@ -498,7 +498,8 @@ class ComplaintController extends BaseController
         $complaints = Complaint::with([
             'atm.cmsUser.bank',
             'complaintType',
-            'custodians'
+            'custodians',
+            'complaintDetail'
         ])
             ->whereHas('atm', function ($query) {
                 $query->where('status', 1);
@@ -510,6 +511,12 @@ class ComplaintController extends BaseController
             if (Auth::user()->id_cms_privileges == 4) {
                 $complaints->where('is_slm', 0);
             }
+        }
+        if(Auth::user()->id_cms_privileges==3){
+           $complaints->whereHas('complaintDetail', function ($query) {
+                $query->where('posted_by', Auth::user()->id);
+            });
+        // $complaints->where('posted_by',Auth::user()->id);
         }
 
         // Filter by other query parameters

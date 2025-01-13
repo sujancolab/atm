@@ -10,5 +10,7 @@ class Complaintdetail extends Model
     protected $fillable = [
 		'id', 'complaint_id','posted_by','comment','is_admin','post_for_engineer','posted_at'
 	];
+    protected $table = "complaint_detail";
     use HasFactory;
+
 }

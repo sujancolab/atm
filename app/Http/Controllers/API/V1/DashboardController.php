@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Complaint;
 use App\Models\MachineCompany;
 use App\Models\MachineModel;
 use App\Models\Machines;
@@ -95,17 +96,27 @@ class DashboardController extends BaseController
                                                 ])->count();
             // echo "96";
             //status processing
-            $ticket_details['processing_tickets'] = DB::table('complaint')
-                                                ->select(DB::raw('count(id) as count'))
-                                                ->where('work_status','Processing')
+            // $ticket_details['processing_tickets'] = DB::table('complaint')
+            //                                     ->select(DB::raw('count(id) as count'))
+            //                                     ->where('work_status','Processing')
+            //                                     ->count();
+            $ticket_details['processing_tickets'] = Complaint::where('work_status', 'Processing')
+                                                ->whereHas('atm', function ($query) {
+                                                    $query->where('status', 1);
+                                                })
+                                                // ->where('complaint_system_type_id', 1)
                                                 ->count();
-            $ticket_details['flm_processing_tickets'] = DB::table('complaint')
-                                                ->select(DB::raw('count(id) as count'))
-                                                ->where([
-                                                    ['work_status','=','Processing'],
-                                                    ['complaint_system_type_id','=',1],
-                                                    ['is_slm','=',0]
-                                                ])->count();
+            // $ticket_details['flm_processing_tickets'] = DB::table('complaint')->select(DB::raw('count(id) as count'))->where([
+            //                                         ['work_status','=','Processing'],
+            //                                         ['complaint_system_type_id','=',1],
+            //                                         ['is_slm','=',0]
+            //                                     ])->count();
+            $ticket_details['flm_processing_tickets']=Complaint::where('work_status', 'Processing')
+            ->where('complaint_system_type_id', 1)
+            ->where('is_slm', 0)->whereHas('atm', function ($query) {
+                $query->where('status', 1);
+            })
+            ->count();
             $ticket_details['slm_processing_tickets'] = DB::table('complaint')
                                                 ->select(DB::raw('count(id) as count'))
                                                 ->where([

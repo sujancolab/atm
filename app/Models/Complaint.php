@@ -14,6 +14,9 @@ class Complaint extends Model
     public function atm() {
         return $this->belongsTo(Atm::class, 'atm_id', 'id');
     }
+    public function complaintDetail() {
+        return $this->hasOne(Complaintdetail::class, 'complaint_id', 'id');
+    }
 
     public function complaintType()
     {
