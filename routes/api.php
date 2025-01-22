@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\V1\AreaCodeController;
+use App\Http\Controllers\API\V1\AtmController;
 use App\Http\Controllers\API\V1\BankController;
 use App\Http\Controllers\API\V1\CityController;
 use App\Http\Controllers\API\V1\ClientController;
@@ -115,6 +116,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::get('/getAreaCodeByPostCode',[AreaCodeController::class,'getAreaCodeByPostCode']);
     Route::get('/getClientCode',[CmsUserController::class,'getClientCode']);
     Route::get('/custodian/list',[ComplaintController::class, 'listOfCustodians']);
+    Route::post('/atm/change-status',[AtmController::class, 'changeStatus']);
     Route::apiResources([
         'company' => 'MachineCompanyController',
         'model' => 'MachineModelController',

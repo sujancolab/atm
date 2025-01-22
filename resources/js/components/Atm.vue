@@ -144,11 +144,28 @@
                                         <td class="text-capitalize">
                                             {{ atm.tag_time }}
                                         </td>
-                                        <td class="text-capitalize" v-if="atm.status==1">
-                                            Active
+                                        <td v-if="atm.status==1">
+
+                                              <a
+                                                        href="javascript:void(0);"
+                                                        @click="
+                                                            changeStatus(atm.id,0)
+                                                        "
+                                                        class=""
+                                                    >
+                                                    <i class="fa fa-toggle-on" style="font-size: 30px;"></i>
+                                                    </a>
                                         </td>
-                                        <td class="text-capitalize" v-else>
-                                            Inactive
+                                        <td  v-else>
+                                             <a
+                                                        href="javascript:void(0);"
+                                                        @click="
+                                                            changeStatus(atm.id,1)
+                                                        "
+                                                        class=""
+                                                    >
+                                                    <i class="fa fa-toggle-off" style="font-size: 30px;"></i>
+                                                    </a>
                                         </td>
 
                                         <!-- <td class="text-capitalize">
@@ -702,6 +719,33 @@ export default {
                                 title: data.data.message,
                             });
                         });
+                }
+            });
+        },
+        changeStatus(id,status) {
+            console.log("id: " + id + " status: " + status);
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: `You want to change status ${status==1 ? "Inactive to Active" : "Active to Inactive"}!`,
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, change it!",
+            }).then((result) => {
+                // Send request to the server
+                if (result.value) {
+                    axios.post("/api/atm/change-status", {id:id,status:status})
+                    .then(res => {
+                        Toast.fire({
+                            icon: "success",
+                            title: res.data.message,
+                        });
+                        this.loadUsers();
+                    }).catch(err => {
+                        console.error(err);
+                    });
+
                 }
             });
         },

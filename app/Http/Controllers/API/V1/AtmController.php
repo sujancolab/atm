@@ -158,4 +158,19 @@ class AtmController extends BaseController
 			return $this->sendError($errorMessage, [$e->getMessage()], 500);
 		}
     }
+    public function changeStatus(Request $request){
+        try {
+            $atm = Atm::find($request->id);
+            $atm->status = $request->status;
+            $atm->save();
+            return $this->sendResponse($atm, 'Status updated successfully');
+        } catch (Exception $e) {
+            app(ExceptionHandler::class)->report($e);
+
+            $errorMessage = Lang::get('errors.'. $e->errorInfo[1], ['default' => 'An error occurred. Please contact administrator.']);
+
+            // Return an error response
+            return $this->sendError($errorMessage, [$e->getMessage()], 500);
+        }
+    }
 }

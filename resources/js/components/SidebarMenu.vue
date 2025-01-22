@@ -41,7 +41,7 @@
             <li class="nav-item" v-if="authUser.id_cms_privileges==4">
                 <router-link to="/complaint-list/1" class="nav-link">
                     <i class="nav-icon fas fa-eye"></i>
-                    <p>
+                    <p @click="redirecturl('/complaint-list/1')">
                        FLM
                     </p>
                 </router-link>
@@ -50,8 +50,8 @@
             <li class="nav-item" v-if="authUser.id_cms_privileges==4">
                 <router-link to="/complaint-list/2" class="nav-link">
                     <i class="nav-icon fas fa-eye"></i>
-                    <p>
-                        Dispenser joined down call (AXIS BNA)
+                    <p @click="redirecturl('/complaint-list/2')">
+                        Dispenser joined call
                     </p>
                 </router-link>
 
@@ -59,7 +59,7 @@
             <li class="nav-item" v-if="authUser.id_cms_privileges==4">
                 <router-link to="/sls-list" class="nav-link">
                     <i class="nav-icon fas fa-eye"></i>
-                    <p>
+                    <p @click="redirecturl('/sls-list')">
                        SLM
                     </p>
                 </router-link>
@@ -239,6 +239,12 @@
         });
     },
     methods: {
+        redirecturl(url){
+        console.log("hello");
+        // $router.push(url)
+        window.location.href=url;
+
+     },
       hasRequiredPermission(permissionNames) {
         if (!permissionNames || !Array.isArray(permissionNames)) {
             return false;

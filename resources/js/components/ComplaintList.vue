@@ -84,16 +84,21 @@
                                         <label for="machine_id">--Custodian--</label>
                                     </div>
                                     <div class="col">
-                                        <!-- <v-select label="site_name"
+                                        <!-- <v-select label="name"
                                             placeholder="Select Complaint Nature..." v-model="search.custodian"
                                             name="complaint_nature">
-                                            <option v-for="(custodian, index) in Custodians" :key="custodian.custodian_id" :value="custodian.custodian_id">{{custodian.name}}( {{ custodian.user_code }} )</option>
+                                            <option v-for="(custodian, index) in Custodians" :key="custodian.custodian_id" :value="custodian.custodian_id">{{custodian.name}}( {{ custodian.custodian_id }} )</option>
                                         </v-select> -->
-                                        <select class="form-control" v-model="search.custodian">
+                                        <v-select label="name" :reduce="(option) => option.custodian_id" :options="Custodians"
+                                                placeholder="Enter Custodian ..." v-model="search.custodian"
+                                                v-validate="'required'"
+                                                :class="{ 'error': verrors.custodian, 'error': verrors.has('custodian'), 'haveValue': search.custodian }"
+                                                data-vv-name="custodian" />
+                                        <!-- <select class="form-control" v-model="search.custodian">
                                             <option v-for="custodian in Custodians" :key="custodian.custodian_id" :value="custodian.custodian_id">
                                                 {{ custodian.name }} ({{ custodian.custodian_id }})
                                             </option>
-                                        </select>
+                                        </select> -->
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-2">

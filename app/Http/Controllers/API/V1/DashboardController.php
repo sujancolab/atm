@@ -124,13 +124,19 @@ class DashboardController extends BaseController
                                                     ['complaint_system_type_id','=',1],
                                                     ['is_slm','=',1]
                                                 ])->count();
-            $ticket_details['joined_processing_tickets'] = DB::table('complaint')
-                                                ->select(DB::raw('count(id) as count'))
-                                                ->where([
-                                                    ['work_status','=','Processing'],
-                                                    ['complaint_system_type_id','=',2],
-                                                    ['is_slm','=',0]
-                                                ])->count();
+            $ticket_details['joined_processing_tickets'] = Complaint::where('work_status','Processing')
+            ->where('complaint_system_type_id', 2)
+            ->where('is_slm',0)->whereHas('atm', function ($query) {
+                $query->where('status', 1);
+            })
+            ->count();
+            // DB::table('complaint')
+            //                                     ->select(DB::raw('count(id) as count'))
+            //                                     ->where([
+            //                                         ['work_status','=','Processing'],
+            //                                         ['complaint_system_type_id','=',2],
+            //                                         ['is_slm','=',0]
+            //                                     ])->count();
             //closed status
             $ticket_details['closed_tickets'] = DB::table('complaint')
                                                 ->select(DB::raw('count(id) as count'))

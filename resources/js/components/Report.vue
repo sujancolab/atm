@@ -11,7 +11,7 @@
             <option value="SLM">SLM</option>
             <option value="FLM">FLM</option>
             <option value="Dispenser joined down call (AXIS BNA)">
-              Dispenser joined down call (AXIS BNA)
+              Dispenser joined call
             </option>
           </select>
         </div>

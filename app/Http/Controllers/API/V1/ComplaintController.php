@@ -486,11 +486,11 @@ class ComplaintController extends BaseController
         $custodian_id = request()->query('custodian');
 
         if (!empty($from_date)) {
-            $from_date = \Carbon\Carbon::parse($from_date . ' 00:00:00');
+            $from_date = \Carbon\Carbon::parse($from_date); //. ' 00:00:00');
         }
 
         if (!empty($to_date)) {
-            $to_date = \Carbon\Carbon::parse($to_date . ' 23:59:59');
+            $to_date = \Carbon\Carbon::parse($to_date);// . ' 23:59:59');
         }
 
         $status_list = array('' => 'Select', 'Pending' => 'Pending', 'Processing' => 'Processing', 'Completed' => 'Completed');
@@ -536,7 +536,17 @@ class ComplaintController extends BaseController
         if ($custodian_id) $complaints = $complaints->whereHas('custodians', function ($query) use ($custodian_id) {
             $query->where('custodian_id', $custodian_id);
         });
-        $complaints = $complaints->orderBy('work_status', 'desc')->orderByRaw("TIME_TO_SEC(lag_time) ASC")->paginate(10)
+        $complaints = $complaints
+    //     ->orderByRaw("
+    //     CASE
+    //         WHEN work_status = 'Processing' THEN 1
+    //         WHEN work_status = 'Pending' THEN 2
+    //         WHEN work_status = 'Completed' THEN 3
+    //         ELSE 4
+    //     END
+    // ")
+    ->orderByRaw("TIME_TO_SEC(lag_time) ASC")
+    ->paginate(10)
             ->through(function ($com) {
                 // Check work status and calculate lag time
                 // if ($com->lag_time) {
@@ -728,7 +738,7 @@ class ComplaintController extends BaseController
 
 
         $complaint_details = DB::table('complaint_detail')
-            ->join('cms_users', 'cms_users.id', '=', 'complaint_detail.posted_by')
+            ->leftJoin('cms_users', 'cms_users.id', '=', 'complaint_detail.posted_by')
             ->leftJoin('client', 'client.id', '=', 'cms_users.client_id')
             ->select('complaint_id', 'posted_by', 'complaint_detail.comment', 'post_for_engineer', 'is_admin', 'posted_at', 'name', 'email', 'mobile', 'user_code', 'client_name')
             ->where('complaint_id', $id)
@@ -976,11 +986,7 @@ class ComplaintController extends BaseController
     {
 
         $user_details = Auth::user();
-        /*if(CRUDBooster::myPrivilegeId()==4){
-        DB::table('complaint_detail')->where('complaint_id',$id)->update(
-            ['viewed_by'=>1,'viewed_at'=>Carbon::now()
-        ]);
-    }*/
+
 
         $complaint = Complaint::findOrFail($id);
         //dd($complaint);
