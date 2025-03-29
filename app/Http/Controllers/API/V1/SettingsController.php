@@ -192,7 +192,7 @@ class SettingsController extends BaseController {
 
     }
     public function accountAuth(){
-        $user=CmsUser::where('id',Auth::user()->id)->select('id','name','email','id_cms_privileges')->first();
+        $user=CmsUser::where('id',Auth::user()->id)->select('id','name','email','id_cms_privileges','is_bna')->first();
         return $this->sendResponse($user, 'auth details');
     }
 }

@@ -17,40 +17,32 @@
  */
 
 /*!
- * ApexCharts v3.40.0
- * (c) 2018-2023 ApexCharts
+ * ApexCharts v3.54.1
+ * (c) 2018-2024 ApexCharts
  * Released under the MIT License.
  */
 
 /*!
- * Sizzle CSS Selector Engine v2.3.9
- * https://sizzlejs.com/
- *
- * Copyright JS Foundation and other contributors
- * Released under the MIT license
- * https://js.foundation/
- *
- * Date: 2022-12-19
- */
-
-/*!
- * Vue.js v2.7.14
- * (c) 2014-2022 Evan You
+ * Vue-Lazyload.js v1.3.5
+ * (c) 2023 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
 
 /*!
- * jQuery JavaScript Library v3.6.3
+ * Vue.js v2.7.16
+ * (c) 2014-2023 Evan You
+ * Released under the MIT License.
+ */
+
+/*!
+ * jQuery JavaScript Library v3.7.1
  * https://jquery.com/
- *
- * Includes Sizzle.js
- * https://sizzlejs.com/
  *
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license
  * https://jquery.org/license
  *
- * Date: 2022-12-20T21:28Z
+ * Date: 2023-08-28T13:37Z
  */
 
 /*!
@@ -79,6 +71,12 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
+
+/*! Hammer.JS - v2.0.7 - 2016-04-22
+ * http://hammerjs.github.io/
+ *
+ * Copyright (c) 2016 Jorik Tangelder;
+ * Licensed under the MIT license */
 
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 
@@ -136,4 +134,4 @@ and limitations under the License.
 
 //! moment.js locale configuration
 
-//! version : 0.5.40
+//! version : 0.5.46

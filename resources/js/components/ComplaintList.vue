@@ -49,6 +49,15 @@
                                             name="docket_no" class="form-control">
                                     </div>
                                 </div>
+                                <div class="row align-items-center mb-2">
+                                    <div class="col-auto col-custom">
+                                        <label for="machine_id">Bank</label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" placeholder="Enter docket no ..." v-model="search.bank"
+                                            name="bank" class="form-control">
+                                    </div>
+                                </div>
 
 
 
@@ -375,6 +384,7 @@ export default {
                 to_date: '',
                 custodian: '',
                 complaint_status: '',
+                bank: '',
 
             },
             categories: [],
@@ -582,8 +592,16 @@ export default {
         },
         formatLagTime(lagTime) {
             if (lagTime) {
-                const parts = lagTime.split(":");
-                return `${parts[0]}H:${parts[1]}M`;
+                let seconds=lagTime;
+                let d = Math.floor(seconds / (3600 * 24));
+                let h = Math.floor((seconds % (3600 * 24)) / 3600);
+                let m = Math.floor((seconds % 3600) / 60);
+                let s = seconds % 60;
+
+                return `${d}d ${h}h ${m}m ${parseInt(s)}s`;
+                // return lagTime;
+                //const parts = lagTime.split(":");
+               // return `${parts[0]}D:${parts[1]}H:${parts[1]}M`;
             } else {
                 return 'N/A';
             }
@@ -779,10 +797,11 @@ export default {
             }, 1000);
         },
         formatTime(seconds) {
-            const hours = Math.floor(seconds / 3600);
-            const minutes = Math.floor((seconds % 3600) / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${this.padTime(hours)}:${this.padTime(minutes)}:${this.padTime(secs)}`;
+            return this.formatLagTime(seconds)
+            // const hours = Math.floor(seconds / 3600);
+            // const minutes = Math.floor((seconds % 3600) / 60);
+            // const secs = Math.floor(seconds % 60);
+            // return `${this.padTime(hours)}:${this.padTime(minutes)}:${this.padTime(secs)}`;
         },
         padTime(time) {
             return time < 10 ? `0${time}` : time;

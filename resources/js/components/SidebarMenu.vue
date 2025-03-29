@@ -47,7 +47,7 @@
                 </router-link>
 
             </li>
-            <li class="nav-item" v-if="authUser.id_cms_privileges==4">
+            <li class="nav-item" v-if="authUser.is_bna">
                 <router-link to="/complaint-list/2" class="nav-link">
                     <i class="nav-icon fas fa-eye"></i>
                     <p @click="redirecturl('/complaint-list/2')">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Atm;
+use App\Models\Bank;
 use App\Models\Complaint;
 use App\Models\ComplaintSystemType;
 use App\Models\Custodian;
@@ -476,6 +477,202 @@ class ComplaintController extends BaseController
     //     ];
     //     return $this->sendResponse($data, 'List of Complaints.');
     // }
+    // public function listComplaint($system = 'all', $status = NULL)
+    // {
+    //     $atm_id = request()->query('atm_id');
+    //     $docket_no = request()->query('docket_no');
+    //     $complaint_status = request()->query('complaint_status');
+    //     $from_date = request()->query('from_date');
+    //     $to_date = request()->query('to_date');
+    //     $custodian_id = request()->query('custodian');
+
+    //     if (!empty($from_date)) {
+    //         $from_date = \Carbon\Carbon::parse($from_date); //. ' 00:00:00');
+    //     }
+
+    //     if (!empty($to_date)) {
+    //         $to_date = \Carbon\Carbon::parse($to_date)->addDay(); // . ' 23:59:59');
+    //     }
+
+    //     $status_list = array('' => 'Select', 'Pending' => 'Pending', 'Processing' => 'Processing', 'Completed' => 'Completed');
+
+    //     $complaints = Complaint::with([
+    //         'atm.cmsUser.bank',
+    //         'complaintType',
+    //         'custodians',
+    //         'complaintDetail'
+    //     ])
+    //         ->whereHas('atm', function ($query) {
+    //             $query->where('status', 1);
+    //         });
+    //     if (request()->bank_name) {
+    //         $bank_name = request()->bank_name;
+    //         $complaints->whereHas('atm.cmsUser.bank', function ($query) use ($bank_name) {
+    //             $query->where('bank_name', "%" . $bank_name . "%");
+    //         });
+    //     }
+
+    //     // Filter based on user privileges
+    //     if ($system != 'all') {
+    //         $complaints->where('complaint_system_type_id', $system);
+    //         if (Auth::user()->id_cms_privileges == 4) {
+    //             $complaints->where('is_slm', 0);
+    //         }
+    //     }
+    //     if (Auth::user()->id_cms_privileges == 3) {
+    //         $complaints->whereHas('complaintDetail', function ($query) {
+    //             $query->where('posted_by', Auth::user()->id);
+    //         });
+    //         // $complaints->where('posted_by',Auth::user()->id);
+    //     }
+
+    //     // Filter by other query parameters
+    //     if ($atm_id) $complaints = $complaints->whereHas('atm', function ($query) use ($atm_id) {
+    //         $query->where('atm_id', $atm_id);
+    //     });
+
+    //     if ($docket_no) $complaints = $complaints->where('docket_no', $docket_no);
+
+    //     if ($complaint_status) $complaints = $complaints->where('work_status', $complaint_status);
+
+    //     if ($from_date) $complaints = $complaints->where('created_at', '>=', $from_date);
+
+    //     if ($to_date) $complaints = $complaints->where('created_at', '<=', $to_date);
+
+    //     if ($status) $complaints = $complaints->where('work_status', $status);
+    //     if ($custodian_id) $complaints = $complaints->whereHas('custodians', function ($query) use ($custodian_id) {
+    //         $query->where('custodian_id', $custodian_id)->where('status', 1);
+    //     });
+    //     $complaints = $complaints->orderByRaw("CASE
+    //         WHEN work_status = 'Pending' THEN 1
+    //         WHEN work_status = 'Processing' THEN 2
+    //         WHEN work_status = 'Completed' THEN 3
+    //         ELSE 4
+    //      END ");
+    //     if (!empty($from_date) && !empty($to_date)) {
+    //         $complaints = $complaints->orderByRaw("created_at ASC");
+    //     } else {
+    //         // $complaints=$complaints->orderByRaw("TIME_TO_SEC(lag_time) ASC");
+    //         $complaints = $complaints->orderByRaw("created_at ASC");
+    //     }
+    //     $complaints = $complaints
+    //         //     ->orderByRaw("
+    //         //     CASE
+    //         //         WHEN work_status = 'Processing' THEN 1
+    //         //         WHEN work_status = 'Pending' THEN 2
+    //         //         WHEN work_status = 'Completed' THEN 3
+    //         //         ELSE 4
+    //         //     END
+    //         // ")
+    //         // ->orderByRaw("TIME_TO_SEC(lag_time) ASC")
+    //         ->paginate(10)
+    //         ->through(function ($com) {
+    //             // Check work status and calculate lag time
+    //             // if ($com->lag_time) {
+    //             //     $time_parts = explode(':', $com->lag_time);
+    //             //     $com->lag_time_seconds = ($time_parts[0] * 3600) + ($time_parts[1] * 60) + $time_parts[2];
+    //             // } else {
+    //             //     $com->lag_time_seconds = 0; // Or some default value
+    //             // }
+    //             if ($com->work_status == 'Completed') {
+    //                 if (!$com->lag_time) {
+    //                     $com->lag_time = null;
+    //                 } else {
+    //                     $com->lag_time = $com->lag_time;
+    //                 }
+    //             } else {
+    //                 // Calculate time difference if work status is not completed
+    //                 $current_date = now();
+    //                 $to = \Carbon\Carbon::parse($com->created_at);
+    //                 $diff_in_seconds = $to->diffInSeconds($current_date);
+    //                 $total_time = $diff_in_seconds;
+
+    //                 $tag_time_parts = explode(':', $com->atm->tag_time);
+    //                 $tag_time = ($tag_time_parts[0] * 3600) + ($tag_time_parts[1] * 60) + $tag_time_parts[2];
+
+    //                 if ($total_time > $tag_time) {
+    //                     $diff = $total_time - $tag_time;
+    //                     $days = floor($diff / 86400); // 86400 seconds in a day
+    //                     $remaining_seconds = $diff % 86400;
+    //                     $hours = floor($remaining_seconds / 3600);
+    //                     $remaining_seconds = $remaining_seconds % 3600;
+    //                     $minutes = floor(($remaining_seconds / 60) % 60);
+    //                     $seconds = $remaining_seconds % 60;
+    //                     $com->lag_time = "$days:$hours:$minutes:$seconds";
+    //                 } else {
+    //                     $com->lag_time = null;
+    //                 }
+    //             }
+
+    //             // Fetch the custodian name
+    //             // $custodian = $com->custodians->firstWhere(function($c) {
+    //             //     return $c->status == 1 && (!$c->custodian_id || $c->custodian_id == request()->query('custodian_id'));
+    //             // });
+    //             $custodian = $com->custodians->firstWhere('status', 1);
+    //             $com->custname = $custodian ? $custodian->name : null;
+
+    //             // Assign additional information from atm and cmsUser
+    //             $com->atm_atm_id = $com->atm->atm_id;
+    //             $com->tag_time = $com->atm->tag_time;
+    //             $com->title = $com->complaint_type->title ?? "";
+
+    //             // Assign user_code and bank_name from atm and cmsUser
+    //             $com->user_code = $com->atm->cmsUser->user_code ?? "";
+    //             $com->bank_name = $com->atm->cmsUser->bank->bank_name ?? "";
+
+    //             return $com;
+    //         });
+    //     // $complaints = $complaints->sortBy('lag_time_seconds');
+
+    //     // Calculate lag_time
+    //     // foreach ($complaints as $com) {
+    //     //     if ($com->work_status == 'Completed' && !$com->lag_time) {
+    //     //         $com->lag_time = null;
+    //     //     } else if ($com->work_status == 'Completed' && $com->lag_time) {
+    //     //         $lag_time = $com->lag_time;
+    //     //         $com->lag_time = $lag_time;
+    //     //     } else {
+    //     //         $current_date = now();
+    //     //         $to = \Carbon\Carbon::parse($com->created_at);
+    //     //         $diff_in_seconds = $to->diffInSeconds($current_date);
+
+    //     //         $total_time = $diff_in_seconds;
+
+    //     //         $tag_time_parts = explode(':', $com->atm->tag_time);
+    //     //         $tag_time = ($tag_time_parts[0] * 3600) + ($tag_time_parts[1] * 60) + $tag_time_parts[2];
+
+    //     //         if ($total_time > $tag_time) {
+    //     //             $diff = $total_time - $tag_time;
+    //     //             $hours = floor($diff / 3600);
+    //     //             $minutes = floor(($diff / 60) % 60);
+    //     //             $seconds = $diff % 60;
+    //     //             $com->lag_time = "$hours:$minutes:$seconds";
+    //     //         } else {
+    //     //             $com->lag_time = null;
+    //     //         }
+    //     //     }
+
+    //     //     // Fetch the custodian name
+    //     //     $custodian = $com->custodians->where('status', 1)->where('custodian_id', '!=', 0)->first();
+    //     //     $com->custname = $custodian ? $custodian->name : null;
+    //     //     $com->atm_atm_id=$com->atm->atm_id;
+    //     //     $com->tag_time=$com->atm->tag_time;
+    //     //     $com->title=isset($com->complaint_type) ? $com->complaint_type->title : "";
+    //     //     // $cms_user=$com->atm->cmsUser;
+    //     //     // return $this->sendResponse($cms_user, 'List of Complaints.');
+    //     //     $com->user_code=isset($com->atm) && isset($com->atm->cmsUser) ? $com->atm->cmsUser->user_code : "";
+    //     //     $com->bank_name=isset($com->atm) && isset($com->atm->cmsUser) && isset($com->atm->cmsUser->bank) ? $com->atm->cmsUser->bank->bank_name : "";
+    //     // }
+
+    //     $data = [
+    //         'complaints' => $complaints,
+    //         'status_list' => $status_list,
+    //         'system' => $system,
+    //     ];
+
+    //     return $this->sendResponse($data, 'List of Complaints.');
+    // }
+
     public function listComplaint($system = 'all', $status = NULL)
     {
         $atm_id = request()->query('atm_id');
@@ -490,225 +687,119 @@ class ComplaintController extends BaseController
         }
 
         if (!empty($to_date)) {
-            $to_date = \Carbon\Carbon::parse($to_date);// . ' 23:59:59');
+            $to_date = \Carbon\Carbon::parse($to_date)->addDay(); // . ' 23:59:59');
         }
 
         $status_list = array('' => 'Select', 'Pending' => 'Pending', 'Processing' => 'Processing', 'Completed' => 'Completed');
 
+        // Existing query filters
         $complaints = Complaint::with([
             'atm.cmsUser.bank',
             'complaintType',
             'custodians',
             'complaintDetail'
         ])
-            ->whereHas('atm', function ($query) {
-                $query->where('status', 1);
-            });
+        ->whereHas('atm', function ($query) {
+            $query->where('status', 1);
+        });
 
-        // Filter based on user privileges
+        // Apply filters (existing code)
+        if (request()->bank) {
+            $bank_name = request()->bank;
+            $complaints->whereHas('atm.cmsUser.bank', function ($query) use ($bank_name) {
+                $query->where('bank_name', 'LIKE', "%" . $bank_name . "%");
+            });
+        }
+
         if ($system != 'all') {
             $complaints->where('complaint_system_type_id', $system);
             if (Auth::user()->id_cms_privileges == 4) {
                 $complaints->where('is_slm', 0);
             }
         }
-        if(Auth::user()->id_cms_privileges==3){
-           $complaints->whereHas('complaintDetail', function ($query) {
+
+        if (Auth::user()->id_cms_privileges == 3) {
+            $complaints->whereHas('complaintDetail', function ($query) {
                 $query->where('posted_by', Auth::user()->id);
             });
-        // $complaints->where('posted_by',Auth::user()->id);
         }
 
-        // Filter by other query parameters
-        if ($atm_id) $complaints = $complaints->whereHas('atm', function ($query) use ($atm_id) {
-            $query->where('atm_id', $atm_id);
-        });
-
-        if ($docket_no) $complaints = $complaints->where('docket_no', $docket_no);
-
-        if ($complaint_status) $complaints = $complaints->where('work_status', $complaint_status);
-
-        if ($from_date) $complaints = $complaints->where('created_at', '>=', $from_date);
-
-        if ($to_date) $complaints = $complaints->where('created_at', '<=', $to_date);
-
-        if ($status) $complaints = $complaints->where('work_status', $status);
-        if ($custodian_id) $complaints = $complaints->whereHas('custodians', function ($query) use ($custodian_id) {
-            $query->where('custodian_id', $custodian_id);
-        });
-        $complaints = $complaints
-    //     ->orderByRaw("
-    //     CASE
-    //         WHEN work_status = 'Processing' THEN 1
-    //         WHEN work_status = 'Pending' THEN 2
-    //         WHEN work_status = 'Completed' THEN 3
-    //         ELSE 4
-    //     END
-    // ")
-    ->orderByRaw("TIME_TO_SEC(lag_time) ASC")
-    ->paginate(10)
-            ->through(function ($com) {
-                // Check work status and calculate lag time
-                // if ($com->lag_time) {
-                //     $time_parts = explode(':', $com->lag_time);
-                //     $com->lag_time_seconds = ($time_parts[0] * 3600) + ($time_parts[1] * 60) + $time_parts[2];
-                // } else {
-                //     $com->lag_time_seconds = 0; // Or some default value
-                // }
-                if ($com->work_status == 'Completed') {
-                    if (!$com->lag_time) {
-                        $com->lag_time = null;
-                    } else {
-                        $com->lag_time = $com->lag_time;
-                    }
-                } else {
-                    // Calculate time difference if work status is not completed
-                    $current_date = now();
-                    $to = \Carbon\Carbon::parse($com->created_at);
-                    $diff_in_seconds = $to->diffInSeconds($current_date);
-                    $total_time = $diff_in_seconds;
-
-                    $tag_time_parts = explode(':', $com->atm->tag_time);
-                    $tag_time = ($tag_time_parts[0] * 3600) + ($tag_time_parts[1] * 60) + $tag_time_parts[2];
-
-                    if ($total_time > $tag_time) {
-                        $diff = $total_time - $tag_time;
-                        $hours = floor($diff / 3600);
-                        $minutes = floor(($diff / 60) % 60);
-                        $seconds = $diff % 60;
-                        $com->lag_time = "$hours:$minutes:$seconds";
-                    } else {
-                        $com->lag_time = null;
-                    }
-                }
-
-                // Fetch the custodian name
-                $custodian = $com->custodians->firstWhere('status', 1);
-                $com->custname = $custodian ? $custodian->name : null;
-
-                // Assign additional information from atm and cmsUser
-                $com->atm_atm_id = $com->atm->atm_id;
-                $com->tag_time = $com->atm->tag_time;
-                $com->title = $com->complaint_type->title ?? "";
-
-                // Assign user_code and bank_name from atm and cmsUser
-                $com->user_code = $com->atm->cmsUser->user_code ?? "";
-                $com->bank_name = $com->atm->cmsUser->bank->bank_name ?? "";
-
-                return $com;
+        if ($atm_id) {
+            $complaints->whereHas('atm', function ($query) use ($atm_id) {
+                $query->where('atm_id', $atm_id);
             });
-        // $complaints = $complaints->sortBy('lag_time_seconds');
+        }
 
-        // Calculate lag_time
-        // foreach ($complaints as $com) {
-        //     if ($com->work_status == 'Completed' && !$com->lag_time) {
-        //         $com->lag_time = null;
-        //     } else if ($com->work_status == 'Completed' && $com->lag_time) {
-        //         $lag_time = $com->lag_time;
-        //         $com->lag_time = $lag_time;
-        //     } else {
-        //         $current_date = now();
-        //         $to = \Carbon\Carbon::parse($com->created_at);
-        //         $diff_in_seconds = $to->diffInSeconds($current_date);
+        if ($docket_no) {
+            $complaints->where('docket_no', $docket_no);
+        }
 
-        //         $total_time = $diff_in_seconds;
+        if ($complaint_status) {
+            $complaints->where('work_status', $complaint_status);
+        }
 
-        //         $tag_time_parts = explode(':', $com->atm->tag_time);
-        //         $tag_time = ($tag_time_parts[0] * 3600) + ($tag_time_parts[1] * 60) + $tag_time_parts[2];
+        if ($from_date) {
+            $complaints->where('created_at', '>=', $from_date);
+        }
 
-        //         if ($total_time > $tag_time) {
-        //             $diff = $total_time - $tag_time;
-        //             $hours = floor($diff / 3600);
-        //             $minutes = floor(($diff / 60) % 60);
-        //             $seconds = $diff % 60;
-        //             $com->lag_time = "$hours:$minutes:$seconds";
-        //         } else {
-        //             $com->lag_time = null;
-        //         }
-        //     }
+        if ($to_date) {
+            $complaints->where('created_at', '<=', $to_date);
+        }
 
-        //     // Fetch the custodian name
-        //     $custodian = $com->custodians->where('status', 1)->where('custodian_id', '!=', 0)->first();
-        //     $com->custname = $custodian ? $custodian->name : null;
-        //     $com->atm_atm_id=$com->atm->atm_id;
-        //     $com->tag_time=$com->atm->tag_time;
-        //     $com->title=isset($com->complaint_type) ? $com->complaint_type->title : "";
-        //     // $cms_user=$com->atm->cmsUser;
-        //     // return $this->sendResponse($cms_user, 'List of Complaints.');
-        //     $com->user_code=isset($com->atm) && isset($com->atm->cmsUser) ? $com->atm->cmsUser->user_code : "";
-        //     $com->bank_name=isset($com->atm) && isset($com->atm->cmsUser) && isset($com->atm->cmsUser->bank) ? $com->atm->cmsUser->bank->bank_name : "";
-        // }
+        if ($status) {
+            $complaints->where('work_status', $status);
+        }
 
+        if ($custodian_id) {
+            $complaints->whereHas('custodians', function ($query) use ($custodian_id) {
+                $query->where('custodian_id', $custodian_id)->where('status', 1);
+            });
+        }
+
+        // Calculate lag_time using a subquery or raw SQL
+        $complaints = $complaints->select('complaint.*')
+            ->selectRaw('
+                CASE
+                    WHEN work_status = "Completed" THEN NULL
+                    ELSE TIMESTAMPDIFF(SECOND, complaint.created_at, NOW()) -
+                         (SUBSTRING_INDEX(atm.tag_time, ":", 1) * 3600 +
+                          SUBSTRING_INDEX(SUBSTRING_INDEX(atm.tag_time, ":", -2), ":", 1) * 60 +
+                          SUBSTRING_INDEX(atm.tag_time, ":", -1))
+                END AS lag_time
+            ')
+            ->join('atm', 'complaint.atm_id', '=', 'atm.id')
+            ->orderByRaw('
+                CASE
+                    WHEN work_status = "Pending" THEN 1
+                    WHEN work_status = "Processing" THEN 2
+                    WHEN work_status = "Completed" THEN 3
+                    ELSE 4
+                END ASC,
+                lag_time DESC
+            ') // Sort by work_status first, then by lag_time
+            ->paginate(10);
+
+        // Format the results
+        $complaints->getCollection()->transform(function ($com) {
+            $com->custname = $com->custodians->firstWhere('status', 1)->name ?? null;
+            $com->atm_atm_id = $com->atm->atm_id;
+            $com->tag_time = $com->atm->tag_time;
+            $com->title = $com->complaint_type->title ?? "";
+            $com->user_code = $com->atm->cmsUser->user_code ?? "";
+            $com->bank_name = $com->atm->cmsUser->bank->bank_name ?? "";
+            return $com;
+        });
+        $banks=Bank::all();
         $data = [
+
             'complaints' => $complaints,
             'status_list' => $status_list,
             'system' => $system,
+            'banks' => $banks,
         ];
 
         return $this->sendResponse($data, 'List of Complaints.');
     }
-
-
-    // public function listComplaint($system = 'all', $status = null)
-    // {
-    //     $user = Auth::user();
-
-    //     // Fetch ATM IDs based on user privileges in one query
-    //     $atmIds = Atm::query()
-    //         ->when($user->id_cms_privileges == 3, fn($query) => $query->where('user_id', $user->id))
-    //         ->pluck('id')
-    //         ->toArray();
-    //     // Prepare filters
-    //     $docketNo = request()->query('docket_no');
-    //     $qrystatus = request()->query('complaint_status');
-
-    //     // Status list
-    //     $statusList = ['' => 'Select', 'Pending' => 'Pending', 'Processing' => 'Processing', 'Completed' => 'Completed'];
-
-    //     // Build complaints query
-    //     $complaintsQuery = DB::table('complaints_view')
-    //         ->whereIn('atm_id', $atmIds)
-    //         ->when($system !== 'all', fn($query) => $query->where('complaint_system_type_id', $system))
-    //         ->when(!empty($docketNo), fn($query) => $query->where('docket_no', $docketNo))
-    //         ->when(!empty($qrystatus), fn($query) => $query->where('work_status', $qrystatus))
-    //         ->when(!empty($status), fn($query) => $query->where('work_status', $status))
-    //         ->orderBy('work_status', 'asc')
-    //         ->orderBy('created_at', 'desc')
-    //         ->paginate(10);
-    //     // return $this->sendResponse($complaintsQuery,"hello");
-    //     // Bulk process complaints for lag time and custodian name
-    //     $complaintIds = $complaintsQuery->pluck('id')->toArray();
-    //     $custodians = DB::table('custodians')
-    //         ->whereIn('complaint_id', $complaintIds)
-    //         ->where('status', 1)
-    //         ->where('custodian_id', '!=', 0)
-    //         ->get()
-    //         ->keyBy('complaint_id');
-
-    //     $currentDate = now();
-    //     foreach ($complaintsQuery as $com) {
-    //         // Calculate lag time
-    //         if ($com->work_status === 'Completed' && empty($com->lag_time)) {
-    //             $com->lag_time = '';
-    //         } elseif ($com->work_status !== 'Completed') {
-    //             $createdAt = \Carbon\Carbon::parse($com->created_at);
-    //             $diffInSeconds = $createdAt->diffInSeconds($currentDate);
-    //             $tagTime = strtotime("1970-01-01 {$com->tag_time} UTC");
-    //             $com->lag_time = $diffInSeconds > $tagTime ? gmdate('H:i:s', $diffInSeconds - $tagTime) : null;
-    //         }
-
-    //         // Attach custodian name
-    //         $com->custname = $custodians[$com->id]->name ?? null;
-    //     }
-
-    //     // Return response
-    //     return $this->sendResponse([
-    //         "complaints" => $complaintsQuery,
-    //         "status_list" => $statusList,
-    //         "system" => $system,
-    //     ], 'List of Complaints.');
-    // }
-
 
     public function listOfCustodians()
     {
