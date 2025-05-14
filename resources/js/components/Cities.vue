@@ -124,7 +124,7 @@
                                         <td class="text-capitalize">
                                             {{ city.district.district_name }}
                                         </td>
-                                        <td>{{ city.state.name }}</td>
+                                        <td>{{ city.state.state_name }}</td>
                                     </tr>
                                 </tbody>
                             </table>

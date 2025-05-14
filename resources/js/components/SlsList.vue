@@ -67,6 +67,23 @@
                                             name="docket_no" class="form-control">
                                     </div>
                                 </div>
+                                <div class="row align-items-center mb-2">
+                                    <div class="col-auto col-custom">
+                                        <label for="machine_id">--Status--</label>
+                                    </div>
+                                    <div class="col">
+                                        <!-- <v-select label="site_name"
+                                            placeholder="Select Complaint Nature..." v-model="search.complaint_status"
+                                            name="complaint_nature">
+                                            <option v-for="(value, key) in Statuses" :key="key" :value="key">{{ value }}</option>
+                                        </v-select> -->
+                                        <select class="form-control" v-model="search.complaint_status">
+                                            <option v-for="(value, key) in Statuses" :key="key" :value="key">
+                                               {{value}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
 
 
 

@@ -194,13 +194,23 @@ class DashboardController extends BaseController
                                 ->get();
             $ticket_details['pending_tickets'] = count($pending_tickets);
             //status processing
-            $processing_tickets = DB::table('complaint')
-                                ->join('complaint_detail','complaint_detail.complaint_id','=','complaint.id')
-                                ->select(DB::raw('count(complaint.id) as complaint_count'))
-                                ->where('posted_by',Auth::user()->id)
-                                ->where('work_status','Processing')
-                                ->groupBy('complaint_detail.complaint_id')
-                                ->get();
+            // $processing_tickets = DB::table('complaint')
+            //                     ->join('complaint_detail','complaint_detail.complaint_id','=','complaint.id')
+            //                     ->select(DB::raw('count(complaint.id) as complaint_count'))
+            //                     ->where('posted_by',Auth::user()->id)
+            //                     ->where('work_status','Processing')
+            //                     ->groupBy('complaint_detail.complaint_id')
+            //                     ->get();
+            $processing_tickets = Complaint::where('work_status', 'Processing')
+            ->whereHas('complaintDetail', function ($q) {
+                $q->where('posted_by', Auth::user()->id);
+            })
+            ->whereHas('atm', function ($query) {
+                $query->where('status', 1);
+            })
+            ->with(['complaintDetail']) // Eager load to avoid N+1 issues
+            ->get();
+
             $ticket_details['processing_tickets'] = count($processing_tickets);
             //closed status
             $closed_tickets = DB::table('complaint')

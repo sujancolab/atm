@@ -70,8 +70,20 @@
                                         <td class="text-capitalize">{{ bank.bank_name }}</td>
                                         <td class="text-capitalize">{{ bank.website_url }}</td>
                                         <td class="text-capitalize">{{ bank.description }}</td>
-                                        <td v-if="bank.status==1">Active</td>
-                                        <td v-if="bank.status==0">Inactive</td>
+                                        <td v-if="bank.status == 1">
+                                            <a href="javascript:void(0);" @click="
+                                                changeStatus(bank.id, 0)
+                                                " class="">
+                                                <i class="fa fa-toggle-on" style="font-size: 30px;"></i>
+                                            </a>
+                                        </td>
+                                        <td v-else>
+                                            <a href="javascript:void(0);" @click="
+                                                changeStatus(bank.id, 1)
+                                                " class="">
+                                                <i class="fa fa-toggle-off" style="font-size: 30px;"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -338,6 +350,33 @@ export default {
                     });
                 }
             })
+        },
+        changeStatus(id, status) {
+            console.log("id: " + id + " status: " + status);
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: `You want to change status ${status == 1 ? "Inactive to Active" : "Active to Inactive"}!`,
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, change it!",
+            }).then((result) => {
+                // Send request to the server
+                if (result.value) {
+                    axios.post("/api/bank/change-status", { id: id, status: status })
+                        .then(res => {
+                            Toast.fire({
+                                icon: "success",
+                                title: res.data.message,
+                            });
+                            this.loadStates();
+                        }).catch(err => {
+                            console.error(err);
+                        });
+
+                }
+            });
         },
         loadStates() {
             let cloaderd = this.$loading.show();

@@ -70,7 +70,7 @@
                         </div>
                         <div v-else class="message admin callcenter-message">
                           <div class="d-flex justify-content-between">
-                            <h5 class="chatheading text-info">Call Center</h5>
+                            <h5 class="chatheading">Call Center</h5>
                             <span class="date text-muted small">{{ formatDate(row.posted_at) }}</span>
                           </div>
                           <p>{{ row.comment }}</p>
@@ -96,7 +96,7 @@
                         <div v-else class="message admin callcenter-message">
                           <!-- <div v-else class="message user-message"> -->
                           <div class="d-flex justify-content-between">
-                            <h5 class="chatheading">Call Center ({{ row.name }})</h5>
+                            <h5 class="chatheading">{{ row.name }}</h5>
                             <span class="date text-muted small">{{ formatDate(row.posted_at) }}</span>
                           </div>
                           <p>{{ row.comment }}</p>

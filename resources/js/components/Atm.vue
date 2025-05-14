@@ -8,66 +8,36 @@
                             <h3 class="card-title">Atm List</h3>
 
                             <div class="card-tools">
-                                <button
-                                    type="button"
-                                    class="btn btn-sm btn-primary"
-                                    @click="newModal"
-
-                                >
+                                <button type="button" class="btn btn-sm btn-primary" @click="newModal">
                                     <i class="fa fa-plus-square"></i>
                                     Add New
                                 </button>
                             </div>
                         </div>
                         <div class="card-body p-2">
-                            <form
-                                autocomplete="off"
-                                @submit.prevent="getResults()"
-                            >
+                            <form autocomplete="off" @submit.prevent="getResults()">
                                 <div class="form-row">
                                     <div class="col col-3 pt-2">
-                                        <input
-                                            placeholder="Enter ..."
-                                            v-model="search"
-                                            class="form-control"
-                                        />
+                                        <input placeholder="Enter ..." v-model="search" class="form-control" />
                                     </div>
-                                    <div
-                                        class="col col-3 pt-2 btn-group"
-                                        role="group"
-                                    >
-                                        <button
-                                            type="submit"
-                                            class="btn btn-success"
-                                        >
+                                    <div class="col col-3 pt-2 btn-group" role="group">
+                                        <button type="submit" class="btn btn-success">
                                             Search
                                         </button>
-                                        <download-excel
-                                            class="btn btn-warning ml-2"
-                                            :fetch="export_csv"
-                                            :fields="json_fields"
-                                            :before-generate="startDownload"
-                                            :before-finish="finishDownload"
-                                            worksheet="My Worksheet"
-                                            type="csv"
-                                            name="user_list.csv"
-                                        >
+                                        <download-excel class="btn btn-warning ml-2" :fetch="export_csv"
+                                            :fields="json_fields" :before-generate="startDownload"
+                                            :before-finish="finishDownload" worksheet="My Worksheet" type="csv"
+                                            name="user_list.csv">
                                             <span class="labelText">
-                                                <i
-                                                    class="fa fa-file-excel-o"
-                                                    aria-hidden="true"
-                                                ></i>
-                                                Export as CSV</span
-                                            >
+                                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                Export as CSV</span>
                                         </download-excel>
                                     </div>
                                 </div>
                             </form>
                         </div>
                         <!-- /.card-header -->
-                        <div
-                            class="card-body ticketLstTbl table-responsive p-0"
-                        >
+                        <div class="card-body ticketLstTbl table-responsive p-0">
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
@@ -84,40 +54,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr
-                                        v-for="(atm, x) in atms.data"
-                                        :key="atm.id"
-                                    >
+                                    <tr v-for="(atm, x) in atms.data" :key="atm.id">
                                         <td>
                                             <div class="btn-group">
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-primary btn-sm btn-toggle-custom"
-                                                    @click="editModal(atm)"
-
-                                                >
+                                                <button type="button" class="btn btn-primary btn-sm btn-toggle-custom"
+                                                    @click="editModal(atm)">
                                                     Edit
                                                 </button>
-                                                <button
-                                                    type="button"
+                                                <button type="button"
                                                     class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false"
-                                                >
-                                                    <span class="sr-only"
-                                                        >Toggle Dropdown</span
-                                                    >
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a
-                                                        href="javascript:void(0);"
-                                                        @click="
-                                                            deleteCity(atm.id)
-                                                        "
-                                                        class="dropdown-item"
-
-                                                    >
+                                                    <a href="javascript:void(0);" @click="
+                                                        deleteCity(atm.id)
+                                                        " class="dropdown-item">
                                                         Delete
                                                     </a>
                                                 </div>
@@ -144,28 +96,20 @@
                                         <td class="text-capitalize">
                                             {{ atm.tag_time }}
                                         </td>
-                                        <td v-if="atm.status==1">
+                                        <td v-if="atm.status == 1">
 
-                                              <a
-                                                        href="javascript:void(0);"
-                                                        @click="
-                                                            changeStatus(atm.id,0)
-                                                        "
-                                                        class=""
-                                                    >
-                                                    <i class="fa fa-toggle-on" style="font-size: 30px;"></i>
-                                                    </a>
+                                            <a href="javascript:void(0);" @click="
+                                                changeStatus(atm.id, 0)
+                                                " class="">
+                                                <i class="fa fa-toggle-on" style="font-size: 30px;"></i>
+                                            </a>
                                         </td>
-                                        <td  v-else>
-                                             <a
-                                                        href="javascript:void(0);"
-                                                        @click="
-                                                            changeStatus(atm.id,1)
-                                                        "
-                                                        class=""
-                                                    >
-                                                    <i class="fa fa-toggle-off" style="font-size: 30px;"></i>
-                                                    </a>
+                                        <td v-else>
+                                            <a href="javascript:void(0);" @click="
+                                                changeStatus(atm.id, 1)
+                                                " class="">
+                                                <i class="fa fa-toggle-off" style="font-size: 30px;"></i>
+                                            </a>
                                         </td>
 
                                         <!-- <td class="text-capitalize">
@@ -178,11 +122,7 @@
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <pagination
-                                :data="atms"
-                                :limit="10"
-                                @pagination-change-page="getResults"
-                            ></pagination>
+                            <pagination :data="atms" :limit="10" @pagination-change-page="getResults"></pagination>
                         </div>
                     </div>
                     <!-- /.card -->
@@ -195,14 +135,7 @@
             </div> -->
 
             <!-- Modal -->
-            <div
-                class="modal fade"
-                id="addNew"
-                tabindex="-1"
-                role="dialog"
-                aria-labelledby="addNew"
-                aria-hidden="true"
-            >
+            <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="addNew" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -212,49 +145,30 @@
                             <h5 class="modal-title" v-show="editmode">
                                 Update Atm's Info
                             </h5>
-                            <button
-                                type="button"
-                                class="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                            >
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
 
                         <!-- <form @submit.prevent="createUser"> -->
 
-                        <form
-                            @submit.prevent="
-                                editmode ? updateCity() : createUser()
-                            "
-                        >
+                        <form @submit.prevent="
+                            editmode ? updateCity() : createUser()
+                            ">
                             <div class="modal-body">
                                 <div class="row">
 
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>State</label>
-                                            <v-select
-                                                label="state_name"
-                                                :reduce="
-                                                    (option) => option.id
-                                                "
-                                                :options="states"
-                                                placeholder="Enter State ..."
-                                                v-model="form.state_id"
-                                                v-validate="'required'"
-                                                :class="{
+                                            <v-select label="state_name" :reduce="(option) => option.id
+                                                " :options="states" placeholder="Enter State ..."
+                                                v-model="form.state_id" v-validate="'required'" :class="{
                                                     error: verrors.state,
                                                     error: verrors.has('state'),
                                                     haveValue: form.state,
-                                                }"
-                                                data-vv-name="state"
-                                            />
-                                            <div
-                                                v-if="verrors.has('state')"
-                                                class="help-block invalid-feedback"
-                                            >
+                                                }" data-vv-name="state" />
+                                            <div v-if="verrors.has('state')" class="help-block invalid-feedback">
                                                 {{ verrors.first("state") }}
                                             </div>
                                         </div>
@@ -262,26 +176,14 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>District</label>
-                                            <v-select
-                                                v-model="form.district_id"
-                                                label="district_name"
-                                                :reduce="
-                                                    (option) => option.id
-                                                "
-                                                :options="districts"
-                                                placeholder="Enter District ..."
-                                                v-validate="'required'"
-                                                :class="{
+                                            <v-select v-model="form.district_id" label="district_name" :reduce="(option) => option.id
+                                                " :options="districts" placeholder="Enter District ..."
+                                                v-validate="'required'" :class="{
                                                     error: verrors.district_id,
                                                     error: verrors.has('district_id'),
                                                     haveValue: form.district_id,
-                                                }"
-                                                data-vv-name="district_id"
-                                            />
-                                            <div
-                                                v-if="verrors.has('district_id')"
-                                                class="help-block invalid-feedback"
-                                            >
+                                                }" data-vv-name="district_id" />
+                                            <div v-if="verrors.has('district_id')" class="help-block invalid-feedback">
                                                 {{ verrors.first("district_id") }}
                                             </div>
                                         </div>
@@ -289,26 +191,14 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>City</label>
-                                            <v-select
-                                                v-model="form.city_id"
-                                                label="city_name"
-                                                :reduce="
-                                                    (option) => option.id
-                                                "
-                                                :options="cities"
-                                                placeholder="Enter City ..."
-                                                v-validate="'required'"
-                                                :class="{
+                                            <v-select v-model="form.city_id" label="city_name" :reduce="(option) => option.id
+                                                " :options="cities" placeholder="Enter City ..."
+                                                v-validate="'required'" :class="{
                                                     error: verrors.city_id,
                                                     error: verrors.has('city_id'),
                                                     haveValue: form.city_id,
-                                                }"
-                                                data-vv-name="city_name"
-                                            />
-                                            <div
-                                                v-if="verrors.has('city_id')"
-                                                class="help-block invalid-feedback"
-                                            >
+                                                }" data-vv-name="city_name" />
+                                            <div v-if="verrors.has('city_id')" class="help-block invalid-feedback">
                                                 {{ verrors.first("city_id") }}
                                             </div>
                                         </div>
@@ -316,26 +206,14 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Post Code</label>
-                                            <v-select
-                                                v-model="form.postcode_id"
-                                                label="postcode"
-                                                :reduce="
-                                                    (option) => option.id
-                                                "
-                                                :options="postcodes"
-                                                placeholder="Enter Post Code ..."
-                                                v-validate="'required'"
-                                                :class="{
+                                            <v-select v-model="form.postcode_id" label="postcode" :reduce="(option) => option.id
+                                                " :options="postcodes" placeholder="Enter Post Code ..."
+                                                v-validate="'required'" :class="{
                                                     error: verrors.postcode_id,
                                                     error: verrors.has('postcode_id'),
                                                     haveValue: form.postcode_id,
-                                                }"
-                                                data-vv-name="postcode"
-                                            />
-                                            <div
-                                                v-if="verrors.has('postcode_id')"
-                                                class="help-block invalid-feedback"
-                                            >
+                                                }" data-vv-name="postcode" />
+                                            <div v-if="verrors.has('postcode_id')" class="help-block invalid-feedback">
                                                 {{ verrors.first("postcode_id") }}
                                             </div>
                                         </div>
@@ -343,26 +221,14 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Area Code</label>
-                                            <v-select
-                                                v-model="form.area_code_id"
-                                                label="area_code"
-                                                :reduce="
-                                                    (option) => option.id
-                                                "
-                                                :options="areacodes"
-                                                placeholder="Enter Area Code ..."
-                                                v-validate="'required'"
-                                                :class="{
+                                            <v-select v-model="form.area_code_id" label="area_code" :reduce="(option) => option.id
+                                                " :options="areacodes" placeholder="Enter Area Code ..."
+                                                v-validate="'required'" :class="{
                                                     error: verrors.area_code_id,
                                                     error: verrors.has('area_code_id'),
                                                     haveValue: form.area_code_id,
-                                                }"
-                                                data-vv-name="area_code"
-                                            />
-                                            <div
-                                                v-if="verrors.has('area_code_id')"
-                                                class="help-block invalid-feedback"
-                                            >
+                                                }" data-vv-name="area_code" />
+                                            <div v-if="verrors.has('area_code_id')" class="help-block invalid-feedback">
                                                 {{ verrors.first("area_code_id") }}
                                             </div>
                                         </div>
@@ -370,26 +236,14 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Client</label>
-                                            <v-select
-                                                v-model="form.client_id"
-                                                label="client_name"
-                                                :reduce="
-                                                    (option) => option.id
-                                                "
-                                                :options="clients"
-                                                placeholder="Enter Client ..."
-                                                v-validate="'required'"
-                                                :class="{
+                                            <v-select v-model="form.client_id" label="client_name" :reduce="(option) => option.id
+                                                " :options="clients" placeholder="Enter Client ..."
+                                                v-validate="'required'" :class="{
                                                     error: verrors.client_id,
                                                     error: verrors.has('client_id'),
                                                     haveValue: form.client_id,
-                                                }"
-                                                data-vv-name="client_name"
-                                            />
-                                            <div
-                                                v-if="verrors.has('client_id')"
-                                                class="help-block invalid-feedback"
-                                            >
+                                                }" data-vv-name="client_name" />
+                                            <div v-if="verrors.has('client_id')" class="help-block invalid-feedback">
                                                 {{ verrors.first("client_id") }}
                                             </div>
                                         </div>
@@ -397,26 +251,14 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Client Code</label>
-                                            <v-select
-                                                v-model="form.user_id"
-                                                label="user_code"
-                                                :reduce="
-                                                    (option) => option.id
-                                                "
-                                                :options="client_codes"
-                                                placeholder="Enter Client Code..."
-                                                v-validate="'required'"
-                                                :class="{
+                                            <v-select v-model="form.user_id" label="user_code" :reduce="(option) => option.id
+                                                " :options="client_codes" placeholder="Enter Client Code..."
+                                                v-validate="'required'" :class="{
                                                     error: verrors.user_id,
                                                     error: verrors.has('user_id'),
                                                     haveValue: form.user_id,
-                                                }"
-                                                data-vv-name="user_code"
-                                            />
-                                            <div
-                                                v-if="verrors.has('user_id')"
-                                                class="help-block invalid-feedback"
-                                            >
+                                                }" data-vv-name="user_code" />
+                                            <div v-if="verrors.has('user_id')" class="help-block invalid-feedback">
                                                 {{ verrors.first("user_id") }}
                                             </div>
                                         </div>
@@ -424,23 +266,13 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Atm Id</label>
-                                            <input
-                                                v-model="form.atm_id"
-                                                type="text"
-                                                name="atm_id"
-                                                class="form-control"
+                                            <input v-model="form.atm_id" type="text" name="atm_id" class="form-control"
                                                 :class="{
                                                     'is-invalid':
                                                         verrors.has('atm_id'),
-                                                }"
-                                                v-validate="'required'"
-                                                data-vv-as="atm_id"
-                                                :disabled="form.id != ''"
-                                            />
-                                            <div
-                                                v-if="verrors.has('atm_id')"
-                                                class="help-block invalid-feedback"
-                                            >
+                                                }" v-validate="'required'" data-vv-as="atm_id"
+                                                :disabled="form.id != ''" />
+                                            <div v-if="verrors.has('atm_id')" class="help-block invalid-feedback">
                                                 {{ verrors.first("atm_id") }}
                                             </div>
                                         </div>
@@ -448,62 +280,41 @@
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Tag Time</label>
-                                            <input
-                                                v-model="form.tag_time"
-                                                type="text"
-                                                name="tag_time"
-                                                class="form-control"
-                                                :class="{
+                                            <input v-model="form.tag_time" type="text" name="tag_time"
+                                                class="form-control" :class="{
                                                     'is-invalid':
                                                         verrors.has('tag_time'),
-                                                }"
-                                                v-validate="'required'"
-                                                data-vv-as="tag_time"
-                                                :disabled="form.id != ''"
-                                            />
-                                            <div
-                                                v-if="verrors.has('tag_time')"
-                                                class="help-block invalid-feedback"
-                                            >
+                                                }" v-validate="'required'" data-vv-as="tag_time"
+                                                :disabled="form.id != ''" />
+                                            <div v-if="verrors.has('tag_time')" class="help-block invalid-feedback">
                                                 {{ verrors.first("tag_time") }}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3">
                                         <div class="form-group">
-                                        <label>Comment</label>
-                                        <textarea placeholder="Enter Comment..."
-                                            v-model="form.comment" v-validate="''"
-                                            :class="{ 'is-invalid': verrors.has('comment') }"
-                                            name="comment" data-vv-as="comment"
-                                            :disabled="form.id != ''" class="form-control">
+                                            <label>Comment</label>
+                                            <textarea placeholder="Enter Comment..." v-model="form.comment"
+                                                v-validate="''" :class="{ 'is-invalid': verrors.has('comment') }"
+                                                name="comment" data-vv-as="comment" :disabled="form.id != ''"
+                                                class="form-control">
                                             </textarea>
-                                        <div v-if="verrors.has('comment')" class="help-block invalid-feedback">
-                                            {{
-                                                verrors.first('comment')
-                                            }}</div>
-                                    </div>
+                                            <div v-if="verrors.has('comment')" class="help-block invalid-feedback">
+                                                {{
+                                                    verrors.first('comment')
+                                                }}</div>
+                                        </div>
                                     </div>
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Status</label>
-                                            <v-select
-                                            v-model="form.status"
-                                            :options="statuses"
-                                            label="value"
-                                            :reduce="option => option.id"
-                                            placeholder="Enter Status ..."
-                                            v-validate="'required'"
-                                            :class="{
-                                                error: verrors.has('status'),
-                                                haveValue: form.status,
-                                            }"
-                                            data-vv-name="status"
-                                            />
-                                            <div
-                                                v-if="verrors.has('status')"
-                                                class="help-block invalid-feedback"
-                                            >
+                                            <v-select v-model="form.status" :options="statuses" label="value"
+                                                :reduce="option => option.id" placeholder="Enter Status ..."
+                                                v-validate="'required'" :class="{
+                                                    error: verrors.has('status'),
+                                                    haveValue: form.status,
+                                                }" data-vv-name="status" />
+                                            <div v-if="verrors.has('status')" class="help-block invalid-feedback">
                                                 {{ verrors.first("status") }}
                                             </div>
                                         </div>
@@ -511,25 +322,13 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button
-                                    type="button"
-                                    class="btn btn-secondary"
-                                    data-dismiss="modal"
-                                >
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
                                     Close
                                 </button>
-                                <button
-                                    v-show="editmode"
-                                    type="submit"
-                                    class="btn btn-success"
-                                >
+                                <button v-show="editmode" type="submit" class="btn btn-success">
                                     Update
                                 </button>
-                                <button
-                                    v-show="!editmode"
-                                    type="submit"
-                                    class="btn btn-primary"
-                                >
+                                <button v-show="!editmode" type="submit" class="btn btn-primary">
                                     Create
                                 </button>
                             </div>
@@ -547,21 +346,21 @@ export default {
         return {
             editmode: false,
             search: "",
-            atms:{},
-            postcodes:[],
-            areacodes:[],
+            atms: {},
+            postcodes: [],
+            areacodes: [],
             cities: [],
             states: [],
             role: [],
             districts: [],
-            statuses:[
+            statuses: [
                 {
-                    id:0,
-                    value:"Inactive",
+                    id: 0,
+                    value: "Inactive",
                 },
                 {
-                    id:1,
-                    value:"Active",
+                    id: 1,
+                    value: "Active",
                 }
             ],
             clients: [],
@@ -577,7 +376,7 @@ export default {
                 user_id: "",
                 atm_id: "",
                 tag_time: "",
-                status:"1",
+                status: "1",
                 comment: "",
 
             }),
@@ -681,7 +480,7 @@ export default {
             // if (user.role.length > 0) {
             //     user.role = user.role[0].name;
             // }
-            console.log("city",city);
+            console.log("city", city);
             this.form.fill(city);
         },
         newModal() {
@@ -722,12 +521,12 @@ export default {
                 }
             });
         },
-        changeStatus(id,status) {
+        changeStatus(id, status) {
             console.log("id: " + id + " status: " + status);
 
             Swal.fire({
                 title: "Are you sure?",
-                text: `You want to change status ${status==1 ? "Inactive to Active" : "Active to Inactive"}!`,
+                text: `You want to change status ${status == 1 ? "Inactive to Active" : "Active to Inactive"}!`,
                 showCancelButton: true,
                 confirmButtonColor: "#d33",
                 cancelButtonColor: "#3085d6",
@@ -735,16 +534,16 @@ export default {
             }).then((result) => {
                 // Send request to the server
                 if (result.value) {
-                    axios.post("/api/atm/change-status", {id:id,status:status})
-                    .then(res => {
-                        Toast.fire({
-                            icon: "success",
-                            title: res.data.message,
+                    axios.post("/api/atm/change-status", { id: id, status: status })
+                        .then(res => {
+                            Toast.fire({
+                                icon: "success",
+                                title: res.data.message,
+                            });
+                            this.loadUsers();
+                        }).catch(err => {
+                            console.error(err);
                         });
-                        this.loadUsers();
-                    }).catch(err => {
-                        console.error(err);
-                    });
 
                 }
             });
@@ -810,13 +609,13 @@ export default {
 
         // Call the APIs in parallel
         axios
-            .all([statesApi,clientApi])
+            .all([statesApi, clientApi])
             .then(
-                axios.spread((statesRes,clientsRes) => {
+                axios.spread((statesRes, clientsRes) => {
                     // Handle the responses
                     this.states = statesRes.data.data;
                     this.clients = clientsRes.data.data;
-                    console.log("clients::::",this.clients);
+                    console.log("clients::::", this.clients);
                 })
             )
             .catch((error) => {

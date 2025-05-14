@@ -739,11 +739,11 @@ class ComplaintController extends BaseController
         }
 
         if ($from_date) {
-            $complaints->where('created_at', '>=', $from_date);
+            $complaints->where('complaint.created_at', '>=', $from_date);
         }
 
         if ($to_date) {
-            $complaints->where('created_at', '<=', $to_date);
+            $complaints->where('complaint.created_at', '<=', $to_date);
         }
 
         if ($status) {
@@ -767,8 +767,19 @@ class ComplaintController extends BaseController
                           SUBSTRING_INDEX(atm.tag_time, ":", -1))
                 END AS lag_time
             ')
-            ->join('atm', 'complaint.atm_id', '=', 'atm.id')
-            ->orderByRaw('
+            ->join('atm', 'complaint.atm_id', '=', 'atm.id');
+            if(Auth::user()->id_cms_privileges==3){
+                $complaints->orderByRaw('
+                CASE
+                    WHEN work_status = "Pending" THEN 1
+                    WHEN work_status = "Processing" THEN 2
+                    WHEN work_status = "Completed" THEN 3
+                    ELSE 4
+                END ASC,
+                created_at DESC
+            ');
+            }else{
+                $complaints->orderByRaw('
                 CASE
                     WHEN work_status = "Pending" THEN 1
                     WHEN work_status = "Processing" THEN 2
@@ -776,8 +787,10 @@ class ComplaintController extends BaseController
                     ELSE 4
                 END ASC,
                 lag_time DESC
-            ') // Sort by work_status first, then by lag_time
-            ->paginate(10);
+            ');
+            }
+             // Sort by work_status first, then by lag_time
+            $complaints=$complaints->paginate(10);
 
         // Format the results
         $complaints->getCollection()->transform(function ($com) {
@@ -952,6 +965,7 @@ class ComplaintController extends BaseController
         $atm_id = request()->query('atm_id');
         $docket_no = request()->query('docket_no');
         $sls_docket_no = request()->query('slm_no');
+        $status=request()->query('complaint_status');
         // Base query with join
         $query = SlsDocket::query()
             ->join('complaint', 'sls_docket.complaint_id', '=', 'complaint.id')
@@ -974,7 +988,8 @@ class ComplaintController extends BaseController
 
         // Apply status and docket number filters
         if ($status) {
-            $query->where('complaint.work_status', $status);
+            // echo $status;die();
+            $query->where('sls_docket.work_status', $status);
         }
         if ($atm_id) {
             $query->where('atm.atm_id', $atm_id);
@@ -988,8 +1003,8 @@ class ComplaintController extends BaseController
         }
 
         // Paginate with ordering
-        $complaints = $query->orderBy('work_status', 'desc')
-            ->orderBy('sls_docket.created_at', 'desc')
+        $complaints = $query->orderBy('work_status', 'asc')
+            ->orderBy('sls_docket.created_at', 'asc')
             ->paginate(10);
 
         // Fetch distinct custodians

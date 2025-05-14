@@ -55,13 +55,16 @@
 
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-primary btn-sm btn-toggle-custom" @click="editModal(callcenter)">Edit</button>
-                                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button type="button" class="btn btn-primary btn-sm btn-toggle-custom"
+                                                    @click="editModal(callcenter)">Edit</button>
+                                                <button type="button"
+                                                    class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <div class="dropdown-menu">
                                                     <a href="javascript:void(0);" @click="deleteState(callcenter.id)"
-                                                        class="dropdown-item" >
+                                                        class="dropdown-item">
                                                         Delete
                                                     </a>
                                                 </div>
@@ -71,22 +74,35 @@
                                         <td class="text-capitalize">{{ callcenter.name }}</td>
                                         <td class="text-capitalize">{{ callcenter.email }}</td>
                                         <td class="text-capitalize">{{ callcenter.mobile }}</td>
-                                        <td class="text-capitalize" v-if="callcenter.status==1">Active</td>
-                                        <td class="text-capitalize" v-else>Inactive</td>
+                                        <td v-if="callcenter.status == 1">
+                                            <a href="javascript:void(0);" @click="
+                                                changeStatus(callcenter.id, 0)
+                                                " class="">
+                                                <i class="fa fa-toggle-on" style="font-size: 30px;"></i>
+                                            </a>
+                                        </td>
+                                        <td v-else>
+                                            <a href="javascript:void(0);" @click="
+                                                changeStatus(callcenter.id, 1)
+                                                " class="">
+                                                <i class="fa fa-toggle-off" style="font-size: 30px;"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <pagination :data="callcenters" :limit="10" @pagination-change-page="getResults"></pagination>
+                            <pagination :data="callcenters" :limit="10" @pagination-change-page="getResults">
+                            </pagination>
                         </div>
                     </div>
                     <!-- /.card -->
                 </div>
             </div>
 
-<!--
+            <!--
             <div v-if="!$gate.isAdmin()">
                 <not-found></not-found>
             </div> -->
@@ -111,12 +127,13 @@
                                     <div class="col-4">
                                         <div class="form-group">
                                             <label>Employee Id</label>
-                                            <input v-model="form.user_code" type="text" name="user_code" class="form-control"
-                                                :class="{ 'is-invalid': verrors.has('user_code') }" v-validate="'required'"
-                                                data-vv-as="user_code" :disabled="form.id != ''">
+                                            <input v-model="form.user_code" type="text" name="user_code"
+                                                class="form-control" :class="{ 'is-invalid': verrors.has('user_code') }"
+                                                v-validate="'required'" data-vv-as="user_code"
+                                                :disabled="form.id != ''">
                                             <div v-if="verrors.has('user_code')" class="help-block invalid-feedback"> {{
-                        verrors.first('user_code')
-                    }}</div>
+                                                verrors.first('user_code')
+                                                }}</div>
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -126,8 +143,8 @@
                                                 :class="{ 'is-invalid': verrors.has('name') }" v-validate="'required'"
                                                 data-vv-as="name" :disabled="form.id != ''">
                                             <div v-if="verrors.has('name')" class="help-block invalid-feedback"> {{
-                        verrors.first('name')
-                    }}</div>
+                                                verrors.first('name')
+                                                }}</div>
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -137,8 +154,8 @@
                                                 :class="{ 'is-invalid': verrors.has('email') }" v-validate="'required'"
                                                 data-vv-as="email" :disabled="form.id != ''">
                                             <div v-if="verrors.has('email')" class="help-block invalid-feedback"> {{
-                        verrors.first('email')
-                    }}</div>
+                                                verrors.first('email')
+                                                }}</div>
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -148,41 +165,31 @@
                                                 :class="{ 'is-invalid': verrors.has('mobile') }" v-validate="'required'"
                                                 data-vv-as="mobile" :disabled="form.id != ''">
                                             <div v-if="verrors.has('mobile')" class="help-block invalid-feedback"> {{
-                        verrors.first('mobile')
-                    }}</div>
+                                                verrors.first('mobile')
+                                                }}</div>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="form-group">
                                             <label>Password</label>
-                                            <input v-model="form.password" type="password" name="password" class="form-control"
-                                                :class="{ 'is-invalid': verrors.has('password') }" v-validate="'required'"
-                                                data-vv-as="password" :disabled="form.id != ''">
+                                            <input v-model="form.password" type="password" name="password"
+                                                class="form-control" :class="{ 'is-invalid': verrors.has('password') }"
+                                                v-validate="'required'" data-vv-as="password" :disabled="form.id != ''">
                                             <div v-if="verrors.has('password')" class="help-block invalid-feedback"> {{
-                        verrors.first('password')
-                    }}</div>
+                                                verrors.first('password')
+                                                }}</div>
                                         </div>
                                     </div>
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Status</label>
-                                            <v-select
-                                            v-model="form.status"
-                                            :options="statuses"
-                                            label="value"
-                                            :reduce="option => option.id"
-                                            placeholder="Enter Status ..."
-                                            v-validate="'required'"
-                                            :class="{
-                                                error: verrors.has('status'),
-                                                haveValue: form.status,
-                                            }"
-                                            data-vv-name="status"
-                                            />
-                                            <div
-                                                v-if="verrors.has('status')"
-                                                class="help-block invalid-feedback"
-                                            >
+                                            <v-select v-model="form.status" :options="statuses" label="value"
+                                                :reduce="option => option.id" placeholder="Enter Status ..."
+                                                v-validate="'required'" :class="{
+                                                    error: verrors.has('status'),
+                                                    haveValue: form.status,
+                                                }" data-vv-name="status" />
+                                            <div v-if="verrors.has('status')" class="help-block invalid-feedback">
                                                 {{ verrors.first("status") }}
                                             </div>
                                         </div>
@@ -212,19 +219,19 @@ export default {
             users: {},
             callcenters: {},
             clients: [],
-            statuses:[
+            statuses: [
                 {
-                    id:"0",
-                    value:"Inactive",
+                    id: "0",
+                    value: "Inactive",
                 },
                 {
-                    id:"1",
-                    value:"Active",
+                    id: "1",
+                    value: "Active",
                 }
             ],
             banks: [],
             cities: [],
-            bnaoptions:['Yes','No'],
+            bnaoptions: ['Yes', 'No'],
             form: new Form({
                 id: '',
                 name: '',
@@ -232,7 +239,7 @@ export default {
                 email: '',
                 mobile: '',
                 user_code: '',
-                status:"1",
+                status: "1",
             }),
             json_fields: {
                 'name': 'name',
@@ -248,38 +255,38 @@ export default {
 
     methods: {
         onFileChange(e) {
-      this.form.photo = e.target.files[0];
-    },
-    async submitForm() {
-      const formData = new FormData();
-      formData.append('id', this.form.id);
-      formData.append('name', this.form.name);
-      formData.append('password', this.form.password);
-      formData.append('email', this.form.email);
-      formData.append('mobile', this.form.mobile);
-      formData.append('user_code', this.form.user_code);
-      try {
-        const response = await axios.post('api/callcenter', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        $('#addNew').modal('hide');
+            this.form.photo = e.target.files[0];
+        },
+        async submitForm() {
+            const formData = new FormData();
+            formData.append('id', this.form.id);
+            formData.append('name', this.form.name);
+            formData.append('password', this.form.password);
+            formData.append('email', this.form.email);
+            formData.append('mobile', this.form.mobile);
+            formData.append('user_code', this.form.user_code);
+            try {
+                const response = await axios.post('api/callcenter', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                $('#addNew').modal('hide');
 
-        Toast.fire({
-            icon: 'success',
-            title: response.data.message
-        });
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
 
-        this.$Progress.finish();
-        this.loadStates();
+                this.$Progress.finish();
+                this.loadStates();
 
-        alert(response.data.success);
-      } catch (error) {
-        console.error(error);
-        alert('Form submission failed.');
-      }
-    },
+                alert(response.data.success);
+            } catch (error) {
+                console.error(error);
+                alert('Form submission failed.');
+            }
+        },
         async export_csv() {
             const response = await axios.get('api/callcenter?export=1', {
                 params: {
@@ -310,7 +317,7 @@ export default {
                     search: this.search
                 }
             }).then(({ data }) => {
-                console.log("after search results",data.data);
+                console.log("after search results", data.data);
                 this.callcenters = data.data;
 
                 cloaderd.hide();
@@ -318,6 +325,33 @@ export default {
                 cloaderd.hide();
                 if (err.response && err.response.data) {
                     this.$setErrorsFromResponse(err.response.data);
+                }
+            });
+        },
+        changeStatus(id, status) {
+            console.log("id: " + id + " status: " + status);
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: `You want to change status ${status == 1 ? "Inactive to Active" : "Active to Inactive"}!`,
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, change it!",
+            }).then((result) => {
+                // Send request to the server
+                if (result.value) {
+                    axios.post("/api/callcenter/change-status", { id: id, status: status })
+                        .then(res => {
+                            Toast.fire({
+                                icon: "success",
+                                title: res.data.message,
+                            });
+                            this.loadStates();
+                        }).catch(err => {
+                            console.error(err);
+                        });
+
                 }
             });
         },
@@ -353,7 +387,7 @@ export default {
             this.form.reset();
             this.verrors.clear();
             $('#addNew').modal('show');
-            state.is_bna= state.is_bna == 1 ? "Yes" : "No";
+            state.is_bna = state.is_bna == 1 ? "Yes" : "No";
 
             this.form.fill(state);
         },
@@ -377,7 +411,7 @@ export default {
                 if (result.value) {
                     this.form.delete('api/callcenter/' + id).then((response) => {
 
-                        if(response.data.success){
+                        if (response.data.success) {
                             Toast.fire({
                                 icon: 'success',
                                 title: 'Data has been deleted'
@@ -404,7 +438,7 @@ export default {
             axios.get('api/callcenter').then(({ data }) => {
                 console.log("callcenter data: ", data);
                 this.callcenters = data.data;
-                console.log("statelist",this.callcenters);
+                console.log("statelist", this.callcenters);
 
                 // this.users.data.forEach((element, index) => {
                 //     if(element.role.length > 0){
@@ -443,7 +477,7 @@ export default {
                     //         if (err.response && err.response.data) {
                     //             this.$setErrorsFromResponse(err.response.data);
                     //         }
-                        // });
+                    // });
                 }
             })
         }
@@ -464,7 +498,7 @@ export default {
         axios.all([clientsApi, bankApi])
             .then(axios.spread((clientRes, banksRes) => {
                 // Handle the responses
-                console.log("statesRes",banksRes);
+                console.log("statesRes", banksRes);
                 this.clients = clientRes.data.data;
                 this.banks = banksRes.data.data;
 
@@ -473,24 +507,24 @@ export default {
                 console.error("There was an error fetching the data:", error);
                 // Handle the error as needed
             });
-            console.log("after fetch clients:",this.clients);
+        console.log("after fetch clients:", this.clients);
         axios.get('api/callcenter').then(({ data }) => {
-                console.log("data: ", data.data);
-                this.callcenters = data.data;
+            console.log("data: ", data.data);
+            this.callcenters = data.data;
 
-                // this.users.data.forEach((element, index) => {
-                //     if(element.role.length > 0){
-                //         element.role_id = element.role[0].id;
-                //     }
-                // });
+            // this.users.data.forEach((element, index) => {
+            //     if(element.role.length > 0){
+            //         element.role_id = element.role[0].id;
+            //     }
+            // });
 
-                cloaderd.hide();
-            }).catch(err => {
-                cloaderd.hide();
-                if (err.response && err.response.data) {
-                    this.$setErrorsFromResponse(err.response.data);
-                }
-            });
+            cloaderd.hide();
+        }).catch(err => {
+            cloaderd.hide();
+            if (err.response && err.response.data) {
+                this.$setErrorsFromResponse(err.response.data);
+            }
+        });
     },
     watch: {
         'form.state': {

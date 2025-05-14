@@ -10,7 +10,7 @@
             <option value="All">All</option>
             <option value="SLM">SLM</option>
             <option value="FLM">FLM</option>
-            <option value="Dispenser joined down call (AXIS BNA)">
+            <option value="Dispenser joined down call">
               Dispenser joined call
             </option>
           </select>

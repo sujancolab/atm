@@ -24,11 +24,11 @@ class ExportReportController extends BaseController
             $complaintType = 2;
         }
         if ($complaintType != 3) {
-            $reports = Complaint::with('atm.cmsUser.bank'
+            $reports = Complaint::with('atm.cmsUser.bank',
             // 'complaintType',
             // 'custodians',
             // 'complaintDetail'
-            )->with('atm.areacode')->InBetween($fromDate, $toDate)
+            )->with(['atm.areacode'])->InBetween($fromDate, $toDate)
                 ->ComplaintSystemType(1)
                 ->where('work_status', 'Completed')
                 ->get();
@@ -38,7 +38,7 @@ class ExportReportController extends BaseController
             // 'complaintType',
             // 'custodians',
             // 'complaintDetail'
-            )->InBetween($fromDate, $toDate)
+            )->with(['atm.areacode'])->InBetween($fromDate, $toDate)
                 ->ComplaintSystemType($complaintType)
                 ->where('work_status', 'Completed')
                 ->where('is_slm', 1)
@@ -61,13 +61,15 @@ class ExportReportController extends BaseController
             if ($report->total_time) {
                 $duration = $report->total_time;
             } else {
-                $duration = $report->updated_at->diffInHours($report->created_at) . ':' . $report->updated_at->diff($report->created_at)->format('%I:%S');
+                $duration = $report->created_at->diff($report->updated_at)->format('%H:%I:%S');
             }
 
             $lag = $report->lag_time ? 'Delay' : 'N/A';
             $lag_reason = $report->lag_reason ? $report->lag_reason : 'N/A';
             $cmsUser=$report->custodians->where('status', 1)->first();
             $user=$cmsUser ? CmsUser::where('id',$cmsUser->custodian_id)->first() : null;
+            // echo "<pre>";
+            // print_r($duration);exit;
             $reportData[] = [
                 'Docket Number' => $report->docket_no,
                 'ATM No' => $report->atm->atm_id,

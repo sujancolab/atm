@@ -24,9 +24,10 @@ class Atm extends Model
     public function postcode() {
 		return $this->belongsTo(Postcode::class);
 	}
-    public function areacode() {
-		return $this->belongsTo(Areacode::class);
-	}
+  public function areacode() {
+    return $this->belongsTo(Areacode::class, 'area_code_id', 'id');
+}
+
     public function client() {
 		return $this->belongsTo(Client::class);
 	}

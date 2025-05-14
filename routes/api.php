@@ -3,16 +3,21 @@
 use App\Http\Controllers\API\V1\AreaCodeController;
 use App\Http\Controllers\API\V1\AtmController;
 use App\Http\Controllers\API\V1\BankController;
+use App\Http\Controllers\API\V1\CallCenterController;
 use App\Http\Controllers\API\V1\CityController;
 use App\Http\Controllers\API\V1\ClientController;
 use App\Http\Controllers\API\V1\CmsUserController;
 use App\Http\Controllers\API\V1\ComplaintController;
+use App\Http\Controllers\API\V1\ComplaintTypeController;
+use App\Http\Controllers\API\V1\CustodianController;
 use App\Http\Controllers\API\V1\DistrictController;
 use App\Http\Controllers\API\V1\ExportReportController;
 use App\Http\Controllers\API\V1\ModuleController;
 use App\Http\Controllers\API\V1\PostCodeController;
 use App\Http\Controllers\API\V1\SettingsController;
+use App\Http\Controllers\API\V1\StateController;
 use App\Http\Controllers\API\V1\UserController;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -117,6 +122,14 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::get('/getClientCode',[CmsUserController::class,'getClientCode']);
     Route::get('/custodian/list',[ComplaintController::class, 'listOfCustodians']);
     Route::post('/atm/change-status',[AtmController::class, 'changeStatus']);
+    Route::post('/custodian/change-status',[CustodianController::class, 'changeStatus']);
+    Route::post('/callcenter/change-status',[CallCenterController::class, 'changeStatus']);
+    Route::post('/client/change-status',[ClientController::class, 'changeStatus']);
+    Route::post('/bank/change-status',[BankController::class, 'changeStatus']);
+    Route::post('/complainttypes/change-status',[ComplaintTypeController::class, 'changeStatus']);
+    Route::post('/states/change-status',[StateController::class, 'changeStatus']);
+    Route::post('/district/change-status',[DistrictController::class, 'changeStatus']);
+    Route::post('/cmsuser/change-status',[CmsUserController::class, 'changeStatus']);
     Route::apiResources([
         'company' => 'MachineCompanyController',
         'model' => 'MachineModelController',

@@ -7,7 +7,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Cmsuser List</h3>
+                            <h3 class="card-title">Cms User List</h3>
 
                             <div class="card-tools">
 
@@ -49,6 +49,7 @@
                                         <th>User Code</th>
                                         <th>Client</th>
                                         <th>Bank</th>
+                                        <th>IS BNA</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -76,7 +77,22 @@
                                         <td class="text-capitalize">{{ cmsuser.user_code }}</td>
                                         <td class="text-capitalize">{{ cmsuser.client ? cmsuser.client.client_name : "" }}</td>
                                         <td class="text-capitalize">{{ cmsuser.bank ? cmsuser.bank.bank_name : "" }}</td>
-                                        <td class="text-capitalize">{{ cmsuser.status }}</td>
+                                        <td class="text-capitalize">{{ cmsuser.is_bna ? "Yes" : "No" }}</td>
+                                        <td v-if="cmsuser.status == 1">
+
+                                            <a href="javascript:void(0);" @click="
+                                                changeStatus(cmsuser.id, 0)
+                                                " class="">
+                                                <i class="fa fa-toggle-on" style="font-size: 30px;"></i>
+                                            </a>
+                                            </td>
+                                            <td v-else>
+                                            <a href="javascript:void(0);" @click="
+                                                changeStatus(cmsuser.id, 1)
+                                                " class="">
+                                                <i class="fa fa-toggle-off" style="font-size: 30px;"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -251,18 +267,19 @@
                                         <div class="form-group">
                                             <label>Bna</label>
                                             <v-select
-                                                v-model="form.is_bna"
-                                                label="bna"
-                                                :options="bnaoptions"
-                                                placeholder="Enter Bna ..."
-                                                v-validate="'required'"
-                                                :class="{
-                                                    error: verrors.is_bna,
-                                                    error: verrors.has('is_bna'),
-                                                    haveValue: form.is_bna,
-                                                }"
-                                                data-vv-name="name"
-                                            />
+                                                    v-model="form.is_bna"
+                                                    label="label"
+                                                    :options="bnaoptions"
+                                                    placeholder="Enter Bna ..."
+                                                    v-validate="'required'"
+                                                    :class="{
+                                                        error: verrors.is_bna,
+                                                        error: verrors.has('is_bna'),
+                                                        haveValue: form.is_bna,
+                                                    }"
+                                                    data-vv-name="name"
+                                                    :reduce="option => option.value"
+                                                />
                                             <div
                                                 v-if="verrors.has('is_bna')"
                                                 class="help-block invalid-feedback"
@@ -331,7 +348,11 @@ export default {
             ],
             banks: [],
             cities: [],
-            bnaoptions:['Yes','No'],
+            bnaoptions: [
+                { label: "Yes", value: 1 },
+                { label: "No", value: 0 }
+            ],
+
             form: new Form({
                 id: '',
                 name: '',
@@ -511,6 +532,33 @@ export default {
                     });
                 }
             })
+        },
+        changeStatus(id, status) {
+            console.log("id: " + id + " status: " + status);
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: `You want to change status ${status == 1 ? "Inactive to Active" : "Active to Inactive"}!`,
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, change it!",
+            }).then((result) => {
+                // Send request to the server
+                if (result.value) {
+                    axios.post("/api/cmsuser/change-status", { id: id, status: status })
+                        .then(res => {
+                            Toast.fire({
+                                icon: "success",
+                                title: res.data.message,
+                            });
+                            this.loadStates();
+                        }).catch(err => {
+                            console.error(err);
+                        });
+
+                }
+            });
         },
         loadStates() {
             let cloaderd = this.$loading.show();

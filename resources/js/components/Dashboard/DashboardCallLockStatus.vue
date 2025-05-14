@@ -361,7 +361,7 @@ export default {
         this.$nextTick(function () {
             // this.asign_graphs();
         })
-        this.getDashboard();
+        // this.getDashboard();
     },
     watch: {
         'search.quarter'(n) {
@@ -393,21 +393,21 @@ export default {
 
         search: {
             handler: function (n) {
-                axios.post('api/dashboard', this.search)
-                    .then(res => {
-                        this.records = res.data.data
-                        this.barEquipmentOptions.chartOptions.xaxis.categories = res.data.data.EquipmentChart.series
-                        this.barEquipmentOptions.series = res.data.data.EquipmentChart.data
+                // axios.post('api/dashboard', this.search)
+                //     .then(res => {
+                //         this.records = res.data.data
+                //         this.barEquipmentOptions.chartOptions.xaxis.categories = res.data.data.EquipmentChart.series
+                //         this.barEquipmentOptions.series = res.data.data.EquipmentChart.data
 
 
 
-                        this.$refs.barCountChart.updateSeries(this.records.barCountChart.series, true)
-                        this.$refs.barCountChart.updateOptions(this.records.barCountChart.options, false, true)
+                //         this.$refs.barCountChart.updateSeries(this.records.barCountChart.series, true)
+                //         this.$refs.barCountChart.updateOptions(this.records.barCountChart.options, false, true)
 
-                    })
-                    .catch(err => {
-                        console.error(err);
-                    })
+                //     })
+                //     .catch(err => {
+                //         console.error(err);
+                //     })
             },
             deep: true
         },
@@ -443,7 +443,7 @@ export default {
             var year = i + '-' + next.toString();
             this.financial_years.push(year)
         }
-        this.getDashboard();
+        // this.getDashboard();
     },
     beforeCreate() {
         // this.getAuth();
@@ -475,6 +475,7 @@ export default {
         }
         axios.get('api/dashboard')
             .then(res => {
+                console.log('dd');
                 this.records = res.data.data
                 if(this.authUser.id_cms_privileges==2){
                     console.log("this.records",this.records);
@@ -534,7 +535,7 @@ export default {
                 this.userRole="Call Center User";
             }
         }
-        this.getDashboard();
+        // this.getDashboard();
         // if (this.$gate.isAdmin()) {
         //     // this.$router.push('/users').catch(() => { });
         // } else {
@@ -559,36 +560,36 @@ export default {
           console.error('Error fetching modules:', error);
         });
         },
-        getDashboard(){
-            axios.get('api/dashboard')
-            .then(res => {
-                this.records = res.data.data
-                if(this.authUser.id_cms_privileges==2){
-                    console.log("this.records",this.records);
+        // getDashboard(){
+        //     axios.get('api/dashboard')
+        //     .then(res => {
+        //         this.records = res.data.data
+        //         if(this.authUser.id_cms_privileges==2){
+        //             console.log("this.records",this.records);
 
 
-                }else{
-                        console.log("this.records",this.records);
-                        this.totalTickets= this.records.total_tickets;
-                        this.pendingTickets= this.records.pending_tickets;
-                        this.flmPending= this.records.flm_pending_tickets;
-                        this.slmPending= this.records.slm_pending_tickets;
-                        this.joinedPending= this.records.joined_pending_tickets;
-                        this.processingTickets= this.records.processing_tickets;
-                        this.flmProcessing= this.records.flm_processing_tickets;
-                        this.slmProcessing= this.records.slm_processing_tickets;
-                        this.joinedProcessing= this.records.joined_processing_tickets;
-                        this.newTickets= this.records.new_tickets;
-                        this.closedTickets= this.records.closed_tickets;
-                        this.userRole= 'Call Center User';
-                }
+        //         }else{
+        //                 console.log("this.records",this.records);
+        //                 this.totalTickets= this.records.total_tickets;
+        //                 this.pendingTickets= this.records.pending_tickets;
+        //                 this.flmPending= this.records.flm_pending_tickets;
+        //                 this.slmPending= this.records.slm_pending_tickets;
+        //                 this.joinedPending= this.records.joined_pending_tickets;
+        //                 this.processingTickets= this.records.processing_tickets;
+        //                 this.flmProcessing= this.records.flm_processing_tickets;
+        //                 this.slmProcessing= this.records.slm_processing_tickets;
+        //                 this.joinedProcessing= this.records.joined_processing_tickets;
+        //                 this.newTickets= this.records.new_tickets;
+        //                 this.closedTickets= this.records.closed_tickets;
+        //                 this.userRole= 'Call Center User';
+        //         }
 
 
-            })
-            .catch(err => {
-                console.error(err);
-            })
-        },
+        //     })
+        //     .catch(err => {
+        //         console.error(err);
+        //     })
+        // },
         asign_graphs() {
             this.records = this.records
             this.chartOptions = {

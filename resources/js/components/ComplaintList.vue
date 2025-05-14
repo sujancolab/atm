@@ -318,8 +318,11 @@
                                         <td class="truncate">{{ formatDate(complaint.created_at) }}</td>
                                         <td v-if="authUser.id_cms_privileges!=3">{{ complaint.custname }}</td>
                                         <td v-if="authUser.id_cms_privileges!=3">{{ complaint.tag_time }}</td>
-                                        <td v-if="authUser.id_cms_privileges!=3" :style="{ color: complaint.lag_time ? 'Red' : 'Green' }"> {{
-                                            formatLagTime(complaint.lag_time) }}</td>
+                                        <td v-if="authUser.id_cms_privileges != 3"
+                                            :style="{ color: complaint.lag_time > 0 ? 'Red' : 'Green' }">
+                                            <!-- {{ complaint.lag_time }} -->
+                                            {{ formatLagTime(Math.abs(complaint.lag_time)) }}
+                                        </td>
 
                                         <!-- <td @click="view_site_details(ticket.machine)">{{ ticket.far_no }}</td> -->
                                         <td v-if="authUser.id_cms_privileges!=3">

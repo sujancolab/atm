@@ -15,7 +15,7 @@
                 <router-link to="/dashboard" class="nav-link">
                     <i class="nav-icon fas fa-tachometer-alt blue"></i>
                     <p>
-                       Dashbord
+                       Dashboard
                     </p>
                 </router-link>
 
@@ -24,7 +24,7 @@
                 <router-link to="/complaint" class="nav-link">
                     <i class="nav-icon fas fa-arrow-left"></i>
                     <p>
-                       Lodge a new Fault
+                       Lodge A New Fault
                     </p>
                 </router-link>
 
@@ -47,11 +47,11 @@
                 </router-link>
 
             </li>
-            <li class="nav-item" v-if="authUser.is_bna">
+            <li class="nav-item" v-if="authUser.is_bna || authUser.id_cms_privileges==4">
                 <router-link to="/complaint-list/2" class="nav-link">
                     <i class="nav-icon fas fa-eye"></i>
                     <p @click="redirecturl('/complaint-list/2')">
-                        Dispenser joined call
+                        Dispenser Joined Call
                     </p>
                 </router-link>
 
@@ -198,7 +198,7 @@
                 <router-link to="/account" class="nav-link">
                     <i class="nav-icon fas fa-cog"></i>
                     <p>
-                       Account details
+                       Account Details
                     </p>
                 </router-link>
 

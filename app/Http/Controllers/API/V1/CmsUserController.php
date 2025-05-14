@@ -205,4 +205,20 @@ class CmsUserController extends BaseController
         return $this->sendResponse($clientcodes, '');
 
     }
+
+    public function changeStatus(Request $request){
+        try {
+            $Custodian = Cmsuser::find($request->id);
+            $Custodian->status = $request->status;
+            $Custodian->save();
+            return $this->sendResponse($Custodian, 'Status updated successfully');
+        } catch (Exception $e) {
+            app(ExceptionHandler::class)->report($e);
+
+            $errorMessage = Lang::get('errors.'. $e->errorInfo[1], ['default' => 'An error occurred. Please contact administrator.']);
+
+            // Return an error response
+            return $this->sendError($errorMessage, [$e->getMessage()], 500);
+        }
+    }
 }
